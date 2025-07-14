@@ -1,0 +1,37 @@
+{
+  "name": "@template/logging",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src --max-warnings 0"
+  },
+  "dependencies": {
+    "@template/env": "workspace:*",
+    "@template/app-defs": "workspace:*",
+    "@template/logging": "workspace:*",
+    "chalk": "^5.4.1",
+    "pino": "^9.7.0",
+    "pino-pretty": "^13.0.0",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "typescript": "5.8.2"
+  }
+}

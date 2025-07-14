@@ -1,0 +1,23 @@
+enum OtpTokenType {
+  AUTH
+}
+
+model Otp {
+  // snowflake
+  id String @id @default(cuid())
+
+  tokenHash String
+  type      OtpTokenType @default(AUTH)
+  expiresAt DateTime
+  isUsed    Boolean      @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // meta
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([userId, expiresAt, type, isUsed])
+}

@@ -1,0 +1,18 @@
+pre-commit:
+  parallel: true
+  commands:
+    check:
+      run: pnpm check:fix
+      stage_fixed: true
+    typecheck:
+      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm check-types
+    test:
+      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test:modules --passWithNoTests
+
+pre-push:
+  parallel: false
+  commands:
+    build:
+      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm nx run-many -t build
+    test:
+      run: NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test:modules --passWithNoTests

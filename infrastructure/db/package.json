@@ -1,0 +1,50 @@
+{
+  "name": "@template/db",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm generate && tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src --max-warnings 0",
+    "generate": "prisma generate",
+    "migrate": "dotenv -e ../../.env -- prisma migrate dev",
+    "deploy": "prisma migrate deploy",
+    "studio": "prisma studio",
+    "prisma": "dotenv -e ../../.env -- prisma"
+  },
+  "dependencies": {
+    "@template/env": "workspace:*",
+    "@prisma/client": "6.11.1",
+    "dotenv": "^16.0.0",
+    "prisma": "^6.11.1",
+    "zod-prisma-types": "^3.2.4",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^22.15.3",
+    "dotenv-cli": "^7.0.0",
+    "eslint": "^9.30.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "5.8.2"
+  },
+  "prisma": {
+    "schema": "./prisma/schemas"
+  }
+}

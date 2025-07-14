@@ -1,0 +1,33 @@
+{
+  "name": "@template/prisma-defs",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm transform && tsc",
+    "transform": "node prisma-transformer.js",
+    "dev": "tsc --watch",
+    "check-types": "tsc --noEmit",
+    "lint": "biome lint src",
+    "format": "biome format --write src"
+  },
+  "dependencies": {
+    "glob": "^11.0.3",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@template/db": "workspace:*",
+    "@types/node": "^22.15.3",
+    "typescript": "5.8.2"
+  }
+}

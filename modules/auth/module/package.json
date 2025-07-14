@@ -1,0 +1,52 @@
+{
+  "name": "@template/auth-module",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src --max-warnings 0"
+  },
+  "dependencies": {
+    "@template/action": "workspace:*",
+    "@template/auth-action-defs": "workspace:*",
+    "@template/auth-defs": "workspace:*",
+    "@template/app-defs": "workspace:*",
+    "@template/cache": "workspace:*",
+    "@template/db": "workspace:*",
+    "@template/env": "workspace:*",
+    "@template/error": "workspace:*",
+    "@template/logging": "workspace:*",
+    "@template/prisma-defs": "workspace:*",
+    "@template/db-utils": "workspace:*",
+    "@template/resend": "workspace:*",
+    "jsonwebtoken": "^9.0.2",
+    "@template/hash-utils": "workspace:*",
+    "@template/api-utils": "workspace:*",
+    "@template/testing": "workspace:*",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "tsc-alias": "^1.8.16",
+    "typescript": "5.8.2",
+    "vitest": "^3.2.4"
+  }
+}

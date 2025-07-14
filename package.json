@@ -1,0 +1,46 @@
+{
+  "name": "@template/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "nx affected -t build",
+    "build:all": "nx run-many -t build",
+    "clean": "node ./scripts/clean.js",
+    "dev": "nx run-many -t dev",
+    "api:dev": "nx run api:dev",
+    "entry:dev": "nx run entry:dev",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "check-types": "nx run-many -t check-types",
+    "test": "nx run-many -t test --projects=\"modules/*/module\"",
+    "test:watch": "nx run-many -t test:watch --projects=\"modules/*/module\"",
+    "test:modules": "nx run-many -t test --projects=\"modules/*/module\"",
+    "create:app": "node scripts/add-app.js",
+    "create:package:internal": "hygen create package-internal",
+    "create:package:client": "hygen create package-client",
+    "create:module": "hygen create module",
+    "create:infrastructure": "node scripts/add-infrastructure.js",
+    "db:migrate": "pnpm --filter=@template/db migrate",
+    "db:generate": "pnpm --filter=@template/db generate",
+    "db": "pnpm --filter=@template/db prisma",
+    "ensure-prisma-ci": "pnpm --filter=@template/db generate && pnpm --filter=@template/prisma-defs transform"
+  },
+  "private": true,
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
+    "@nx/js": "21.2.2",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "hygen": "^6.2.11",
+    "lefthook": "^1.11.16",
+    "nx": "21.2.2",
+    "tslib": "^2.3.0",
+    "typescript": "~5.8.2"
+  },
+  "engines": {
+    "node": "^22.11.0"
+  }
+}
