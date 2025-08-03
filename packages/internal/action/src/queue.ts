@@ -1,18 +1,18 @@
-import { makeLogger } from '@axon-ai/logging';
-import type { Redis } from '@axon-ai/redis';
+import { makeLogger } from "@axon-ai/logging";
+import type { Redis } from "@axon-ai/redis";
 import {
   Queue as BullQ,
   type JobsOptions,
   QueueEvents,
   Worker,
   type WorkerOptions,
-} from 'bullmq';
+} from "bullmq";
 
 export class Queue {
   private _queues = new Map<string, BullQ>();
   private _workers = new Map<string, Worker>();
   private _events = new Map<string, QueueEvents>();
-  #logger = makeLogger('AppQueue');
+  #logger = makeLogger("AppQueue");
 
   constructor(public redisConn: Redis) {}
 
@@ -34,16 +34,16 @@ export class Queue {
 
     if (q) return q;
 
-    const newQ = new BullQ(name);
+    const newQ = new BullQ(name, { connection: this.redisConn });
     this._queues.set(name, newQ);
 
     return newQ;
   }
 
-  getOrCreateWorker(
+  async getOrCreateWorker(
     name: string,
     workerFn: Function,
-    settings?: WorkerOptions
+    settings?: WorkerOptions,
   ) {
     const worker = this._workers.get(name);
 
@@ -59,7 +59,7 @@ export class Queue {
   createWorker(
     name: string,
     workerFn: (job: unknown) => Promise<any>,
-    settings?: WorkerOptions
+    settings?: WorkerOptions,
   ) {
     return new Worker(name, workerFn, settings);
   }
@@ -82,7 +82,7 @@ export class Queue {
   }
 
   #attachEventHandlers(qEvent: QueueEvents, name: string) {
-    qEvent.on('error', this.#getErrorEventHandler(name));
+    qEvent.on("error", this.#getErrorEventHandler(name));
   }
 
   #getErrorEventHandler(name: string) {
@@ -110,8 +110,8 @@ export class Queue {
         queue
           .close()
           .catch((error) =>
-            this.#logger.error(`Error closing queue ${name}`, error)
-          )
+            this.#logger.error(`Error closing queue ${name}`, error),
+          ),
       );
     }
 
@@ -126,8 +126,8 @@ export class Queue {
         queue
           .close()
           .catch((error) =>
-            this.#logger.error(`Error closing workers ${name}`, error)
-          )
+            this.#logger.error(`Error closing workers ${name}`, error),
+          ),
       );
     }
 
@@ -142,8 +142,8 @@ export class Queue {
         queue
           .close()
           .catch((error) =>
-            this.#logger.error(`Error closing events ${name}`, error)
-          )
+            this.#logger.error(`Error closing events ${name}`, error),
+          ),
       );
     }
 

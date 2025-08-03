@@ -1,13 +1,17 @@
-import { makeError } from "@axon-ai/error";
-import type z from "zod";
+import { makeError } from '@axon-ai/error';
+import type z from 'zod';
 import type {
   ActionDef,
   ActionGroup,
   ActionGroupHandler,
   ActionHandler,
-  ModuleAction,
-} from "./__defs__";
-import { flattenActionGroup, flattenActionHandlers } from "./helpers/object";
+} from './__defs__';
+import { flattenActionGroup, flattenActionHandlers } from './helpers/object';
+
+export type ModuleAction<T extends ActionDef<z.ZodAny, z.ZodAny>> = {
+  handler?: ActionHandler<T>;
+  def: T;
+};
 
 export class Module<T extends ActionGroup> {
   public _actions: Map<string, ModuleAction<ActionDef<z.ZodAny, z.ZodAny>>> =
@@ -18,7 +22,7 @@ export class Module<T extends ActionGroup> {
 
   constructor(
     public name: string,
-    _actionGroup: T,
+    _actionGroup: T
   ) {
     const actions = flattenActionGroup<ActionDef<any, any>>(_actionGroup);
 
@@ -41,7 +45,7 @@ export class Module<T extends ActionGroup> {
   }
 
   getHandler<A extends ActionDef<z.ZodSchema, z.ZodSchema>>(
-    actionPath: A,
+    actionPath: A
   ): ActionHandler<A> | undefined {
     return this._actions.get(actionPath.name)?.handler;
   }
@@ -60,8 +64,8 @@ export class Module<T extends ActionGroup> {
 
       if (!actionName) {
         throw makeError({
-          type: "INTERNAL",
-          message: "Action Definitino not found",
+          type: 'INTERNAL',
+          message: 'Action Definitino not found',
         });
       }
 
@@ -69,8 +73,8 @@ export class Module<T extends ActionGroup> {
 
       if (!existingAction) {
         throw makeError({
-          type: "INTERNAL",
-          message: "Action Definitino not found",
+          type: 'INTERNAL',
+          message: 'Action Definitino not found',
         });
       }
 

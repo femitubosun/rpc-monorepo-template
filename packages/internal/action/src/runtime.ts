@@ -1,10 +1,10 @@
 import Env from "@axon-ai/env";
 import { makeLogger } from "@axon-ai/logging";
 import type z from "zod";
-import type { ActionDef, ModuleAction } from "./__defs__";
+import type { ActionDef } from "./__defs__";
 import { CRON, type ExtractActionTypes } from "./__defs__";
 import { getWrapperHandler } from "./helpers/handlers";
-import type { Module } from "./module";
+import type { Module, ModuleAction } from "./module";
 import type { Queue } from "./queue";
 
 const logger = makeLogger("AppRuntime");
@@ -57,10 +57,16 @@ class Runtime {
     },
   ) {
     const queue = this.#validateQueue();
-    if (!queue) return;
+    if (!queue) {
+      logger.warn(`Queue for scheduled job not found`);
+      return;
+    }
 
     const actionDef = this.#getValidAction(action.name);
-    if (!actionDef) return;
+    if (!actionDef) {
+      logger.warn(`Action definition not found`);
+      return;
+    }
 
     const actionQueue = queue.getOrCreateQ(action.name);
 
@@ -71,7 +77,7 @@ class Runtime {
       concurrency: action._settings?.concurrency ?? 10,
     });
 
-    actionQueue!.add(action.name, input);
+    await actionQueue!.add(action.name, input);
   }
 
   async #startCron(name: string) {
@@ -99,7 +105,7 @@ class Runtime {
 
     await actionQueue!.add(
       name,
-      {},
+      { context: {}, input: undefined },
       {
         repeat: {
           pattern,

@@ -1,13 +1,13 @@
-import type z from 'zod';
+import type z from "zod";
 import {
   ActionDef,
   type ActionGroup,
   type ExtractActionTypes,
-} from './__defs__';
+} from "./__defs__";
 
-import { executeSyncHandler } from './helpers/index';
-import { Module } from './module';
-import { runtime } from './runtime';
+import { executeSyncHandler } from "./helpers/index";
+import { Module } from "./module";
+import { runtime } from "./runtime";
 
 /**
  * Function to call an action and await the result
@@ -19,15 +19,15 @@ export const callAction = async <T extends ActionDef<any, any>>(
   action: T,
   input: {
     context: any;
-    input: z.infer<ExtractActionTypes<T, 'input'>>;
-  }
+    input: z.infer<ExtractActionTypes<T, "input">>;
+  },
 ): Promise<{
   context: any;
-  data: z.infer<ExtractActionTypes<T, 'output'>>;
+  data: z.infer<ExtractActionTypes<T, "output">>;
 }> => {
   const res = await executeSyncHandler(action.name, input);
 
-  return res as Promise<z.infer<ExtractActionTypes<T, 'output'>>>;
+  return res as Promise<z.infer<ExtractActionTypes<T, "output">>>;
 };
 
 /**
@@ -40,9 +40,11 @@ export const scheduleAction = async <T extends ActionDef<any, any>>(
   action: T,
   input: {
     context: any;
-    input: z.infer<ExtractActionTypes<T, 'input'>>;
-  }
+    input: z.infer<ExtractActionTypes<T, "input">>;
+  },
 ): Promise<void> => {
+  console.log("scheduling job");
+
   return await runtime.scheduleJob(action, input);
 };
 
@@ -53,7 +55,7 @@ export const scheduleAction = async <T extends ActionDef<any, any>>(
  */
 export function makeModule<T extends ActionGroup>(
   string: string,
-  group: T
+  group: T,
 ): Module<T> {
   return new Module(string, group);
 }
