@@ -1,5 +1,5 @@
-import type { Logger } from '@template/app-defs';
-import { AppError } from '@template/error';
+import type { Logger } from '@axon-ai/app-defs';
+import { AppError } from '@axon-ai/error';
 
 export type ActionRegistry = {
   [key: string]: {
@@ -26,6 +26,13 @@ export type PendingJob =
       action: string;
       logger: Logger;
       data: any;
+    }
+  | {
+      type: 'wait-native';
+      action: string;
+      logger: Logger;
+      data: any;
+      reject: (error: any) => void;
     };
 
 export class QueueConnectionError extends AppError {

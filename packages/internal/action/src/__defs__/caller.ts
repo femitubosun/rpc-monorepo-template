@@ -1,6 +1,6 @@
 import type z from 'zod';
-import type { ActionDef } from '../action-def';
 import type { ExtractActionTypes } from './action';
+import type { ActionDef } from './action-def';
 
 export type ActionCaller<T extends ActionDef<any, any>> = (
   aName: T,

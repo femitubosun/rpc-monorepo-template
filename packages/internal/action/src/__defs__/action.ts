@@ -1,10 +1,11 @@
+import type { AppContext, Logger } from '@axon-ai/app-defs';
+import type { ActionCacheKey } from '@axon-ai/cache-utils';
 import type {
-  AppContext,
-  Logger,
-} from '@template/app-defs';
-import type { preMakeActionError } from '@template/error';
+  preMakeAsyncActionError,
+  preMakeSyncActionError,
+} from '@axon-ai/error';
 import type z from 'zod';
-import type { ActionDef } from '../action-def';
+import type { ActionDef } from './action-def';
 
 export type Action = ActionDef<z.ZodTypeAny, z.ZodTypeAny>;
 
@@ -23,7 +24,10 @@ export type ActionHandler<T extends Action> = (args: {
   input: z.infer<ExtractActionTypes<T, 'input'>>;
   context: AppContext;
   logger: Logger;
-  makeError: ReturnType<typeof preMakeActionError>;
+  makeError: ReturnType<
+    typeof preMakeAsyncActionError | typeof preMakeSyncActionError
+  >;
+  cacheKey: ActionCacheKey;
 }) => Promise<{
   data: z.infer<ExtractActionTypes<T, 'output'>>;
   context: any;

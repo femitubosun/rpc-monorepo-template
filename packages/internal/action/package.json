@@ -1,14 +1,17 @@
 {
-  "name": "@template/action",
+  "name": "@axon-ai/action",
   "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./rewrite": {
+      "types": "./dist/rewrite/index.d.ts",
+      "import": "./dist/rewrite/index.js"
     }
   },
   "files": [
@@ -18,17 +21,19 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "check-types": "tsc --noEmit",
-    "lint": "eslint src --max-warnings 0"
+    "test": "vitest run"
   },
   "dependencies": {
+    "@axon-ai/app-defs": "workspace:*",
+    "@axon-ai/app-utils": "workspace:*",
+    "@axon-ai/cache-utils": "workspace:*",
+    "@axon-ai/env": "workspace:*",
+    "@axon-ai/error": "workspace:*",
+    "@axon-ai/logging": "workspace:*",
+    "@axon-ai/redis": "workspace:*",
     "bullmq": "^5.56.3",
-    "zod": "3.25.74",
-    "@template/redis": "workspace:*",
-    "@template/env": "workspace:*",
-    "@template/logging": "workspace:*",
-    "@template/error": "workspace:*",
-    "@template/app-defs": "workspace:*",
-    "@template/app-utils": "workspace:*"
+    "vitest": "^3.2.4",
+    "zod": "3.25.74"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

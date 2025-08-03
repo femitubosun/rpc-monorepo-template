@@ -1,5 +1,5 @@
-import type { ActionDef } from '../action-def';
 import type { Action, ActionHandler } from './action';
+import type { ActionDef } from './action-def';
 
 export type ActionGroup = {
   [key: string]: Action | ActionGroup;
@@ -23,3 +23,9 @@ export type ActionStructure<T extends ActionGroup> = {
       ? ActionStructure<T[K]>
       : never;
 };
+
+// Type to extract handler type for a specific action from ActionGroup
+export type ExtractActionHandler<
+  _AG extends ActionGroup,
+  ActionPath extends ActionDef<any, any>,
+> = ActionPath extends Action ? ActionHandler<ActionPath> : never;
