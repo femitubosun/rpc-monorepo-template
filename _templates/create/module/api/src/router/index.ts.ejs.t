@@ -1,7 +1,7 @@
 ---
 to: modules/<%=name%>/api/src/router/index.ts
 ---
-import { AppResponse, createApiRoute, Router } from '@template/router';
+import { Route } from '@axon-ai/router';
 
 export const _router = {
 

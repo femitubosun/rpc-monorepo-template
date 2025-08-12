@@ -1,5 +1,5 @@
 ---
-to: packages/clients/<%= name %>/README.md
+to: infrastructure/<%= name %>/README.md
 ---
 # @axon-ai/<%= name %>
 

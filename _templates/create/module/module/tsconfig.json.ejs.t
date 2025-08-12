@@ -2,27 +2,16 @@
 to: modules/<%=name%>/module/tsconfig.json
 ---
 {
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "declaration": true,
-    "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "types": [],
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@logic": ["./logic"],
-       "@module": ["./"]
+      "@logic": ["src/logic"],
+      "@module": ["src/_module"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist", "**/*.testing.ts"]
 }

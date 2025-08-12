@@ -2,7 +2,6 @@
 to: modules/<%=name%>/module/src/index.ts
 ---
 import './actions';
-import module from './_module';
+import module from '@module';
 
 export default module;
-

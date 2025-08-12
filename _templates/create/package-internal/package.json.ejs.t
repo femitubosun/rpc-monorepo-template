@@ -2,30 +2,24 @@
 to: packages/internal/<%= name %>/package.json
 ---
 {
-  "name": "@template/<%= name %>",
+  "name": "@axon-ai/<%= name %>",
   "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
+
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src --max-warnings 0"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "3.25.74",
-    "@template/env": "workspace:*"
+    "@axon-ai/env": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

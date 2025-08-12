@@ -2,38 +2,28 @@
 to: modules/<%=name%>/__defs__/package.json
 ---
 {
-  "name": "@template/<%=name%>-defs",
+  "name": "@axon-ai/<%=name%>-defs",
+  "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "module": "dist/index.js",
-  "type": "module",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
+
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src --max-warnings 0"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "3.25.74",
-    "@template/prisma-defs": "workspace:*",
-    "@template/logging": "workspace:*",
-    "@template/env": "workspace:*"
+    "@axon-ai/prisma-defs": "workspace:*",
+    "@axon-ai/logging": "workspace:*",
+    "@axon-ai/env": "workspace:*"
   },
   "devDependencies": {
-   "@types/node": "^22.15.3",
-   "eslint": "^9.30.0",
-   "typescript": "5.8.2"
+    "@types/node": "^22.15.3",
+    "typescript": "5.8.2"
   }
 }

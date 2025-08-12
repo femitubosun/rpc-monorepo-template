@@ -1,8 +1,8 @@
 ---
-to: packages/clients/<%= name %>/tsconfig.json
+to: infrastructure/<%= name %>/tsconfig.json
 ---
 {
-  "extends": "../../../tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"

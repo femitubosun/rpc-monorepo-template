@@ -2,44 +2,38 @@
 to: modules/<%=name%>/api/package.json
 ---
 {
-  "name": "@template/<%=name%>-api",
+  "name": "@axon-ai/<%=name%>-api",
+  "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "module": "dist/index.js",
-  "type": "module",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
+
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src --max-warnings 0"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "3.25.74",
-    "@template/router": "workspace:*",
-    "@template/action": "workspace:*",
-    "@template/logging": "workspace:*",
-    "@template/testing": "workspace:*",
-    "@template/env": "workspace:*",
-    "@template/api-utils": "workspace:*",
-    "@template/<%=name%>-action-defs": "workspace:*",
-    "@template/<%=name%>-module": "workspace:*",
-    "@template/<%=name%>-defs": "workspace:*"
+    "@axon-ai/action": "workspace:*",
+    "@axon-ai/app-utils": "workspace:*",
+    "@axon-ai/app-defs": "workspace:*",
+    "@axon-ai/<%=name%>-action-defs": "workspace:*",
+    "@axon-ai/<%=name%>-defs": "workspace:*",
+    "@axon-ai/<%=name%>-module": "workspace:*",
+    "@axon-ai/logging": "workspace:*",
+    "@axon-ai/env": "workspace:*",
+    "@axon-ai/db": "workspace:*",
+    "@axon-ai/error": "workspace:*",
+    "@axon-ai/router": "workspace:*",
+    "@axon-ai/testing": "workspace:*"
   },
   "devDependencies": {
-   "@types/node": "^22.15.3",
-   "eslint": "^9.30.0",
-   "typescript": "5.8.2"
+    "@types/node": "^22.15.3",
+    "typescript": "5.8.2"
+    
   }
 }

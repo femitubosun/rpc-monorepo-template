@@ -1,11 +1,11 @@
 ---
 to: modules/<%=name%>/api/src/index.ts
 ---
-import { CreateAppRouter, Module } from '@template/router';
+import { type AppOpenAPI, CreateAppRouter, Module } from '@axon-ai/router';
 import { _handlers } from './handlers';
 import { _router } from './router';
 
-export function router() {
+export function router(): AppOpenAPI {
   const router = CreateAppRouter();
 
   Module.registerRoutes(router, _router, _handlers);
@@ -13,5 +13,5 @@ export function router() {
   return router;
 }
 
-const moduleRouter = router();
+const moduleRouter: AppOpenAPI = router();
 export default moduleRouter;

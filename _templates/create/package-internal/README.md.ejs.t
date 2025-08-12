@@ -1,20 +1,20 @@
 ---
 to: packages/internal/<%= name %>/README.md
 ---
-# @template/<%= name %>
+# @axon-ai/<%= name %>
 
-<%= name %> package for your Project.
+<%= name %> package for Axon AI platform.
 
 ## Installation
 
 ```bash
-pnpm add @template/<%= name %>
+pnpm add @axon-ai/<%= name %>
 ```
 
 ## Usage
 
 ```typescript
-import { /* exports */ } from '@template/<%= name %>';
+import { /* exports */ } from '@axon-ai/<%= name %>';
 ```
 
 ## Development
