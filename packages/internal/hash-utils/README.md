@@ -1,6 +1,6 @@
 # @template/hash-utils
 
-hash-utils package for your Project.
+hash-utils package for Axon AI platform.
 
 ## Installation
 

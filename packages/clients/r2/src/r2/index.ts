@@ -1,0 +1,214 @@
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import Env from "@template/env";
+import { AppError, makeError } from "@template/error";
+import { makeLogger } from "@template/logging";
+import type {
+  RequestDeleteObjectOptions,
+  RequestGetObjectOptions,
+  RequestUploadOptions,
+  RequestVerifyObjectExistsOptions,
+} from "./__defs__";
+
+class R2 {
+  /**
+   * Generates a presigned URL for uploading an object to R2 Bucket.
+   * @param input {RequestUploadOptions} - Object containing parameters for constructing the request:
+   *   - fileName: The name of the file to upload
+   *   - contentType: The MIME type of the file
+   * @returns {string} URL endpoint to use for this identity request
+   */
+
+  #s3Client: S3Client;
+  #logger = makeLogger("R2Client");
+
+  constructor() {
+    this.#s3Client = new S3Client({
+      endpoint: Env.R2_ENDPOINT_URL,
+      credentials: {
+        accessKeyId: Env.R2_ACCESS_KEY_ID,
+        secretAccessKey: Env.R2_ACCESS_KEY,
+      },
+      region: "auto",
+    });
+  }
+
+  async generatePresignedUploadUrl(
+    input: RequestUploadOptions,
+  ): Promise<string | null> {
+    const { fileName } = input;
+
+    try {
+      const upload = new PutObjectCommand({
+        Bucket: Env.R2_DEFAULT_APP_BUCKET,
+        Key: fileName,
+      });
+
+      const presignedUrl = await getSignedUrl(this.#s3Client, upload, {
+        expiresIn: 3600,
+      });
+
+      return presignedUrl;
+    } catch (e) {
+      this.#logger.error("Error generating presigned URL", e);
+
+      return null;
+    }
+  }
+
+  /**
+   * Verifies an object from the R2 Bucket.
+   * @param input {RequestVerifyObjectExistsOptions} - Object containing parameters for constructing the request:
+   *   - objectKey: The key of the object to verify
+   * @returns {boolean} Whether the object exists
+   */
+  async verifyObjectExists(
+    input: RequestVerifyObjectExistsOptions,
+  ): Promise<boolean> {
+    const { objectKey } = input;
+
+    try {
+      const verifyUpload = new HeadObjectCommand({
+        Bucket: Env.R2_DEFAULT_APP_BUCKET,
+        Key: objectKey,
+      });
+
+      await this.#s3Client.send(verifyUpload);
+
+      return true;
+    } catch (e) {
+      this.#logger.error("Error verifying object exists", e);
+      return false;
+    }
+  }
+
+  /**
+   * Deletes an object from the R2 Bucket.
+   * @param input {RequestDeleteObjectOptions} - Object containing parameters for constructing the request:
+   *   - objectKey: The key of the object to delete
+   * @returns {boolean} Whether the object was deleted
+   */
+  async deleteObject(input: RequestDeleteObjectOptions): Promise<boolean> {
+    const { objectKey } = input;
+
+    try {
+      const deleteCommand = new DeleteObjectCommand({
+        Bucket: Env.R2_DEFAULT_APP_BUCKET,
+        Key: objectKey,
+      });
+
+      await this.#s3Client.send(deleteCommand);
+      return true;
+    } catch (e) {
+      this.#logger.error("Error deleting object", e);
+      return false;
+    }
+  }
+
+  /**
+   * Generates a presigned URL for getting an object from R2.
+   * @param input {RequestGetObjectOptions} - Object containing parameters for constructing the request:
+   *   - objectKey: The key of the object to get
+   * @returns {string | null} The presigned URL or null if an error occurred
+   */
+  async getObjectUrl(input: RequestGetObjectOptions): Promise<string | null> {
+    const { objectKey, range } = input;
+
+    try {
+      const getCommand = new GetObjectCommand({
+        Bucket: Env.R2_DEFAULT_APP_BUCKET,
+        Key: objectKey,
+        Range: range,
+      });
+
+      const presignedUrl = await getSignedUrl(this.#s3Client, getCommand, {
+        expiresIn: 900,
+      });
+
+      return presignedUrl;
+    } catch (e) {
+      this.#logger.error("Error getting object", e);
+      return null;
+    }
+  }
+
+  /**
+   * @description Get object data as Buffer from R2 storage
+   * @param input - Object containing key and optional bucket name
+   * @returns Promise<Buffer> - The object data as a Buffer
+   */
+  async getObjectAsBuffer(input: {
+    key: string;
+    bucket: string;
+  }): Promise<Buffer> {
+    const { key: Key, bucket: Bucket } = input;
+
+    try {
+      const response = await this.#s3Client.send(
+        new GetObjectCommand({
+          Bucket: Bucket,
+          Key,
+        }),
+      );
+
+      if (!response.Body) {
+        throw makeError({
+          message: `Object body not found: ${Key}`,
+          type: "INTERNAL",
+        });
+      }
+
+      const chunks: Uint8Array[] = [];
+      const reader = response.Body.transformToWebStream().getReader();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) {
+          chunks.push(value);
+        }
+      }
+
+      return Buffer.concat(chunks);
+    } catch (error: any) {
+      if (error.name === "NoSuchKey" || error.name === "NotFound") {
+        this.#logger.error(`Asset not found in storage: ${Key}`, error);
+
+        throw makeError({
+          message: `Asset not found in storage: ${Key}`,
+          type: "INTERNAL",
+        });
+      }
+
+      if (error.name === "AccessDenied" || error.name === "Forbidden") {
+        this.#logger.error(`"Unable to access storage"`, error);
+
+        throw makeError({
+          message: "Unable to access storage",
+          type: "INTERNAL",
+        });
+      }
+
+      if (error instanceof AppError) {
+        this.#logger.error(error.message, error);
+
+        throw error;
+      }
+
+      this.#logger.error("Something went wrong with R2", error);
+
+      throw makeError({
+        message: `Storage error: ${error.message}`,
+        type: "INTERNAL",
+      });
+    }
+  }
+}
+
+export default new R2();

@@ -1,23 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-imports, no-console */
+import type { Logger } from "@template/app-defs";
+import Env from "@template/env";
+import pino from "pino";
+import { nestStyleTransport } from "./pino";
 
-import type { Logger } from '@template/app-defs';
-import Env from '@template/env';
-import pino from 'pino';
-import { nestStyleTransport } from './pino';
-
-export const PrettyStream:
-  | pino.DestinationStream
-  | undefined =
-  Env.NODE_ENV === 'production'
+export const PrettyStream: pino.DestinationStream | undefined =
+  Env.NODE_ENV === "production"
     ? nestStyleTransport // TODO change
     : nestStyleTransport;
 
 const base = pino(
   {
-    level: 'debug',
+    level: "debug",
     timestamp: pino.stdTimeFunctions.epochTime,
   },
-  PrettyStream
+  PrettyStream,
 );
 
 function wrapPino(p: pino.Logger): Logger {
@@ -28,21 +24,11 @@ function wrapPino(p: pino.Logger): Logger {
     error: (msg, meta) => {
       if (meta instanceof Error) {
         p.error({ err: meta, stack: meta.stack }, msg);
-      } else if (typeof meta === 'string') {
+      } else if (typeof meta === "string") {
         const error = new Error(meta);
-        p.error(
-          { err: error, stack: error.stack, context: meta },
-          msg
-        );
-      } else if (
-        meta &&
-        typeof meta === 'object' &&
-        meta.stack
-      ) {
-        p.error(
-          { err: meta, stack: meta.stack, ...meta },
-          msg
-        );
+        p.error({ err: error, stack: error.stack, context: meta }, msg);
+      } else if (meta && typeof meta === "object" && meta.stack) {
+        p.error({ err: meta, stack: meta.stack, ...meta }, msg);
       } else {
         const error = new Error(msg);
         p.error({ ...meta, stack: error.stack }, msg);

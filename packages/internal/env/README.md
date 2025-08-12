@@ -1,6 +1,6 @@
 # @template/env
 
-A shared library package for your Project workspace.
+A shared library package for the Axon AI workspace.
 
 ## Installation
 

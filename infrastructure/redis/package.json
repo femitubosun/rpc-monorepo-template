@@ -1,16 +1,9 @@
 {
   "name": "@template/redis",
+  "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "files": [
     "dist"
   ],
@@ -19,8 +12,7 @@
     "dev": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src --max-warnings 0"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@template/env": "workspace:*",

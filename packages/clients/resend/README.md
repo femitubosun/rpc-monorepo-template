@@ -1,6 +1,6 @@
 # @template/resend
 
-resend package for your Project.
+resend package for Axon AI platform.
 
 ## Installation
 

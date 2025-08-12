@@ -5,10 +5,10 @@
 //  * A module needs to be able to register its actions.
 //  *
 //  */
-// import { ActionCacheKey } from '@axon-ai/cache-utils';
-// import Env from '@axon-ai/env';
-// import { preMakeAsyncActionError } from '@axon-ai/error';
-// import { makeLogger } from '@axon-ai/logging';
+// import { ActionCacheKey } from '@template/cache-utils';
+// import Env from '@template/env';
+// import { preMakeAsyncActionError } from '@template/error';
+// import { makeLogger } from '@template/logging';
 // import { Worker } from 'bullmq';
 // import { connection } from '../connection';
 // import type {

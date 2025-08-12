@@ -1,6 +1,6 @@
 # @template/db-utils
 
-db-utils package for your Project.
+db-utils package for Axon AI platform.
 
 ## Installation
 

@@ -38,15 +38,11 @@ export class AppResponse {
  *  -------------------------------------------------------
  */
 
-function json200<Schema extends AppZodResponse>(
-  schema: Schema
-) {
+function json200<Schema extends AppZodResponse>(schema: Schema) {
   return jsonStatusCode(200, schema);
 }
 
-export function json201<Schema extends AppZodResponse>(
-  schema: Schema
-) {
+export function json201<Schema extends AppZodResponse>(schema: Schema) {
   return jsonStatusCode(201, schema);
 }
 

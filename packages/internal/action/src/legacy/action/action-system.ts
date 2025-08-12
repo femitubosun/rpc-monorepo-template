@@ -1,4 +1,4 @@
-// import { makeLogger } from '@axon-ai/logging';
+// import { makeLogger } from '@template/logging';
 // import {
 //   clearSyncHandlers,
 //   executeSyncHandler,

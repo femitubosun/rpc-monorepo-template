@@ -1,5 +1,5 @@
-import type { Logger } from '@axon-ai/app-defs';
-import { AppError } from '@axon-ai/error';
+import type { Logger } from "@template/app-defs";
+import { AppError } from "@template/error";
 
 export type ActionRegistry = {
   [key: string]: {
@@ -18,17 +18,17 @@ export type PendingJob =
       handleTimeout: NodeJS.Timeout;
       action: string;
       logger: Logger;
-      type: 'action';
+      type: "action";
       data: any;
     }
   | {
-      type: 'background-job';
+      type: "background-job";
       action: string;
       logger: Logger;
       data: any;
     }
   | {
-      type: 'wait-native';
+      type: "wait-native";
       action: string;
       logger: Logger;
       data: any;
@@ -39,10 +39,10 @@ export class QueueConnectionError extends AppError {
   constructor(queueName: string, originalError: Error) {
     super({
       message: `Queue ${queueName} connection failed: ${originalError.message}`,
-      type: 'INTERNAL',
+      type: "INTERNAL",
       action: queueName,
     });
-    this.name = 'QueueConnectionError';
+    this.name = "QueueConnectionError";
     this.cause = originalError;
   }
 }

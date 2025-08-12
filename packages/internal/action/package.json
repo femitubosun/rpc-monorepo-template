@@ -1,5 +1,5 @@
 {
-  "name": "@axon-ai/action",
+  "name": "@template/action",
   "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
@@ -24,13 +24,13 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@axon-ai/app-defs": "workspace:*",
-    "@axon-ai/app-utils": "workspace:*",
-    "@axon-ai/cache-utils": "workspace:*",
-    "@axon-ai/env": "workspace:*",
-    "@axon-ai/error": "workspace:*",
-    "@axon-ai/logging": "workspace:*",
-    "@axon-ai/redis": "workspace:*",
+    "@template/app-defs": "workspace:*",
+    "@template/app-utils": "workspace:*",
+    "@template/cache-utils": "workspace:*",
+    "@template/env": "workspace:*",
+    "@template/error": "workspace:*",
+    "@template/logging": "workspace:*",
+    "@template/redis": "workspace:*",
     "bullmq": "^5.56.3",
     "vitest": "^3.2.4",
     "zod": "3.25.74"

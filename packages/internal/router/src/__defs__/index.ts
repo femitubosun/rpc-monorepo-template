@@ -1,8 +1,4 @@
-import type {
-  OpenAPIHono,
-  RouteConfig,
-  RouteHandler,
-} from '@hono/zod-openapi';
+import type { OpenAPIHono, RouteConfig, RouteHandler } from '@hono/zod-openapi';
 import type { PinoLogger } from 'hono-pino';
 
 export * from './module';
@@ -15,8 +11,10 @@ export interface AppBindings {
 
 export type AppOpenAPI = OpenAPIHono<AppBindings>;
 
-export type AppRouteHandler<RouteDef extends RouteConfig> =
-  RouteHandler<RouteDef, AppBindings>;
+export type AppRouteHandler<RouteDef extends RouteConfig> = RouteHandler<
+  RouteDef,
+  AppBindings
+>;
 
 type RouteResponse = RouteConfig['responses'][string];
 type ExtractResponseConfig<T> = T extends infer U
@@ -28,17 +26,11 @@ type ResponseConfig = ExtractResponseConfig<RouteResponse>;
 
 type Content = ResponseConfig['content'];
 type DefinedContent = Exclude<Content, undefined>;
-type ZodMediaTypeValue = DefinedContent extends Record<
-  any,
-  infer V
->
+type ZodMediaTypeValue = DefinedContent extends Record<any, infer V>
   ? V
   : never;
 
-export type AppZodResponse = Exclude<
-  ZodMediaTypeValue,
-  undefined
->['schema'];
+export type AppZodResponse = Exclude<ZodMediaTypeValue, undefined>['schema'];
 
 export const StatusDescriptions = {
   200: 'OK',

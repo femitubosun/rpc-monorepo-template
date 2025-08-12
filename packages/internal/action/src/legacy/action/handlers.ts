@@ -1,9 +1,9 @@
-// import { ActionCacheKey } from '@axon-ai/cache-utils';
+// import { ActionCacheKey } from '@template/cache-utils';
 // import {
 //   AppError,
 //   preMakeSyncActionError,
-// } from '@axon-ai/error';
-// import { makeLogger } from '@axon-ai/logging';
+// } from '@template/error';
+// import { makeLogger } from '@template/logging';
 
 // const syncHandlers = new Map<string, any>();
 

@@ -1,10 +1,11 @@
-import { resolve } from 'node:path';
-import { config, Env } from '@template/env';
-import { main } from './server';
+import Env, { validateAppEnv } from "@template/env";
+import startActionRuntime from "@template/worker-service";
+import { main } from "./server";
 
-Env.NODE_ENV !== 'production' &&
-  config({ path: resolve(process.cwd(), '.env') });
+(async () => {
+  await validateAppEnv(process.env);
 
-import '@template/worker-service';
+  await startActionRuntime(Env.ADD_QUEUE_TO_ACTION);
+})();
 
 main();

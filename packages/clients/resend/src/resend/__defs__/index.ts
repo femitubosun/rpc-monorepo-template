@@ -4,3 +4,7 @@ export interface SendEmailOptions {
   subject: string;
   html: string;
 }
+
+export interface IResend {
+  sendEmail(input: SendEmailOptions): Promise<void>;
+}

@@ -1,6 +1,6 @@
-import { PrettyStream } from '@template/logging';
-import { pinoLogger } from 'hono-pino';
-import { pino } from 'pino';
+import { PrettyStream } from "@template/logging";
+import { pinoLogger } from "hono-pino";
+import { pino } from "pino";
 
 export function logger() {
   return pinoLogger({
@@ -10,10 +10,10 @@ export function logger() {
     pino: (_c) =>
       pino(
         {
-          level: 'error',
+          level: "error",
           timestamp: pino.stdTimeFunctions.epochTime,
         },
-        PrettyStream
+        PrettyStream,
       ),
   });
 }

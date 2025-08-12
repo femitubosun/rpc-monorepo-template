@@ -1,15 +1,21 @@
-import { logger } from '../logger';
-import { autoLoadModules } from './lib';
+import { Queue, runtime } from "@template/action";
+import Env from "@template/env";
+import { logger } from "../logger";
+import { autoLoadModules } from "./lib";
+import { getRedisConn } from "./redis";
 
-async function main() {
+export async function startActionRuntime(addQueueToActionRuntime: boolean) {
   const modules = await autoLoadModules();
-  await Promise.all(
-    modules.map((module) => module.start())
-  );
 
-  logger.log(
-    `Started workers in ${modules.length} modules`
-  );
+  if (addQueueToActionRuntime) {
+    runtime.init(modules, new Queue(getRedisConn()));
+  } else {
+    runtime.init(modules);
+  }
+
+  await runtime.start();
+
+  if (Env.NODE_ENV !== "testing") {
+    logger.log(`Started workers in ${modules.length} modules`);
+  }
 }
-
-await main();

@@ -7,17 +7,14 @@ import type { ZodSchema } from 'zod';
  * ------------------------------------------
  */
 
-export function makeRoute<
-  T extends Parameters<typeof createRoute>[0],
->(config: T) {
+export function makeRoute<T extends Parameters<typeof createRoute>[0]>(
+  config: T
+) {
   return createRoute(config);
 }
 
 // Flexible route helpers - create routes with different combinations
-type RouteOptions<
-  TMethod extends string,
-  TPath extends string,
-> = {
+type RouteOptions<TMethod extends string, TPath extends string> = {
   method: TMethod;
   path: TPath;
   params?: ZodSchema;
@@ -31,16 +28,10 @@ type RouteOptions<
 };
 
 export function createFlexibleRoute<
-  TMethod extends
-    | 'get'
-    | 'post'
-    | 'put'
-    | 'patch'
-    | 'delete',
+  TMethod extends 'get' | 'post' | 'put' | 'patch' | 'delete',
   TPath extends string,
 >(options: RouteOptions<TMethod, TPath>) {
-  const { method, path, params, body, query, response } =
-    options;
+  const { method, path, params, body, query, response } = options;
 
   // Build request object
   const request: any = {};
@@ -59,11 +50,7 @@ export function createFlexibleRoute<
   // Build responses object
   const responses: any = {};
   if (response) {
-    const {
-      schema,
-      statusCode = 200,
-      description = 'Success',
-    } = response;
+    const { schema, statusCode = 200, description = 'Success' } = response;
     responses[statusCode] = {
       description,
     };
@@ -80,10 +67,8 @@ export function createFlexibleRoute<
 
   // Build final config
   const config: any = { method, path };
-  if (Object.keys(request).length > 0)
-    config.request = request;
-  if (Object.keys(responses).length > 0)
-    config.responses = responses;
+  if (Object.keys(request).length > 0) config.request = request;
+  if (Object.keys(responses).length > 0) config.responses = responses;
 
   return createRoute(config);
 }

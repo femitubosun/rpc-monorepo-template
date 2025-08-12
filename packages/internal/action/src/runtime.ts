@@ -1,5 +1,5 @@
-import Env from "@axon-ai/env";
-import { makeLogger } from "@axon-ai/logging";
+import Env from "@template/env";
+import { makeLogger } from "@template/logging";
 import type z from "zod";
 import type { ActionDef } from "./__defs__";
 import { CRON, type ExtractActionTypes } from "./__defs__";

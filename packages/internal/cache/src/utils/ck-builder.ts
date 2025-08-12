@@ -2,23 +2,14 @@ export class CacheKeyBuilder {
   private segments: string[] = [];
   private parameters: Record<string, any> = {};
 
-  constructor(
-    private readonly module: string,
-    private readonly version: string = 'v1'
-  ) {
+  constructor(module: string, version: string = 'v1') {
     if (!module || module.trim() === '') {
-      throw new Error(
-        'Module cannot be empty for CacheKeyBuilder.'
-      );
+      throw new Error('Module cannot be empty for CacheKeyBuilder.');
     }
     if (!version || version.trim() === '') {
-      throw new Error(
-        'Version cannot be empty for CacheKeyBuilder.'
-      );
+      throw new Error('Version cannot be empty for CacheKeyBuilder.');
     }
-    this.segments.push(
-      `${module.trim()}:${version.trim()}`
-    );
+    this.segments.push(`${module.trim()}:${version.trim()}`);
   }
 
   /**
@@ -62,12 +53,7 @@ export class CacheKeyBuilder {
     userId: string | number,
     itemId: string | number
   ): CacheKeyBuilder {
-    this.segments.push(
-      'user',
-      String(userId),
-      'single',
-      String(itemId)
-    );
+    this.segments.push('user', String(userId), 'single', String(itemId));
     return this;
   }
 
@@ -93,10 +79,7 @@ export class CacheKeyBuilder {
     }
 
     const paramString = Object.entries(this.parameters)
-      .map(
-        ([k, v]) =>
-          `${k}=${encodeURIComponent(this.serializeValue(v))}`
-      )
+      .map(([k, v]) => `${k}=${encodeURIComponent(this.serializeValue(v))}`)
       .join('&');
 
     return `${baseKey}?${paramString}`;
@@ -132,9 +115,7 @@ export class CacheKeyBuilder {
   /**
    * Sorts the keys of an object alphabetically (deep sort)
    */
-  private sortObjectKeys(
-    obj: Record<string, any>
-  ): Record<string, any> {
+  private sortObjectKeys(obj: Record<string, any>): Record<string, any> {
     if (typeof obj !== 'object' || obj === null) {
       return obj;
     }
@@ -154,9 +135,7 @@ export class CacheKeyBuilder {
           } else if (Array.isArray(value)) {
             result[key] = value?.map((item) =>
               // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-              typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item)
+              typeof item === 'object' && item !== null && !Array.isArray(item)
                 ? // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                   this.sortObjectKeys(item)
                 : item
@@ -175,7 +154,5 @@ export class CacheKeyBuilder {
 /**
  * Factory function to create a new CacheKeyBuilder instance
  */
-export const ckMaker = (
-  module: string,
-  version: string = 'v1'
-) => new CacheKeyBuilder(module, version);
+export const ckMaker = (module: string, version: string = 'v1') =>
+  new CacheKeyBuilder(module, version);

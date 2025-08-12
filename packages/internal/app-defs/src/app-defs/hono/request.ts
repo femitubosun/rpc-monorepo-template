@@ -8,18 +8,9 @@ import type {
   RouterRoute,
   ValidationTargets,
 } from './types';
-import type {
-  BodyData,
-  ParseBodyOptions,
-} from './utils/body';
-import type {
-  CustomHeader,
-  RequestHeader,
-} from './utils/headers';
-import type {
-  Simplify,
-  UnionToIntersection,
-} from './utils/types';
+import type { BodyData, ParseBodyOptions } from './utils/body';
+import type { CustomHeader, RequestHeader } from './utils/headers';
+import type { Simplify, UnionToIntersection } from './utils/types';
 
 type Body = {
   json: any;
@@ -88,11 +79,9 @@ export declare class HonoRequest<
   param<P2 extends ParamKeys<P> = ParamKeys<P>>(
     key: P2 extends `${infer _}?` ? never : P2
   ): string;
-  param<
-    P2 extends RemoveQuestion<
-      ParamKeys<P>
-    > = RemoveQuestion<ParamKeys<P>>,
-  >(key: P2): string | undefined;
+  param<P2 extends RemoveQuestion<ParamKeys<P>> = RemoveQuestion<ParamKeys<P>>>(
+    key: P2
+  ): string | undefined;
   param(key: string): string | undefined;
   param<P2 extends string = P>(): Simplify<
     UnionToIntersection<ParamKeyToRecord<ParamKeys<P2>>>
@@ -146,10 +135,7 @@ export declare class HonoRequest<
    */
   header(name: RequestHeader): string | undefined;
   header(name: string): string | undefined;
-  header(): Record<
-    RequestHeader | (string & CustomHeader),
-    string
-  >;
+  header(): Record<RequestHeader | (string & CustomHeader), string>;
   /**
    * `.parseBody()` can parse Request body of type `multipart/form-data` or `application/x-www-form-urlencoded`
    *
@@ -236,10 +222,7 @@ export declare class HonoRequest<
    * @param target - The target of the validation.
    * @param data - The validated data to add.
    */
-  addValidatedData(
-    target: keyof ValidationTargets,
-    data: {}
-  ): void;
+  addValidatedData(target: keyof ValidationTargets, data: {}): void;
   /**
    * Gets validated data from the request.
    *

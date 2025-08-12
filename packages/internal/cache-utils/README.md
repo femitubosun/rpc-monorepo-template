@@ -1,17 +1,17 @@
-# @axon-ai/cache-utils
+# @template/cache-utils
 
 cache-utils package for Axon AI platform.
 
 ## Installation
 
 ```bash
-pnpm add @axon-ai/cache-utils
+pnpm add @template/cache-utils
 ```
 
 ## Usage
 
 ```typescript
-import { /* exports */ } from '@axon-ai/cache-utils';
+import { /* exports */ } from '@template/cache-utils';
 ```
 
 ## Development

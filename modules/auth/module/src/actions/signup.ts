@@ -1,16 +1,16 @@
-import { enqueueAction } from '@template/action';
-import AuthAction from '@template/auth-action-defs';
-import db from '@template/db';
-import Env from '@template/env';
-import { hashString } from '@template/hash-utils';
-import module from '../_module';
-import { generateOtp, getOtpExpiration } from '../logic';
+import { scheduleAction } from "@template/action";
+import AuthAction from "@template/auth-action-defs";
+import db from "@template/db";
+import Env from "@template/env";
+import { hashString } from "@template/hash-utils";
+import module from "../_module";
+import { generateOtp, getOtpExpiration } from "../logic";
 
 module.registerHandlers({
-  signup: async ({ input, context, makeError }) => {
+  signup: async ({ input, context }) => {
     const { email } = input;
 
-    const existingUser = await db.user.findUnique({
+    await db.user.findUniqueOrThrow({
       where: {
         email,
       },
@@ -18,14 +18,6 @@ module.registerHandlers({
         id: true,
       },
     });
-
-    if (existingUser) {
-      throw makeError({
-        type: 'CONFLICT',
-        message: 'User already exists',
-        data: input,
-      });
-    }
 
     const otp = generateOtp();
 
@@ -36,7 +28,7 @@ module.registerHandlers({
           create: {
             tokenHash: await hashString(otp),
             expiresAt: getOtpExpiration(),
-            type: 'AUTH',
+            type: "AUTH",
           },
         },
       },
@@ -48,17 +40,18 @@ module.registerHandlers({
     });
 
     await Promise.all([
-      enqueueAction(AuthAction.mail.sendOnboardingMail, {
+      scheduleAction(AuthAction.mail.sendOnboardingMail, {
         context,
         input: {
           email: user.email,
-          name: user.name ?? user.email.split('@')[0],
+          name: user.name ?? user.email.split("@")[0],
         },
       }),
-      enqueueAction(AuthAction.mail.sendSignInCode, {
+      scheduleAction(AuthAction.mail.sendSignInCode, {
         context,
         input: {
           email: user.email,
+          name: user.name ?? user.email.split("@")[0],
           otp: otp,
         },
       }),
@@ -67,8 +60,8 @@ module.registerHandlers({
     return {
       context,
       data: {
-        message: 'Signup successful',
-        ...(Env.NODE_ENV === 'development' ? { otp } : {}),
+        message: "Signup successful",
+        ...(["development", "testing"].includes(Env.NODE_ENV) ? { otp } : {}),
       },
     };
   },

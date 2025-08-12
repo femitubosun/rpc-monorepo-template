@@ -1,6 +1,6 @@
 # @template/app-utils
 
-app-utils package for your Project.
+app-utils package for Axon AI platform.
 
 ## Installation
 

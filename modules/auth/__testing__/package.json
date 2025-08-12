@@ -1,0 +1,36 @@
+{
+  "name": "@template/auth-testing",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=../../../.env.test -- vitest run"
+  },
+  "dependencies": {
+    "@template/action": "workspace:*",
+    "@template/api-utils": "workspace:*",
+    "@template/app-utils": "workspace:*",
+    "@template/auth-action-defs": "workspace:*",
+    "@template/auth-defs": "workspace:*",
+    "@template/auth-module": "workspace:*",
+    "@template/cache": "workspace:*",
+    "@template/db": "workspace:*",
+    "@template/env": "workspace:*",
+    "@template/logging": "workspace:*",
+    "@template/hash-utils": "workspace:*",
+    "@template/testing": "workspace:*",
+    "@template/mail": "workspace:*",
+    "vitest": "^3.2.4",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "5.8.2",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}

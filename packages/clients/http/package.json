@@ -1,0 +1,27 @@
+{
+  "name": "@template/http",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@template/env": "workspace:*",
+    "@template/error": "workspace:*",
+    "@template/logging": "workspace:*",
+    "axios": "^1.7.9",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "typescript": "5.8.2"
+  }
+}

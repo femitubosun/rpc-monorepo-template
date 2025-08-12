@@ -1,17 +1,17 @@
-# @axon-ai/action
+# @template/action
 
 A shared library package for the Axon AI workspace.
 
 ## Installation
 
 ```bash
-pnpm add @axon-ai/action@workspace:*
+pnpm add @template/action@workspace:*
 ```
 
 ## Usage
 
 ```typescript
-import { /* your imports */ } from '@axon-ai/action'
+import { /* your imports */ } from '@template/action'
 
 // Your usage examples here
 ```

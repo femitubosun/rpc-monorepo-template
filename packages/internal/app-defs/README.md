@@ -1,6 +1,6 @@
 # @template/app-defs
 
-app-defs package for your Project.
+app-defs package for Axon AI platform.
 
 ## Installation
 

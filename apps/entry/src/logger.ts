@@ -1,3 +1,4 @@
-import { makeLogger } from '@template/logging';
+import type { Logger } from "@template/app-defs";
+import { makeLogger } from "@template/logging";
 
-export const logger = makeLogger('Entry');
+export const logger: Logger = makeLogger("Entry");

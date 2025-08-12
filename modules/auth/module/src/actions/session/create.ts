@@ -2,9 +2,9 @@ import {
   getSessionTtl,
   makeSessionKey,
   makeSessionObject,
-} from '@template/api-utils';
-import cache from '@template/cache';
-import module from '../../_module';
+} from "@template/api-utils";
+import cache from "@template/cache";
+import module from "../../_module";
 
 module.registerHandlers({
   session: {
@@ -20,7 +20,7 @@ module.registerHandlers({
         context,
         data: {
           user,
-          version: 1,
+          version,
         },
       };
     },

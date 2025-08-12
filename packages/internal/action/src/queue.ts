@@ -1,5 +1,5 @@
-import { makeLogger } from "@axon-ai/logging";
-import type { Redis } from "@axon-ai/redis";
+import { makeLogger } from "@template/logging";
+import type { Redis } from "@template/redis";
 import {
   Queue as BullQ,
   type JobsOptions,

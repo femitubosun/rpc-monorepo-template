@@ -1,6 +1,6 @@
 # @template/error
 
-error package for your Project.
+error package for Axon AI platform.
 
 ## Installation
 

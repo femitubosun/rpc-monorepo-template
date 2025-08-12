@@ -16,5 +16,6 @@ export const SendOnboardingMailSchema = z.object({
 
 export const SendSignInCodeMailSchema = z.object({
   email: z.string(),
+  name: z.string(),
   otp: z.string().min(6).max(6),
 });

@@ -5,7 +5,7 @@ export function configureOpenAPI(app: AppOpenAPI) {
   app.doc('/docs', {
     openapi: '3.0.0',
     info: {
-      title: 'your Project API',
+      title: 'Axon AI API',
       version: '0.0.0',
     },
   });
@@ -14,8 +14,17 @@ export function configureOpenAPI(app: AppOpenAPI) {
     '/docs/ref',
     Scalar({
       url: '/docs',
-      theme: 'deepSpace',
+      theme: 'alternate',
       layout: 'modern',
+      persistAuth: true,
+      authentication: {
+        preferredSecurityScheme: 'httpBearer',
+        securitySchemes: {
+          httpBearer: {
+            token: 'xyz token value',
+          },
+        },
+      },
     })
   );
 }

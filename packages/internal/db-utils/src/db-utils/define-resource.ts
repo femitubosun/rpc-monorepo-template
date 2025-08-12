@@ -22,12 +22,7 @@ export function makeResourceSchema<
   TCustomSchemas extends Record<string, z.ZodType>,
   TName extends string = string,
 >(
-  config: ResourceConfig<
-    T,
-    ListItem,
-    Filters,
-    TCustomSchemas
-  > & {
+  config: ResourceConfig<T, ListItem, Filters, TCustomSchemas> & {
     name: TName;
   }
 ) {
@@ -42,34 +37,24 @@ export function makeResourceSchema<
 
   const listingInputSchema = z.object({
     pagination: PaginationInputSchema,
-    ...(includeSearch
-      ? { search: z.string().optional() }
-      : {}),
+    ...(includeSearch ? { search: z.string().optional() } : {}),
     filters: config.listConfig.filters,
   });
 
   const transformedCustomSchemas = Object.fromEntries(
-    Object.entries(customSchemas).map(([key, value]) => [
-      toPascal(key),
-      value,
-    ])
+    Object.entries(customSchemas).map(([key, value]) => [toPascal(key), value])
   );
 
   const schemas = {
-    [`${toPascal(config.name)}ListingInput`]:
-      listingInputSchema,
-    [`${toPascal(config.name)}ListingOutput`]:
-      listingOutputSchema,
+    [`${toPascal(config.name)}ListingInput`]: listingInputSchema,
+    [`${toPascal(config.name)}ListingOutput`]: listingOutputSchema,
     [`${toPascal(config.name)}FullOutput`]: config.base,
-    [`${toPascal(config.name)}ListingItem`]:
-      config.listConfig.itemSchema,
+    [`${toPascal(config.name)}ListingItem`]: config.listConfig.itemSchema,
     ...transformedCustomSchemas,
   };
 
   return schemas as {
-    [K in keyof TCustomSchemas as Capitalize<
-      string & K
-    >]: TCustomSchemas[K];
+    [K in keyof TCustomSchemas as Capitalize<string & K>]: TCustomSchemas[K];
   } & {
     [K in
       | `${Capitalize<TName>}ListingInput`
@@ -91,14 +76,8 @@ export function defineResourceSchema<
   T extends z.ZodObject<any>,
   ListItem extends z.ZodType,
   Filters extends z.ZodType,
-  TCustomSchemas extends Record<string, z.ZodType> = Record<
-    string,
-    never
-  >,
-  TOperations extends ResourceOperations<T> = Record<
-    string,
-    never
-  >,
+  TCustomSchemas extends Record<string, z.ZodType> = Record<string, never>,
+  TOperations extends ResourceOperations<T> = Record<string, never>,
   TName extends string = string,
 >(
   config: DefineResourceConfig<
@@ -112,11 +91,7 @@ export function defineResourceSchema<
   }
 ) {
   const {
-    listConfig: {
-      includeSearch = true,
-      filters,
-      itemSchema,
-    },
+    listConfig: { includeSearch = true, filters, itemSchema },
     custom = {},
     operations = {},
   } = config;
@@ -130,15 +105,11 @@ export function defineResourceSchema<
     | readonly (keyof T['shape'])[]
     | undefined;
 
-  const listingOutputSchema = PaginatedResultGenericSchema(
-    itemSchema.array()
-  );
+  const listingOutputSchema = PaginatedResultGenericSchema(itemSchema.array());
 
   const listingInputSchema = z.object({
     pagination: PaginationInputSchema,
-    ...(includeSearch
-      ? { search: z.string().optional() }
-      : {}),
+    ...(includeSearch ? { search: z.string().optional() } : {}),
     filters: filters,
   });
 
@@ -150,17 +121,12 @@ export function defineResourceSchema<
     : undefined;
 
   const transformedCustomSchemas = Object.fromEntries(
-    Object.entries(custom).map(([key, value]) => [
-      toPascal(key),
-      value,
-    ])
+    Object.entries(custom).map(([key, value]) => [toPascal(key), value])
   );
 
   const baseSchemas = {
-    [`${toPascal(config.name)}ListingInput`]:
-      listingInputSchema,
-    [`${toPascal(config.name)}ListingOutput`]:
-      listingOutputSchema,
+    [`${toPascal(config.name)}ListingInput`]: listingInputSchema,
+    [`${toPascal(config.name)}ListingOutput`]: listingOutputSchema,
     [`${toPascal(config.name)}FullOutput`]: config.base,
     [`${toPascal(config.name)}ListingItem`]: itemSchema,
     ...transformedCustomSchemas,
@@ -169,15 +135,11 @@ export function defineResourceSchema<
   const operationSchemas: Record<string, any> = {};
 
   if (createSchema) {
-    operationSchemas[
-      `Create${toPascal(config.name)}Schema`
-    ] = createSchema;
+    operationSchemas[`Create${toPascal(config.name)}Schema`] = createSchema;
   }
 
   if (updateSchema) {
-    operationSchemas[
-      `Update${toPascal(config.name)}Schema`
-    ] = updateSchema;
+    operationSchemas[`Update${toPascal(config.name)}Schema`] = updateSchema;
   }
 
   const schemas = {
@@ -186,9 +148,7 @@ export function defineResourceSchema<
   };
 
   return schemas as {
-    [K in keyof TCustomSchemas as Capitalize<
-      string & K
-    >]: TCustomSchemas[K];
+    [K in keyof TCustomSchemas as Capitalize<string & K>]: TCustomSchemas[K];
   } & {
     [K in
       | `${Capitalize<TName>}ListingInput`

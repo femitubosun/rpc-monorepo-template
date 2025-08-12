@@ -3,14 +3,12 @@
  * Types utility.
  */
 export type Expect<T extends true> = T;
-export type Equal<X, Y> = (<T>() => T extends X
-  ? 1
-  : 2) extends <T>() => T extends Y ? 1 : 2
+export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
+  T,
+>() => T extends Y ? 1 : 2
   ? true
   : false;
-export type NotEqual<X, Y> = true extends Equal<X, Y>
-  ? false
-  : true;
+export type NotEqual<X, Y> = true extends Equal<X, Y> ? false : true;
 export type UnionToIntersection<U> = (
   U extends any
     ? (k: U) => void
@@ -18,27 +16,14 @@ export type UnionToIntersection<U> = (
 ) extends (k: infer I) => void
   ? I
   : never;
-export type RemoveBlankRecord<T> = T extends Record<
-  infer K,
-  unknown
->
+export type RemoveBlankRecord<T> = T extends Record<infer K, unknown>
   ? K extends string
     ? T
     : never
   : never;
-export type IfAnyThenEmptyObject<T> = 0 extends 1 & T
-  ? {}
-  : T;
-export type JSONPrimitive =
-  | string
-  | boolean
-  | number
-  | null;
-export type JSONArray = (
-  | JSONPrimitive
-  | JSONObject
-  | JSONArray
-)[];
+export type IfAnyThenEmptyObject<T> = 0 extends 1 & T ? {} : T;
+export type JSONPrimitive = string | boolean | number | null;
+export type JSONArray = (JSONPrimitive | JSONObject | JSONArray)[];
 export type JSONObject = {
   [key: string]:
     | JSONPrimitive
@@ -51,22 +36,15 @@ export type InvalidJSONValue =
   | undefined
   | symbol
   | ((...args: unknown[]) => unknown);
-type InvalidToNull<T> = T extends InvalidJSONValue
-  ? null
-  : T;
-type IsInvalid<T> = T extends InvalidJSONValue
-  ? true
-  : false;
+type InvalidToNull<T> = T extends InvalidJSONValue ? null : T;
+type IsInvalid<T> = T extends InvalidJSONValue ? true : false;
 /**
  * symbol keys are omitted through `JSON.stringify`
  */
 type OmitSymbolKeys<T> = {
   [K in keyof T as K extends symbol ? never : K]: T[K];
 };
-export type JSONValue =
-  | JSONObject
-  | JSONArray
-  | JSONPrimitive;
+export type JSONValue = JSONObject | JSONArray | JSONPrimitive;
 export type JSONParsed<T> = T extends {
   toJSON(): infer J;
 }
@@ -89,9 +67,7 @@ export type JSONParsed<T> = T extends {
           ? {}
           : T extends object
             ? {
-                [K in keyof OmitSymbolKeys<T> as IsInvalid<
-                  T[K]
-                > extends true
+                [K in keyof OmitSymbolKeys<T> as IsInvalid<T[K]> extends true
                   ? never
                   : K]: boolean extends IsInvalid<T[K]>
                   ? JSONParsed<T[K]> | undefined
@@ -118,31 +94,21 @@ export type InterfaceToType<T> = T extends Function
   : {
       [K in keyof T]: InterfaceToType<T[K]>;
     };
-export type RequiredKeysOf<BaseType extends object> =
-  Exclude<
-    {
-      [Key in keyof BaseType]: BaseType extends Record<
-        Key,
-        BaseType[Key]
-      >
-        ? Key
-        : never;
-    }[keyof BaseType],
-    undefined
-  >;
+export type RequiredKeysOf<BaseType extends object> = Exclude<
+  {
+    [Key in keyof BaseType]: BaseType extends Record<Key, BaseType[Key]>
+      ? Key
+      : never;
+  }[keyof BaseType],
+  undefined
+>;
 export type HasRequiredKeys<BaseType extends object> =
   RequiredKeysOf<BaseType> extends never ? false : true;
-export type IsAny<T> = boolean extends (
-  T extends never
-    ? true
-    : false
-)
+export type IsAny<T> = boolean extends (T extends never ? true : false)
   ? true
   : false;
 /**
  * String literal types with auto-completion
  * @see https://github.com/Microsoft/TypeScript/issues/29729
  */
-export type StringLiteralUnion<T> =
-  | T
-  | (string & Record<never, never>);
+export type StringLiteralUnion<T> = T | (string & Record<never, never>);

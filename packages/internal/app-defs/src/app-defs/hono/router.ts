@@ -97,9 +97,7 @@ export type Params = Record<string, string>;
  * ]
  * ```
  */
-export type Result<T> =
-  | [[T, ParamIndexMap][], ParamStash]
-  | [[T, Params][]];
+export type Result<T> = [[T, ParamIndexMap][], ParamStash] | [[T, Params][]];
 /**
  * Error class representing an unsupported path error.
  */

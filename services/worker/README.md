@@ -1,6 +1,6 @@
 # @template/queue
 
-queue package for your Project.
+queue package for Axon AI platform.
 
 ## Installation
 

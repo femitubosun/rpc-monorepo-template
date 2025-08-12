@@ -1,5 +1,3 @@
-import { _Resend } from './resend';
-
-const resend = new _Resend();
+import { resend } from './resend';
 
 export default resend;

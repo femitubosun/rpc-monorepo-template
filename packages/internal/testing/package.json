@@ -1,29 +1,26 @@
 {
   "name": "@template/testing",
+  "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src --max-warnings 0"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "3.25.74",
     "vitest": "^3.2.4",
     "@faker-js/faker": "^9.9.0",
-    "@template/app-defs": "workspace:*"
+    "@template/app-defs": "workspace:*",
+    "@template/worker-service": "workspace:*",
+    "@template/app-utils": "workspace:*",
+    "@template/cache-utils": "workspace:*",
+    "@template/error": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

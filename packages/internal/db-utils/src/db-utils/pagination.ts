@@ -41,9 +41,7 @@ export async function findManyWithPagination<T>(
   };
 }
 
-export const toPrismaSkipTake = (
-  pagination: PaginationInput
-) => ({
+export const toPrismaSkipTake = (pagination: PaginationInput) => ({
   skip: (pagination.page - 1) * pagination.perPage,
   take: pagination.perPage,
 });
