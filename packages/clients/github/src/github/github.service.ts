@@ -1,7 +1,7 @@
-import { Octokit } from "@octokit/core";
-import Env from "@template/env";
-import http from "@template/http";
-import { makeLogger } from "@template/logging";
+import { Octokit } from '@octokit/core';
+import Env from '@template/env';
+import http from '@template/http';
+import { makeLogger } from '@template/logging';
 import type {
   IGithub,
   RequestAuthOptions,
@@ -9,9 +9,9 @@ import type {
   RequestAuthTokenOptions,
   RequestAuthTokenResponse,
   RequestGithubRepoOptions,
-} from "./__defs__";
+} from './__defs__';
 
-const logger = makeLogger("GithubClient");
+const logger = makeLogger('GithubClient');
 
 export class Github implements IGithub {
   /**
@@ -26,15 +26,26 @@ export class Github implements IGithub {
   generateAuthUrl(input: RequestAuthOptions): string {
     const { state, scopes, codeChallenge } = input;
 
-    const endpointUrl = new URL(Env.GITHUB_REQUEST_IDENTITY_URL);
+    const endpointUrl = new URL(
+      Env.GITHUB_REQUEST_IDENTITY_URL
+    );
 
-    endpointUrl.searchParams.append("client_id", Env.GITHUB_CLIENT_ID);
-    endpointUrl.searchParams.append("state", state);
-    endpointUrl.searchParams.append("code_challenge", codeChallenge);
-    endpointUrl.searchParams.append("code_challenge_method", "S256");
     endpointUrl.searchParams.append(
-      "scope",
-      (scopes ?? ["user:email"]).join(","),
+      'client_id',
+      Env.GITHUB_CLIENT_ID
+    );
+    endpointUrl.searchParams.append('state', state);
+    endpointUrl.searchParams.append(
+      'code_challenge',
+      codeChallenge
+    );
+    endpointUrl.searchParams.append(
+      'code_challenge_method',
+      'S256'
+    );
+    endpointUrl.searchParams.append(
+      'scope',
+      (scopes ?? ['user:email']).join(',')
     );
 
     return endpointUrl.toString();
@@ -52,7 +63,7 @@ export class Github implements IGithub {
    *   - tokenType: Type of token (string), e.g., 'refresh'
    */
   async requestAuthenticationToken(
-    input: RequestAuthTokenOptions,
+    input: RequestAuthTokenOptions
   ): Promise<RequestAuthTokenResponse | null> {
     const {
       code,
@@ -70,7 +81,7 @@ export class Github implements IGithub {
         endpointUrl,
         requestConfig: {
           headers: {
-            accept: "application/json",
+            accept: 'application/json',
           },
         },
         dataPayload: {
@@ -95,9 +106,9 @@ export class Github implements IGithub {
     });
 
     try {
-      const result = await octoKit.request("GET /user", {
+      const result = await octoKit.request('GET /user', {
         headers: {
-          "X-GitHub-Api-Version": "2022-11-28",
+          'X-GitHub-Api-Version': '2022-11-28',
         },
       });
 
@@ -113,14 +124,17 @@ export class Github implements IGithub {
     const { repo, owner } = input;
     const octoKit = new Octokit();
     try {
-      const result = await octoKit.request("GET /repos/{owner}/{repo}", {
-        owner,
-        repo,
-        headers: {
-          "X-GitHub-Api-Version": "2022-11-28",
-          accept: "application/vnd.github+json",
-        },
-      });
+      const result = await octoKit.request(
+        'GET /repos/{owner}/{repo}',
+        {
+          owner,
+          repo,
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28',
+            accept: 'application/vnd.github+json',
+          },
+        }
+      );
 
       return result.data;
     } catch (e) {

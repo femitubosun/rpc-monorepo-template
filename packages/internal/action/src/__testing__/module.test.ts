@@ -44,7 +44,11 @@ describe('New Module Test', () => {
       .input(z.object({ date: z.string().datetime() }))
       .output(z.object({ timestamp: z.number() })),
     tenth: A('test.tenth')
-      .input(z.object({ config: z.object({ enabled: z.boolean() }) }))
+      .input(
+        z.object({
+          config: z.object({ enabled: z.boolean() }),
+        })
+      )
       .output(z.object({ applied: z.boolean() })),
   });
 
@@ -58,13 +62,21 @@ describe('New Module Test', () => {
     const expectedResult = new Map();
 
     expectedResult.set('test.first', { def: group.first });
-    expectedResult.set('test.second', { def: group.second });
+    expectedResult.set('test.second', {
+      def: group.second,
+    });
     expectedResult.set('test.third', { def: group.third });
-    expectedResult.set('test.fourth', { def: group.fourth });
+    expectedResult.set('test.fourth', {
+      def: group.fourth,
+    });
     expectedResult.set('test.fifth', { def: group.fifth });
     expectedResult.set('test.sixth', { def: group.sixth });
-    expectedResult.set('test.seventh', { def: group.seventh });
-    expectedResult.set('test.eighth', { def: group.eighth });
+    expectedResult.set('test.seventh', {
+      def: group.seventh,
+    });
+    expectedResult.set('test.eighth', {
+      def: group.eighth,
+    });
     expectedResult.set('test.ninth', { def: group.ninth });
     expectedResult.set('test.tenth', { def: group.tenth });
 
@@ -75,14 +87,19 @@ describe('New Module Test', () => {
     const singleActionGroup = G({
       first: A('test.single.first')
         .input(z.object({ id: z.string() }))
-        .output(z.object({ id: z.string(), message: z.string() })),
+        .output(
+          z.object({ id: z.string(), message: z.string() })
+        ),
     });
 
-    const singleModule = makeModule('SingleTest', singleActionGroup);
+    const singleModule = makeModule(
+      'SingleTest',
+      singleActionGroup
+    );
 
-    const handler: ActionHandler<typeof singleActionGroup.first> = async ({
-      input: _input,
-    }) => {
+    const handler: ActionHandler<
+      typeof singleActionGroup.first
+    > = async ({ input: _input }) => {
       return {
         context: {},
         data: {
@@ -110,14 +127,19 @@ describe('New Module Test', () => {
     const getHandlerGroup = G({
       first: A('test.gethandler.first')
         .input(z.object({ id: z.string() }))
-        .output(z.object({ id: z.string(), message: z.string() })),
+        .output(
+          z.object({ id: z.string(), message: z.string() })
+        ),
     });
 
-    const getHandlerModule = new Module('GetHandlerTest', getHandlerGroup);
+    const getHandlerModule = new Module(
+      'GetHandlerTest',
+      getHandlerGroup
+    );
 
-    const handler: ActionHandler<typeof getHandlerGroup.first> = async ({
-      input: _input,
-    }) => {
+    const handler: ActionHandler<
+      typeof getHandlerGroup.first
+    > = async ({ input: _input }) => {
       return {
         context: {},
         data: {
@@ -131,69 +153,71 @@ describe('New Module Test', () => {
       first: handler,
     });
 
-    expect(getHandlerModule.getHandler(getHandlerGroup.first)).toBe(handler);
+    expect(
+      getHandlerModule.getHandler(getHandlerGroup.first)
+    ).toBe(handler);
   });
 
   it('should add a multiple hanlders to the action def when registerHanlders is called', () => {
     const moduleTwo = new Module('Test', group);
 
-    const firstHandler: ActionHandler<typeof group.first> = async ({
-      context,
-    }) => {
+    const firstHandler: ActionHandler<
+      typeof group.first
+    > = async ({ context }) => {
       return { data: { id: '', message: '' }, context };
     };
 
-    const secondHandler: ActionHandler<typeof group.second> = async ({
-      context,
-    }) => {
+    const secondHandler: ActionHandler<
+      typeof group.second
+    > = async ({ context }) => {
       return { data: { result: '' }, context };
     };
 
-    const thirdHandler: ActionHandler<typeof group.third> = async ({
-      context,
-    }) => {
+    const thirdHandler: ActionHandler<
+      typeof group.third
+    > = async ({ context }) => {
       return { data: { total: 0 }, context };
     };
 
-    const fourthHandler: ActionHandler<typeof group.fourth> = async ({
-      context,
-    }) => {
+    const fourthHandler: ActionHandler<
+      typeof group.fourth
+    > = async ({ context }) => {
       return { data: { status: '' }, context };
     };
 
-    const fifthHandler: ActionHandler<typeof group.fifth> = async ({
-      context,
-    }) => {
+    const fifthHandler: ActionHandler<
+      typeof group.fifth
+    > = async ({ context }) => {
       return { data: { processed: 0 }, context };
     };
 
-    const sixthHandler: ActionHandler<typeof group.sixth> = async ({
-      context,
-    }) => {
+    const sixthHandler: ActionHandler<
+      typeof group.sixth
+    > = async ({ context }) => {
       return { data: { valid: true }, context };
     };
 
-    const seventhHandler: ActionHandler<typeof group.seventh> = async ({
-      context,
-    }) => {
+    const seventhHandler: ActionHandler<
+      typeof group.seventh
+    > = async ({ context }) => {
       return { data: { formatted: '' }, context };
     };
 
-    const eighthHandler: ActionHandler<typeof group.eighth> = async ({
-      context,
-    }) => {
+    const eighthHandler: ActionHandler<
+      typeof group.eighth
+    > = async ({ context }) => {
       return { data: { count: 0 }, context };
     };
 
-    const ninthHandler: ActionHandler<typeof group.ninth> = async ({
-      context,
-    }) => {
+    const ninthHandler: ActionHandler<
+      typeof group.ninth
+    > = async ({ context }) => {
       return { data: { timestamp: 0 }, context };
     };
 
-    const tenthHandler: ActionHandler<typeof group.tenth> = async ({
-      context,
-    }) => {
+    const tenthHandler: ActionHandler<
+      typeof group.tenth
+    > = async ({ context }) => {
       return { data: { applied: true }, context };
     };
 
@@ -212,19 +236,46 @@ describe('New Module Test', () => {
 
     const expectedResult = new Map();
 
-    expectedResult.set('first', { def: group.first, handler: firstHandler });
-    expectedResult.set('second', { def: group.second, handler: secondHandler });
-    expectedResult.set('third', { def: group.third, handler: thirdHandler });
-    expectedResult.set('fourth', { def: group.fourth, handler: fourthHandler });
-    expectedResult.set('fifth', { def: group.fifth, handler: fifthHandler });
-    expectedResult.set('sixth', { def: group.sixth, handler: sixthHandler });
+    expectedResult.set('first', {
+      def: group.first,
+      handler: firstHandler,
+    });
+    expectedResult.set('second', {
+      def: group.second,
+      handler: secondHandler,
+    });
+    expectedResult.set('third', {
+      def: group.third,
+      handler: thirdHandler,
+    });
+    expectedResult.set('fourth', {
+      def: group.fourth,
+      handler: fourthHandler,
+    });
+    expectedResult.set('fifth', {
+      def: group.fifth,
+      handler: fifthHandler,
+    });
+    expectedResult.set('sixth', {
+      def: group.sixth,
+      handler: sixthHandler,
+    });
     expectedResult.set('seventh', {
       def: group.seventh,
       handler: seventhHandler,
     });
-    expectedResult.set('eighth', { def: group.eighth, handler: eighthHandler });
-    expectedResult.set('ninth', { def: group.ninth, handler: ninthHandler });
-    expectedResult.set('tenth', { def: group.tenth, handler: tenthHandler });
+    expectedResult.set('eighth', {
+      def: group.eighth,
+      handler: eighthHandler,
+    });
+    expectedResult.set('ninth', {
+      def: group.ninth,
+      handler: ninthHandler,
+    });
+    expectedResult.set('tenth', {
+      def: group.tenth,
+      handler: tenthHandler,
+    });
 
     expect(moduleTwo._actions).toEqual(expectedResult);
   });

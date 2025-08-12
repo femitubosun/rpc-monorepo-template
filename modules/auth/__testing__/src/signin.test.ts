@@ -1,12 +1,12 @@
-import { scheduleAction } from "@template/action";
-import AuthAction from "@template/auth-action-defs";
-import module from "@template/auth-module";
-import db from "@template/db";
+import { scheduleAction } from '@template/action';
+import AuthAction from '@template/auth-action-defs';
+import module from '@template/auth-module';
+import db from '@template/db';
 import {
   createActionMocks,
   faker,
   setUpTestEnvironment,
-} from "@template/testing";
+} from '@template/testing';
 import {
   afterEach,
   beforeAll,
@@ -15,10 +15,10 @@ import {
   expect,
   it,
   vi,
-} from "vitest";
+} from 'vitest';
 
-vi.mock("@template/action", async () => {
-  const actual = await vi.importActual("@template/action");
+vi.mock('@template/action', async () => {
+  const actual = await vi.importActual('@template/action');
   return {
     ...actual,
     scheduleAction: vi.fn(),
@@ -27,8 +27,10 @@ vi.mock("@template/action", async () => {
 
 const mockScheduleAction = vi.mocked(scheduleAction);
 
-describe("Auth.signin Test", () => {
-  let handler: ReturnType<typeof module.getHandler<typeof AuthAction.signIn>>;
+describe('Auth.signin Test', () => {
+  let handler: ReturnType<
+    typeof module.getHandler<typeof AuthAction.signIn>
+  >;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
@@ -48,11 +50,11 @@ describe("Auth.signin Test", () => {
     await db.user.deleteMany({});
   });
 
-  it("should be defined", () => {
+  it('should be defined', () => {
     expect(handler).toBeDefined();
   });
 
-  it("should sign in a user successfully", async () => {
+  it('should sign in a user successfully', async () => {
     await db.user.create({
       data: {
         email,
@@ -71,12 +73,12 @@ describe("Auth.signin Test", () => {
 
     expect(result).toMatchObject({
       data: {
-        message: "Check email for further instructions",
+        message: 'Check email for further instructions',
       },
     });
   });
 
-  it("should set all old user AUTH otps to used", async () => {
+  it('should set all old user AUTH otps to used', async () => {
     const user = await db.user.create({
       data: {
         email,
@@ -87,17 +89,17 @@ describe("Auth.signin Test", () => {
           create: [
             {
               tokenHash: faker.string.hexadecimal(),
-              type: "AUTH",
+              type: 'AUTH',
               expiresAt: new Date(),
             },
             {
               tokenHash: faker.string.hexadecimal(),
-              type: "AUTH",
+              type: 'AUTH',
               expiresAt: new Date(),
             },
             {
               tokenHash: faker.string.hexadecimal(),
-              type: "AUTH",
+              type: 'AUTH',
               expiresAt: new Date(),
             },
           ],
@@ -118,10 +120,10 @@ describe("Auth.signin Test", () => {
           user: {
             id: user.id,
           },
-          type: "AUTH",
+          type: 'AUTH',
           isUsed: true,
         },
-      }),
+      })
     ).toBe(3);
 
     expect(
@@ -130,14 +132,14 @@ describe("Auth.signin Test", () => {
           user: {
             email,
           },
-          type: "AUTH",
+          type: 'AUTH',
           isUsed: false,
         },
-      }),
+      })
     ).toBe(1);
   });
 
-  it("should schedule signInCodeMail", async () => {
+  it('should schedule signInCodeMail', async () => {
     await db.user.create({
       data: {
         email,
@@ -159,10 +161,10 @@ describe("Auth.signin Test", () => {
       expect.objectContaining({
         input: {
           email,
-          name: email.split("@")[0],
+          name: email.split('@')[0],
           otp: expect.stringMatching(/^\d{6}$/),
         },
-      }),
+      })
     );
   });
 });

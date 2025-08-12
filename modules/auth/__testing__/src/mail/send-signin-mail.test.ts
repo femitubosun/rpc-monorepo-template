@@ -1,42 +1,53 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
-vi.mock("@template/mail", () => ({
+vi.mock('@template/mail', () => ({
   default: {
     sendLoginOtp: vi.fn().mockResolvedValue(undefined),
   },
 }));
 
-import AuthAction from "@template/auth-action-defs";
-import module from "@template/auth-module";
-import mail from "@template/mail";
+import AuthAction from '@template/auth-action-defs';
+import module from '@template/auth-module';
+import mail from '@template/mail';
 import {
   createActionMocks,
   faker,
   setUpTestEnvironment,
-} from "@template/testing";
+} from '@template/testing';
 
 const mockMail = vi.mocked(mail);
 
-describe("Auth.mail.sendSignInCode Test", () => {
+describe('Auth.mail.sendSignInCode Test', () => {
   let handler: ReturnType<
-    typeof module.getHandler<typeof AuthAction.mail.sendSignInCode>
+    typeof module.getHandler<
+      typeof AuthAction.mail.sendSignInCode
+    >
   >;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
 
-    handler = module.getHandler(AuthAction.mail.sendSignInCode);
+    handler = module.getHandler(
+      AuthAction.mail.sendSignInCode
+    );
   }, 3000);
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should be defined", () => {
+  it('should be defined', () => {
     expect(handler).toBeDefined();
   });
 
-  it("should call mail.sendLoginOtp with correct parameters", async () => {
+  it('should call mail.sendLoginOtp with correct parameters', async () => {
     const email = faker.internet.email();
     const name = faker.person.firstName();
     const otp = faker.string.numeric(6);
@@ -59,10 +70,14 @@ describe("Auth.mail.sendSignInCode Test", () => {
     });
 
     // Verify that the mail service was called with the correct parameters
-    expect(mockMail.sendLoginOtp).toHaveBeenCalledWith("", email, otp);
+    expect(mockMail.sendLoginOtp).toHaveBeenCalledWith(
+      '',
+      email,
+      otp
+    );
   });
 
-  it("should return correct response structure", async () => {
+  it('should return correct response structure', async () => {
     const email = faker.internet.email();
     const name = faker.person.firstName();
     const otp = faker.string.numeric(6);
@@ -84,14 +99,14 @@ describe("Auth.mail.sendSignInCode Test", () => {
     });
   });
 
-  it("should handle mail service errors gracefully", async () => {
+  it('should handle mail service errors gracefully', async () => {
     const email = faker.internet.email();
     const name = faker.person.firstName();
     const otp = faker.string.numeric(6);
     const context = { userId: faker.string.uuid() };
 
     mockMail.sendLoginOtp.mockRejectedValueOnce(
-      new Error("Mail service error"),
+      new Error('Mail service error')
     );
 
     const result = await handler!({

@@ -6,12 +6,15 @@ export declare const getMimeType: (
   filename: string,
   mimes?: Record<string, string>
 ) => string | undefined;
-export declare const getExtension: (mimeType: string) => string | undefined;
+export declare const getExtension: (
+  mimeType: string
+) => string | undefined;
 export { baseMimes as mimes };
 /**
  * Union types for BaseMime
  */
-export type BaseMime = (typeof _baseMimes)[keyof typeof _baseMimes];
+export type BaseMime =
+  (typeof _baseMimes)[keyof typeof _baseMimes];
 declare const _baseMimes: {
   readonly aac: 'audio/aac';
   readonly avi: 'video/x-msvideo';

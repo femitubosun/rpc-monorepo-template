@@ -6,7 +6,9 @@ export const PaginationInputSchema = z.object({
   perPage: z.number().min(1).max(100).default(10),
 });
 
-export type PaginationInput = z.infer<typeof PaginationInputSchema>;
+export type PaginationInput = z.infer<
+  typeof PaginationInputSchema
+>;
 
 export type BaseDelegate = {
   findMany: (args?: any) => Promise<any[]>;
@@ -36,7 +38,11 @@ export interface PaginatedResult<T> {
   };
 }
 
-export const PaginatedResultGenericSchema = <T extends z.ZodType>(schema: T) =>
+export const PaginatedResultGenericSchema = <
+  T extends z.ZodType,
+>(
+  schema: T
+) =>
   z.object({
     data: schema,
     meta: z.object({

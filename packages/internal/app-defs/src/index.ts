@@ -1,5 +1,5 @@
-import { UserSchema } from "@template/prisma-defs";
-import z from "zod";
+import { UserSchema } from '@template/prisma-defs';
+import z from 'zod';
 
 export type AppContext = {
   userId?: string;
@@ -27,7 +27,9 @@ export const ContextUserSchema = UserSchema.pick({
     .nullish(),
 });
 
-export type ContextUserSchema = z.infer<typeof ContextUserSchema>;
+export type ContextUserSchema = z.infer<
+  typeof ContextUserSchema
+>;
 
 export const SessionSchema = z.object({
   user: ContextUserSchema,
@@ -36,7 +38,7 @@ export const SessionSchema = z.object({
 
 export type SessionSchema = z.infer<typeof SessionSchema>;
 
-export type { HonoRequest } from "./app-defs";
+export type { HonoRequest } from './app-defs';
 
 export const MessageSchema = z.object({
   message: z.string(),

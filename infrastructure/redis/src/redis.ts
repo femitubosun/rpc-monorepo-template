@@ -1,8 +1,8 @@
-import { Env } from "@template/env";
-import { makeLogger } from "@template/logging";
-import Redis from "ioredis";
+import { Env } from '@template/env';
+import { makeLogger } from '@template/logging';
+import Redis from 'ioredis';
 
-const logger = makeLogger("Redis");
+const logger = makeLogger('Redis');
 
 let _redis: Redis | undefined;
 let _shouldConnect: boolean | undefined;
@@ -11,8 +11,8 @@ function shouldConnectToRedis(): boolean {
   if (_shouldConnect !== undefined) return _shouldConnect;
 
   _shouldConnect =
-    Env.NODE_ENV !== "testing" ||
-    process.env.REDIS_INTEGRATION_TESTS === "true";
+    Env.NODE_ENV !== 'testing' ||
+    process.env.REDIS_INTEGRATION_TESTS === 'true';
 
   return _shouldConnect;
 }
@@ -45,11 +45,15 @@ function createMockRedis(): Redis {
     get: async (key: string) => store.get(key) || null,
     set: async (key: string, value: string) => {
       store.set(key, value);
-      return "OK";
+      return 'OK';
     },
-    setex: async (key: string, _ttl: number, value: string) => {
+    setex: async (
+      key: string,
+      _ttl: number,
+      value: string
+    ) => {
       store.set(key, value);
-      return "OK";
+      return 'OK';
     },
     del: async (...keys: string[]) => {
       let deleted = 0;
@@ -76,10 +80,10 @@ function createMockRedis(): Redis {
       return set ? Array.from(set) : [];
     },
     scan: async (cursor: string, ..._args: unknown[]) => {
-      if (cursor === "0") {
-        return ["0", Array.from(store.keys())];
+      if (cursor === '0') {
+        return ['0', Array.from(store.keys())];
       }
-      return ["0", []];
+      return ['0', []];
     },
     disconnect: () => {},
     on: () => {},
@@ -87,9 +91,11 @@ function createMockRedis(): Redis {
 }
 
 function setupRedisEvents(redis: Redis) {
-  redis.on("connect", () => logger.info("Redis connected"));
-  redis.on("error", (err) => logger.error("Redis Error", err));
-  redis.on("ready", () => logger.info("Redis Ready"));
+  redis.on('connect', () => logger.info('Redis connected'));
+  redis.on('error', (err) =>
+    logger.error('Redis Error', err)
+  );
+  redis.on('ready', () => logger.info('Redis Ready'));
 
   // Graceful shutdown
   const cleanup = () => {
@@ -97,8 +103,8 @@ function setupRedisEvents(redis: Redis) {
     redis.disconnect();
   };
 
-  process.on("SIGTERM", cleanup);
-  process.on("SIGINT", cleanup);
+  process.on('SIGTERM', cleanup);
+  process.on('SIGINT', cleanup);
 }
 
 // For testing - allows forcing connection state

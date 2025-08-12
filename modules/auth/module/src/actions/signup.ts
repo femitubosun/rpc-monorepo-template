@@ -1,10 +1,10 @@
-import { scheduleAction } from "@template/action";
-import AuthAction from "@template/auth-action-defs";
-import db from "@template/db";
-import Env from "@template/env";
-import { hashString } from "@template/hash-utils";
-import module from "../_module";
-import { generateOtp, getOtpExpiration } from "../logic";
+import { scheduleAction } from '@template/action';
+import AuthAction from '@template/auth-action-defs';
+import db from '@template/db';
+import Env from '@template/env';
+import { hashString } from '@template/hash-utils';
+import module from '../_module';
+import { generateOtp, getOtpExpiration } from '../logic';
 
 module.registerHandlers({
   signup: async ({ input, context }) => {
@@ -28,7 +28,7 @@ module.registerHandlers({
           create: {
             tokenHash: await hashString(otp),
             expiresAt: getOtpExpiration(),
-            type: "AUTH",
+            type: 'AUTH',
           },
         },
       },
@@ -44,14 +44,14 @@ module.registerHandlers({
         context,
         input: {
           email: user.email,
-          name: user.name ?? user.email.split("@")[0],
+          name: user.name ?? user.email.split('@')[0],
         },
       }),
       scheduleAction(AuthAction.mail.sendSignInCode, {
         context,
         input: {
           email: user.email,
-          name: user.name ?? user.email.split("@")[0],
+          name: user.name ?? user.email.split('@')[0],
           otp: otp,
         },
       }),
@@ -60,8 +60,12 @@ module.registerHandlers({
     return {
       context,
       data: {
-        message: "Signup successful",
-        ...(["development", "testing"].includes(Env.NODE_ENV) ? { otp } : {}),
+        message: 'Signup successful',
+        ...(['development', 'testing'].includes(
+          Env.NODE_ENV
+        )
+          ? { otp }
+          : {}),
       },
     };
   },

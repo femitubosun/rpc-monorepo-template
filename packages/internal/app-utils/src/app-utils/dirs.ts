@@ -10,8 +10,16 @@ export const APP_DIRS = {
   MODULES_DIR: path.join(ROOT, 'modules'),
   INFRASTRUCTURE_DIR: path.join(ROOT, 'infrastructure'),
   PACKAGES_DIR: path.join(ROOT, 'packages'),
-  PACKAGES_CLIENT_DIR: path.join(ROOT, 'packages', 'internal'),
-  PACKAGES_INTERNAL_DIR: path.join(ROOT, 'packages', 'clients'),
+  PACKAGES_CLIENT_DIR: path.join(
+    ROOT,
+    'packages',
+    'internal'
+  ),
+  PACKAGES_INTERNAL_DIR: path.join(
+    ROOT,
+    'packages',
+    'clients'
+  ),
   WORKER_DIR: path.join(ROOT, 'servcies', 'worker'),
   SCRIPTS_DIR: path.join(ROOT, 'scripts'),
 } as const;

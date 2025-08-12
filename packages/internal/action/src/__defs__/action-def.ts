@@ -15,12 +15,16 @@ export class ActionDef<
     this.name = name;
   }
 
-  input<T extends z.ZodTypeAny>(schema: T): ActionDef<T, Output> {
+  input<T extends z.ZodTypeAny>(
+    schema: T
+  ): ActionDef<T, Output> {
     this._input = schema as unknown as Input;
     return this as unknown as ActionDef<T, Output>;
   }
 
-  output<T extends z.ZodTypeAny>(schema: T): ActionDef<Input, T> {
+  output<T extends z.ZodTypeAny>(
+    schema: T
+  ): ActionDef<Input, T> {
     this._output = schema as unknown as Output;
     return this as any;
   }

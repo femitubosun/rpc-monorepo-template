@@ -1,5 +1,5 @@
-import Env from "@template/env";
-import { Redis } from "@template/redis";
+import Env from '@template/env';
+import { Redis } from '@template/redis';
 
 export const getRedisConn = () =>
   new Redis({

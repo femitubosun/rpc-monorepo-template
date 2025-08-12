@@ -1,15 +1,21 @@
-import module from "@module";
-import google from "@template/google";
+import module from '@module';
+import google from '@template/google';
 
 module.registerHandlers({
   google: {
-    getUserProfile: async ({ input, context, makeError }) => {
-      const profile = await google.getGoogleUser(input.token);
+    getUserProfile: async ({
+      input,
+      context,
+      makeError,
+    }) => {
+      const profile = await google.getGoogleUser(
+        input.token
+      );
 
       if (!profile) {
         throw makeError({
-          message: "Error fetching google profile",
-          type: "INTERNAL",
+          message: 'Error fetching google profile',
+          type: 'INTERNAL',
         });
       }
 

@@ -1,6 +1,9 @@
-import type { ContextUserSchema, SessionSchema } from "@template/app-defs";
-import Env from "@template/env";
-import { THIRTY_DAYS_TTL } from "./constants";
+import type {
+  ContextUserSchema,
+  SessionSchema,
+} from '@template/app-defs';
+import Env from '@template/env';
+import { THIRTY_DAYS_TTL } from './constants';
 
 export function makeSessionKey(userId: string) {
   return `session:${userId}`;
@@ -8,7 +11,7 @@ export function makeSessionKey(userId: string) {
 
 export function makeSessionObject(
   user: ContextUserSchema,
-  sessionVersion: number,
+  sessionVersion: number
 ): SessionSchema {
   return {
     user,
@@ -17,7 +20,7 @@ export function makeSessionObject(
 }
 
 export function getSessionTtl() {
-  return Env.NODE_ENV === "development"
+  return Env.NODE_ENV === 'development'
     ? THIRTY_DAYS_TTL
     : Env.SESSION_TTL_SECONDS;
 }

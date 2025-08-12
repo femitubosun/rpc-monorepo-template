@@ -1,16 +1,25 @@
-import AuthAction from "@template/auth-action-defs";
-import module from "@template/auth-module";
-import db from "@template/db";
-import * as hashUtils from "@template/hash-utils";
+import AuthAction from '@template/auth-action-defs';
+import module from '@template/auth-module';
+import db from '@template/db';
+import * as hashUtils from '@template/hash-utils';
 import {
   createActionMocks,
   faker,
   setUpTestEnvironment,
-} from "@template/testing";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+} from '@template/testing';
+import {
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
-describe("Auth.useCode Test", async () => {
-  let handler: ReturnType<typeof module.getHandler<typeof AuthAction.useCode>>;
+describe('Auth.useCode Test', async () => {
+  let handler: ReturnType<
+    typeof module.getHandler<typeof AuthAction.useCode>
+  >;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
@@ -22,17 +31,21 @@ describe("Auth.useCode Test", async () => {
     await db.otp.deleteMany({});
   });
 
-  it("should return token for a user", async () => {
-    vi.spyOn(hashUtils, "verifyString").mockResolvedValue(true);
+  it('should return token for a user', async () => {
+    vi.spyOn(hashUtils, 'verifyString').mockResolvedValue(
+      true
+    );
 
-    const tenMinutesFromNow = new Date(Date.now() + 10 * 60 * 1000);
+    const tenMinutesFromNow = new Date(
+      Date.now() + 10 * 60 * 1000
+    );
 
     const user = await db.user.create({
       data: {
         email: faker.internet.email(),
         otpTokens: {
           create: {
-            type: "AUTH",
+            type: 'AUTH',
             expiresAt: tenMinutesFromNow,
             tokenHash: faker.string.alphanumeric(),
           },
@@ -44,7 +57,7 @@ describe("Auth.useCode Test", async () => {
       ...createActionMocks(),
       input: {
         email: user.email,
-        otp: "123456",
+        otp: '123456',
       },
     });
 
@@ -58,23 +71,23 @@ describe("Auth.useCode Test", async () => {
     });
   });
 
-  it("should throw error if user does not exist", async () => {
+  it('should throw error if user does not exist', async () => {
     await expect(
       handler!({
         ...createActionMocks(),
         input: {
           email: faker.internet.email(),
-          otp: "123456",
+          otp: '123456',
         },
-      }),
+      })
     ).rejects.toThrow(
       expect.objectContaining({
-        message: "Invalid credentials",
-      }),
+        message: 'Invalid credentials',
+      })
     );
   });
 
-  it("should throw error if otp token does not exist", async () => {
+  it('should throw error if otp token does not exist', async () => {
     const user = await db.user.create({
       data: {
         email: faker.internet.email(),
@@ -86,27 +99,31 @@ describe("Auth.useCode Test", async () => {
         ...createActionMocks(),
         input: {
           email: user.email,
-          otp: "123456",
+          otp: '123456',
         },
-      }),
+      })
     ).rejects.toThrow(
       expect.objectContaining({
-        message: "Invalid credentials",
-      }),
+        message: 'Invalid credentials',
+      })
     );
   });
 
-  it("should throw error for an invalid otp", async () => {
-    vi.spyOn(hashUtils, "verifyString").mockResolvedValue(false);
+  it('should throw error for an invalid otp', async () => {
+    vi.spyOn(hashUtils, 'verifyString').mockResolvedValue(
+      false
+    );
 
-    const tenMinutesFromNow = new Date(Date.now() + 10 * 60 * 1000);
+    const tenMinutesFromNow = new Date(
+      Date.now() + 10 * 60 * 1000
+    );
 
     const user = await db.user.create({
       data: {
         email: faker.internet.email(),
         otpTokens: {
           create: {
-            type: "AUTH",
+            type: 'AUTH',
             expiresAt: tenMinutesFromNow,
             tokenHash: faker.string.alphanumeric(),
           },
@@ -119,18 +136,20 @@ describe("Auth.useCode Test", async () => {
         ...createActionMocks(),
         input: {
           email: user.email,
-          otp: "123456",
+          otp: '123456',
         },
-      }),
+      })
     ).rejects.toThrow(
       expect.objectContaining({
-        message: "Invalid credentials",
-      }),
+        message: 'Invalid credentials',
+      })
     );
   });
 
-  it("should throw error for an expired otp", async () => {
-    vi.spyOn(hashUtils, "verifyString").mockResolvedValue(false);
+  it('should throw error for an expired otp', async () => {
+    vi.spyOn(hashUtils, 'verifyString').mockResolvedValue(
+      false
+    );
 
     const now = new Date();
 
@@ -139,7 +158,7 @@ describe("Auth.useCode Test", async () => {
         email: faker.internet.email(),
         otpTokens: {
           create: {
-            type: "AUTH",
+            type: 'AUTH',
             expiresAt: now,
             tokenHash: faker.string.alphanumeric(),
           },
@@ -152,13 +171,13 @@ describe("Auth.useCode Test", async () => {
         ...createActionMocks(),
         input: {
           email: user.email,
-          otp: "123456",
+          otp: '123456',
         },
-      }),
+      })
     ).rejects.toThrow(
       expect.objectContaining({
-        message: "Invalid credentials",
-      }),
+        message: 'Invalid credentials',
+      })
     );
   });
 });

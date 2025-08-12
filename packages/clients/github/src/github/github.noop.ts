@@ -14,13 +14,17 @@ export class GithubNoop implements IGithub {
   requestAuthenticationToken(
     _input: RequestAuthTokenOptions
   ): Promise<RequestAuthTokenResponse | null> {
-    return Promise.resolve({} as unknown as RequestAuthTokenResponse);
+    return Promise.resolve(
+      {} as unknown as RequestAuthTokenResponse
+    );
   }
   getGithubUser(_authToken: string) {
     return Promise.resolve({} as any);
   }
 
-  getRepository(_input: RequestGithubRepoOptions): Promise<any> {
+  getRepository(
+    _input: RequestGithubRepoOptions
+  ): Promise<any> {
     return Promise.resolve({} as any);
   }
 }

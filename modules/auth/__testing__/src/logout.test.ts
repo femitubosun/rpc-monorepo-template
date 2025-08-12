@@ -1,16 +1,25 @@
-import AuthAction from "@template/auth-action-defs";
-import module from "@template/auth-module";
-import cache from "@template/cache";
-import db from "@template/db";
+import AuthAction from '@template/auth-action-defs';
+import module from '@template/auth-module';
+import cache from '@template/cache';
+import db from '@template/db';
 import {
   createActionMocks,
   faker,
   setUpTestEnvironment,
-} from "@template/testing";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+} from '@template/testing';
+import {
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
-describe("Auth.logout", async () => {
-  let handler: ReturnType<typeof module.getHandler<typeof AuthAction.logout>>;
+describe('Auth.logout', async () => {
+  let handler: ReturnType<
+    typeof module.getHandler<typeof AuthAction.logout>
+  >;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
@@ -22,11 +31,11 @@ describe("Auth.logout", async () => {
     vi.clearAllMocks();
   });
 
-  it("should be defined", () => {
+  it('should be defined', () => {
     expect(handler).toBeDefined();
   });
 
-  it("should logout successfully and return success message", async () => {
+  it('should logout successfully and return success message', async () => {
     const userId = faker.string.uuid();
     const developerId = faker.string.uuid();
 
@@ -41,7 +50,7 @@ describe("Auth.logout", async () => {
 
     expect(result).toMatchObject({
       data: {
-        message: "logout successful",
+        message: 'logout successful',
       },
       context: {
         userId,
@@ -50,7 +59,7 @@ describe("Auth.logout", async () => {
     });
   });
 
-  it("should delete session from cache", async () => {
+  it('should delete session from cache', async () => {
     const userId = faker.string.uuid();
     const developerId = faker.string.uuid();
 
@@ -66,7 +75,7 @@ describe("Auth.logout", async () => {
     expect(await cache.get(`session:${userId}`)).toBeNull();
   });
 
-  it("should handle logout with different user IDs", async () => {
+  it('should handle logout with different user IDs', async () => {
     const userId1 = faker.string.uuid();
     const userId2 = faker.string.uuid();
     const developerId = faker.string.uuid();
@@ -89,7 +98,11 @@ describe("Auth.logout", async () => {
       input: {},
     });
 
-    expect(await cache.get(`session:${userId1}`)).toBeNull();
-    expect(await cache.get(`session:${userId2}`)).toBeNull();
+    expect(
+      await cache.get(`session:${userId1}`)
+    ).toBeNull();
+    expect(
+      await cache.get(`session:${userId2}`)
+    ).toBeNull();
   });
 });

@@ -6,7 +6,9 @@ export type ModuleRouterDefinition = {
 };
 
 // @ts-ignore
-export type ModuleRouterHandler<T extends Record<string, any>> = Partial<{
+export type ModuleRouterHandler<
+  T extends Record<string, any>,
+> = Partial<{
   [K in keyof T]: T[K] extends RouteConfig
     ? // @ts-ignore
       AppRouteHandler<T[K]>

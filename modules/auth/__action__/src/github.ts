@@ -1,4 +1,4 @@
-import { A, G } from "@template/action";
+import { A, G } from '@template/action';
 import {
   AuthResponseSchema,
   FetchGithubProfileInput,
@@ -6,19 +6,19 @@ import {
   GenerateGithubAuthUrlInputSchema,
   GenerateGithubAuthUrlOutputSchema,
   HandleCallbackInputSchema,
-} from "@template/auth-defs";
+} from '@template/auth-defs';
 
 export const github = G({
-  generateAuthUrl: A("auth.github.generateAuthUrl")
+  generateAuthUrl: A('auth.github.generateAuthUrl')
     .input(GenerateGithubAuthUrlInputSchema)
     .output(GenerateGithubAuthUrlOutputSchema),
 
-  handleCallbackUrl: A("auth.github.handleCallback")
+  handleCallbackUrl: A('auth.github.handleCallback')
     .input(HandleCallbackInputSchema)
     .output(AuthResponseSchema)
     .async(),
 
-  getUserProfile: A("auth.github.getUserProfile")
+  getUserProfile: A('auth.github.getUserProfile')
     .input(FetchGithubProfileInput)
     .output(FetchGithubProfileOutput)
     .async(),

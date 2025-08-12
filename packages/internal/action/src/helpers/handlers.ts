@@ -1,10 +1,16 @@
-import type { AppContext } from "@template/app-defs";
-import { ActionCacheKey } from "@template/cache-utils";
-import { preMakeAsyncActionError } from "@template/error";
-import { makeLogger } from "@template/logging";
+import type { AppContext } from '@template/app-defs';
+import { ActionCacheKey } from '@template/cache-utils';
+import { preMakeAsyncActionError } from '@template/error';
+import { makeLogger } from '@template/logging';
 
-export function getWrapperHandler(action: string, originalHandler: Function) {
-  return async (input: { context: AppContext; input: unknown }) => {
+export function getWrapperHandler(
+  action: string,
+  originalHandler: Function
+) {
+  return async (input: {
+    context: AppContext;
+    input: unknown;
+  }) => {
     return await originalHandler({
       ...getActionProps(action),
       context: input.context,

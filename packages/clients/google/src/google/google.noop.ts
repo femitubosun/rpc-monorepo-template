@@ -11,13 +11,17 @@ export class GoogleNoop implements IGoogle {
     return '';
   }
 
-  getGoogleUser(_authToken: string): Promise<GoogleUser | null> {
+  getGoogleUser(
+    _authToken: string
+  ): Promise<GoogleUser | null> {
     return Promise.resolve({} as unknown as GoogleUser);
   }
 
   requestAuthenticationToken(
     _input: RequestAuthTokenOptions
   ): Promise<RequestAuthTokenResponse | null> {
-    return Promise.resolve({} as unknown as RequestAuthTokenResponse);
+    return Promise.resolve(
+      {} as unknown as RequestAuthTokenResponse
+    );
   }
 }

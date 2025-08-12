@@ -1,15 +1,17 @@
-import type { ActionGroup, Module } from "@template/action";
-import { APP_DIRS } from "@template/app-utils";
-import Env from "@template/env";
-import { readdir, stat } from "node:fs/promises";
-import { join } from "node:path";
-import { logger } from "../../logger";
+import { readdir, stat } from 'node:fs/promises';
+import { join } from 'node:path';
+import type { ActionGroup, Module } from '@template/action';
+import { APP_DIRS } from '@template/app-utils';
+import Env from '@template/env';
+import { logger } from '../../logger';
 
 interface ModuleModule {
   default: Module<ActionGroup>;
 }
 
-export async function autoLoadModules(): Promise<Module<ActionGroup>[]> {
+export async function autoLoadModules(): Promise<
+  Module<ActionGroup>[]
+> {
   const modules: Module<ActionGroup>[] = [];
 
   try {
@@ -28,13 +30,17 @@ export async function autoLoadModules(): Promise<Module<ActionGroup>[]> {
       const modulePackageName = `@template/${moduleName}-module`;
 
       try {
-        if (Env.NODE_ENV !== "testing") {
-          logger.info(`Attempting to auto-load namespace ${modulePackageName}`);
+        if (Env.NODE_ENV !== 'testing') {
+          logger.info(
+            `Attempting to auto-load namespace ${modulePackageName}`
+          );
         }
 
-        const moduleModule: ModuleModule = await import(modulePackageName);
+        const moduleModule: ModuleModule = await import(
+          modulePackageName
+        );
 
-        if (Env.NODE_ENV !== "testing") {
+        if (Env.NODE_ENV !== 'testing') {
           logger.log(`Imported package`);
         }
 
@@ -43,12 +49,16 @@ export async function autoLoadModules(): Promise<Module<ActionGroup>[]> {
         }
       } catch (e) {
         console.error(e);
-        logger.warn(`Failed to auto-load namespace ${modulePackageName}`);
+        logger.warn(
+          `Failed to auto-load namespace ${modulePackageName}`
+        );
       }
     }
 
-    if (Env.NODE_ENV !== "testing") {
-      logger.info(`Successfully loaded ${modules.length} namespace modules`);
+    if (Env.NODE_ENV !== 'testing') {
+      logger.info(
+        `Successfully loaded ${modules.length} namespace modules`
+      );
     }
 
     return modules;

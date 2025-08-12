@@ -1,14 +1,20 @@
-import AuthAction from "@template/auth-action-defs";
-import module from "@template/auth-module";
-import cache from "@template/cache";
+import AuthAction from '@template/auth-action-defs';
+import module from '@template/auth-module';
+import cache from '@template/cache';
 import {
   createActionMocks,
   faker,
   setUpTestEnvironment,
-} from "@template/testing";
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+} from '@template/testing';
+import {
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+} from 'vitest';
 
-describe("auth.session.get Test", async () => {
+describe('auth.session.get Test', async () => {
   let handler: ReturnType<
     typeof module.getHandler<typeof AuthAction.session.get>
   >;
@@ -31,7 +37,7 @@ describe("auth.session.get Test", async () => {
     await cache.delete(`session:${userId}`);
   });
 
-  it("should return null when session does not exist", async () => {
+  it('should return null when session does not exist', async () => {
     const result = await handler!({
       ...createActionMocks(),
       input: {
@@ -44,7 +50,7 @@ describe("auth.session.get Test", async () => {
     });
   });
 
-  it("should return session when it exists", async () => {
+  it('should return session when it exists', async () => {
     const sessionData = {
       user,
       version: 1,

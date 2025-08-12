@@ -7,9 +7,11 @@ export interface RequestUploadOptions {
   contentType: string;
 }
 
-export interface RequestVerifyObjectExistsOptions extends S3Options {}
+export interface RequestVerifyObjectExistsOptions
+  extends S3Options {}
 
-export interface RequestDeleteObjectOptions extends S3Options {}
+export interface RequestDeleteObjectOptions
+  extends S3Options {}
 
 export interface RequestGetObjectOptions {
   objectKey: string;

@@ -1,11 +1,11 @@
-import { AppError } from "@template/error";
-import { makeLogger } from "@template/logging";
-import { runtime } from "../runtime";
-import { getActionProps } from "./handlers";
+import { AppError } from '@template/error';
+import { makeLogger } from '@template/logging';
+import { runtime } from '../runtime';
+import { getActionProps } from './handlers';
 
 export async function executeSyncHandler(
   action: string,
-  data: any,
+  data: any
 ): Promise<any> {
   const handler = runtime.getHandler(action);
 
@@ -13,7 +13,7 @@ export async function executeSyncHandler(
     throw new AppError({
       message: `No handler found for action: ${action}`,
       action,
-      type: "INTERNAL",
+      type: 'INTERNAL',
       data,
     });
   }

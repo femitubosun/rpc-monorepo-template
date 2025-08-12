@@ -6,7 +6,9 @@ class PKCE {
    * Length: 43-128 characters, URL-safe base64
    */
   generateCodeVerifier(length = 43): string {
-    return randomBytes(32).toString('base64url').slice(0, length);
+    return randomBytes(32)
+      .toString('base64url')
+      .slice(0, length);
   }
 
   /**
@@ -14,7 +16,9 @@ class PKCE {
    * Only S256 method is supported by GitHub
    */
   generateCodeChallenge(verifier: string): string {
-    return createHash('sha256').update(verifier).digest('base64url');
+    return createHash('sha256')
+      .update(verifier)
+      .digest('base64url');
   }
 
   /**

@@ -12,7 +12,13 @@ export class AppError extends Error {
   public data: any = {};
   public code?: number;
 
-  constructor({ message, type, code, data, action }: AppErrorOptions) {
+  constructor({
+    message,
+    type,
+    code,
+    data,
+    action,
+  }: AppErrorOptions) {
     super(message);
 
     Error.call(this);
@@ -22,7 +28,9 @@ export class AppError extends Error {
     this.type = type ?? this.type;
     this.data = data ?? this.data;
     this.action = action ?? this.action;
-    this.code = code ?? (this.type ? AppErrorTypeDef[this.type].code : 500);
+    this.code =
+      code ??
+      (this.type ? AppErrorTypeDef[this.type].code : 500);
 
     Object.defineProperties(this, {
       name: { enumerable: true },
@@ -58,7 +66,8 @@ export class AppError extends Error {
 
   static fromActionFailReason(reason: string): AppError {
     try {
-      const errorObject: AppErrorOptions = JSON.parse(reason);
+      const errorObject: AppErrorOptions =
+        JSON.parse(reason);
 
       return new AppError(errorObject);
     } catch {

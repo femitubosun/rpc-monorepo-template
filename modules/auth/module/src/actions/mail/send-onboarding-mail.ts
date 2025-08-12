@@ -1,9 +1,13 @@
-import mail from "@template/mail";
-import module from "../../_module";
+import mail from '@template/mail';
+import module from '../../_module';
 
 module.registerHandlers({
   mail: {
-    sendOnboardingMail: async ({ input, context, logger }) => {
+    sendOnboardingMail: async ({
+      input,
+      context,
+      logger,
+    }) => {
       const { email, name } = input;
 
       try {

@@ -1,4 +1,7 @@
-import type { ActionErrorOptions, AppErrorOptions } from '../__defs__';
+import type {
+  ActionErrorOptions,
+  AppErrorOptions,
+} from '../__defs__';
 import { AppError } from '../app-error';
 
 export function makeError(input: AppErrorOptions) {

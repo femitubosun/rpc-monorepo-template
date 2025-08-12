@@ -33,11 +33,13 @@ git commit -m "Initial commit from template"
    pnpm install
    ```
 
-2. **Set up environment**:
+2. **Set up environment**: (uses dotenvx)
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
+
+
 
 3. **Set up lefthook**
   ```bash
@@ -240,7 +242,7 @@ const UserAction = G({
   create: A('user.create')
     .input(CreateUserSchema)
     .output(UserResponseSchema),
-  
+
   get: A('user.get')
     .input(z.object({ id: z.string() }))
     .output(UserResponseSchema),
@@ -259,7 +261,7 @@ module.registerHandlers({
     const user = await db.user.create({
       data: input,
     });
-    
+
     return {
       context,
       data: {
@@ -295,36 +297,36 @@ export const _handlers: ModuleRouterHandler<typeof router> = {
   create: async (c) => {
     const input = c.req.valid('json');
     const { context } = await getAppActor(c.req); // For authenticated routes
-    
+
     const { data } = await callAction(UserAction.create, {
       input,
       context,
     });
-    
+
     return c.json(data, 201);
   },
-  
+
   get: async (c) => {
     const { id } = c.req.param();
     const { context } = await getAppActor(c.req); // For authenticated routes
-    
+
     const { data } = await callAction(UserAction.get, {
       input: { id },
       context,
     });
-    
+
     return c.json(data, 200);
   },
-  
+
   // For public routes (no authentication required)
   public: async (c) => {
     const input = c.req.valid('json');
-    
+
     const { data } = await callAction(UserAction.public, {
       input,
       context: {}, // Empty context for public routes
     });
-    
+
     return c.json(data, 200);
   },
 };
@@ -353,7 +355,7 @@ export const router = {
     .tags(['User'])
     .jsonResponse(201, 'User created successfully', UserResponseSchema)
     .build(),
-    
+
   get: Route.get('/users/:id')
     .tags(['User'])
     .jsonResponse(200, 'User retrieved successfully', UserResponseSchema)
@@ -409,12 +411,12 @@ module.registerHandlers({
       input: input.user,
       context,
     });
-    
+
     const { data: profile } = await callAction(ProfileAction.create, {
       input: { ...input.profile, userId: user.id },
       context,
     });
-    
+
     return {
       context,
       data: { user, profile },

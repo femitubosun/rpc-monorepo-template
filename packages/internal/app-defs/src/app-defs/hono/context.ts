@@ -31,7 +31,11 @@ type HeaderRecord =
 /**
  * Data type can be a string, ArrayBuffer, Uint8Array (buffer), or ReadableStream.
  */
-export type Data = string | ArrayBuffer | ReadableStream | Uint8Array;
+export type Data =
+  | string
+  | ArrayBuffer
+  | ReadableStream
+  | Uint8Array;
 /**
  * Interface for the execution context in a web worker or similar environment.
  */
@@ -78,21 +82,26 @@ export type Renderer = ContextRenderer extends Function
 /**
  * Extracts the props for the renderer.
  */
-export type PropsForRenderer = [...Required<Parameters<Renderer>>] extends [
-  unknown,
-  infer Props,
-]
+export type PropsForRenderer = [
+  ...Required<Parameters<Renderer>>,
+] extends [unknown, infer Props]
   ? Props
   : unknown;
-export type Layout<T = Record<string, any>> = (props: T) => any;
+export type Layout<T = Record<string, any>> = (
+  props: T
+) => any;
 /**
  * Interface for getting context variables.
  *
  * @template E - Environment type.
  */
 interface Get<E extends Env> {
-  <Key extends keyof E['Variables']>(key: Key): E['Variables'][Key];
-  <Key extends keyof ContextVariableMap>(key: Key): ContextVariableMap[Key];
+  <Key extends keyof E['Variables']>(
+    key: Key
+  ): E['Variables'][Key];
+  <Key extends keyof ContextVariableMap>(
+    key: Key
+  ): ContextVariableMap[Key];
 }
 /**
  * Interface for setting context variables.
@@ -113,7 +122,11 @@ interface Set<E extends Env> {
  * Interface for creating a new response.
  */
 interface NewResponse {
-  (data: Data | null, status?: StatusCode, headers?: HeaderRecord): Response;
+  (
+    data: Data | null,
+    status?: StatusCode,
+    headers?: HeaderRecord
+  ): Response;
   (data: Data | null, init?: ResponseOrInit): Response;
 }
 /**
@@ -153,12 +166,18 @@ interface BodyRespond {
  * @returns {Response & TypedResponse<T, U, 'text'>} - The response after rendering the text content, typed with the provided text and status code types.
  */
 interface TextRespond {
-  <T extends string, U extends ContentfulStatusCode = ContentfulStatusCode>(
+  <
+    T extends string,
+    U extends ContentfulStatusCode = ContentfulStatusCode,
+  >(
     text: T,
     status?: U,
     headers?: HeaderRecord
   ): Response & TypedResponse<T, U, 'text'>;
-  <T extends string, U extends ContentfulStatusCode = ContentfulStatusCode>(
+  <
+    T extends string,
+    U extends ContentfulStatusCode = ContentfulStatusCode,
+  >(
     text: T,
     init?: ResponseOrInit<U>
   ): Response & TypedResponse<T, U, 'text'>;
@@ -178,7 +197,10 @@ interface TextRespond {
  */
 interface JSONRespond {
   <
-    T extends JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue,
+    T extends
+      | JSONValue
+      | SimplifyDeepArray<unknown>
+      | InvalidJSONValue,
     U extends ContentfulStatusCode = ContentfulStatusCode,
   >(
     object: T,
@@ -186,7 +208,10 @@ interface JSONRespond {
     headers?: HeaderRecord
   ): JSONRespondReturn<T, U>;
   <
-    T extends JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue,
+    T extends
+      | JSONValue
+      | SimplifyDeepArray<unknown>
+      | InvalidJSONValue,
     U extends ContentfulStatusCode = ContentfulStatusCode,
   >(
     object: T,
@@ -200,7 +225,10 @@ interface JSONRespond {
  * @returns {Response & TypedResponse<SimplifyDeepArray<T> extends JSONValue ? (JSONValue extends SimplifyDeepArray<T> ? never : JSONParsed<T>) : never, U, 'json'>} - The response after rendering the JSON object, typed with the provided object and status code types.
  */
 type JSONRespondReturn<
-  T extends JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue,
+  T extends
+    | JSONValue
+    | SimplifyDeepArray<unknown>
+    | InvalidJSONValue,
   U extends ContentfulStatusCode,
 > = Response &
   TypedResponse<
@@ -246,7 +274,10 @@ type ContextOptions<E extends Env> = {
   /**
    * Execution context for the request.
    */
-  executionCtx?: FetchEventLike | ExecutionContext | undefined;
+  executionCtx?:
+    | FetchEventLike
+    | ExecutionContext
+    | undefined;
   /**
    * Handler for not found responses.
    */
@@ -258,9 +289,21 @@ interface SetHeadersOptions {
   append?: boolean;
 }
 interface SetHeaders {
-  (name: 'Content-Type', value?: BaseMime, options?: SetHeadersOptions): void;
-  (name: ResponseHeader, value?: string, options?: SetHeadersOptions): void;
-  (name: string, value?: string, options?: SetHeadersOptions): void;
+  (
+    name: 'Content-Type',
+    value?: BaseMime,
+    options?: SetHeadersOptions
+  ): void;
+  (
+    name: ResponseHeader,
+    value?: string,
+    options?: SetHeadersOptions
+  ): void;
+  (
+    name: string,
+    value?: string,
+    options?: SetHeadersOptions
+  ): void;
 }
 type ResponseHeadersInit =
   | [string, string][]
@@ -276,7 +319,8 @@ interface ResponseInit<T extends StatusCode = StatusCode> {
 type ResponseOrInit<T extends StatusCode = StatusCode> =
   | ResponseInit<T>
   | Response;
-export declare const TEXT_PLAIN = 'text/plain; charset=UTF-8';
+export declare const TEXT_PLAIN =
+  'text/plain; charset=UTF-8';
 export declare class Context<
   E extends Env = any,
   P extends string = any,
@@ -447,7 +491,8 @@ export declare class Context<
   set: Set<
     IsAny<E> extends true
       ? {
-          Variables: ContextVariableMap & Record<string, any>;
+          Variables: ContextVariableMap &
+            Record<string, any>;
         }
       : E
   >;
@@ -467,7 +512,8 @@ export declare class Context<
   get: Get<
     IsAny<E> extends true
       ? {
-          Variables: ContextVariableMap & Record<string, any>;
+          Variables: ContextVariableMap &
+            Record<string, any>;
         }
       : E
   >;

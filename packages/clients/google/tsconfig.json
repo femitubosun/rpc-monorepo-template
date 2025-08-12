@@ -16,5 +16,10 @@
     "types": []
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.testing.ts", "**/*.testing.tsx"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.testing.ts",
+    "**/*.testing.tsx"
+  ]
 }

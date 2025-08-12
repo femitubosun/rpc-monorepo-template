@@ -1,16 +1,24 @@
-import AuthAction from "@template/auth-action-defs";
-import module from "@template/auth-module";
-import cache from "@template/cache";
+import AuthAction from '@template/auth-action-defs';
+import module from '@template/auth-module';
+import cache from '@template/cache';
 import {
   createActionMocks,
   faker,
   setUpTestEnvironment,
-} from "@template/testing";
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+} from '@template/testing';
+import {
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+} from 'vitest';
 
-describe("auth.session.refresh Test", async () => {
+describe('auth.session.refresh Test', async () => {
   let handler: ReturnType<
-    typeof module.getHandler<typeof AuthAction.session.refresh>
+    typeof module.getHandler<
+      typeof AuthAction.session.refresh
+    >
   >;
   const user = {
     id: faker.string.uuid(),
@@ -30,16 +38,16 @@ describe("auth.session.refresh Test", async () => {
     await cache.delete(`session:${user.id}`);
   });
 
-  it("should throw NOT_FOUND error when session does not exist", async () => {
+  it('should throw NOT_FOUND error when session does not exist', async () => {
     await expect(
       handler!({
         ...createActionMocks(),
         input: user,
-      }),
+      })
     ).rejects.toThrow();
   });
 
-  it("should refresh session and increment version", async () => {
+  it('should refresh session and increment version', async () => {
     const initialSession = {
       user,
       version: 1,
@@ -60,7 +68,7 @@ describe("auth.session.refresh Test", async () => {
     });
   });
 
-  it("should update session in cache with new version", async () => {
+  it('should update session in cache with new version', async () => {
     const initialSession = {
       user,
       version: 3,
@@ -73,14 +81,16 @@ describe("auth.session.refresh Test", async () => {
       input: user,
     });
 
-    const cachedSession = await cache.get(`session:${user.id}`);
+    const cachedSession = await cache.get(
+      `session:${user.id}`
+    );
     expect(cachedSession).toMatchObject({
       user,
       version: 4,
     });
   });
 
-  it("should work with multiple refresh calls", async () => {
+  it('should work with multiple refresh calls', async () => {
     const initialSession = {
       user,
       version: 1,
@@ -102,7 +112,9 @@ describe("auth.session.refresh Test", async () => {
 
     expect(result2.data.version).toBe(3);
 
-    const cachedSession: any = await cache.get(`session:${user.id}`);
+    const cachedSession: any = await cache.get(
+      `session:${user.id}`
+    );
     expect(cachedSession?.version).toBe(3);
   });
 });

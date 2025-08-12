@@ -1,42 +1,53 @@
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
-vi.mock("@template/mail", () => ({
+vi.mock('@template/mail', () => ({
   default: {
     sendWelcomeMail: vi.fn().mockResolvedValue(undefined),
   },
 }));
 
-import AuthAction from "@template/auth-action-defs";
-import module from "@template/auth-module";
-import mail from "@template/mail";
+import AuthAction from '@template/auth-action-defs';
+import module from '@template/auth-module';
+import mail from '@template/mail';
 import {
   createActionMocks,
   faker,
   setUpTestEnvironment,
-} from "@template/testing";
+} from '@template/testing';
 
 const mockMail = vi.mocked(mail);
 
-describe("Auth.mail.sendOnboardingMail Test", () => {
+describe('Auth.mail.sendOnboardingMail Test', () => {
   let handler: ReturnType<
-    typeof module.getHandler<typeof AuthAction.mail.sendOnboardingMail>
+    typeof module.getHandler<
+      typeof AuthAction.mail.sendOnboardingMail
+    >
   >;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
 
-    handler = module.getHandler(AuthAction.mail.sendOnboardingMail);
+    handler = module.getHandler(
+      AuthAction.mail.sendOnboardingMail
+    );
   }, 3000);
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should be defined", () => {
+  it('should be defined', () => {
     expect(handler).toBeDefined();
   });
 
-  it("should call mail.sendWelcomeMail with correct parameters", async () => {
+  it('should call mail.sendWelcomeMail with correct parameters', async () => {
     const email = faker.internet.email();
     const name = faker.person.firstName();
     const context = { userId: faker.string.uuid() };
@@ -55,10 +66,13 @@ describe("Auth.mail.sendOnboardingMail Test", () => {
       data: null,
     });
 
-    expect(mockMail.sendWelcomeMail).toHaveBeenCalledWith(email, name);
+    expect(mockMail.sendWelcomeMail).toHaveBeenCalledWith(
+      email,
+      name
+    );
   });
 
-  it("should return correct response structure", async () => {
+  it('should return correct response structure', async () => {
     const email = faker.internet.email();
     const name = faker.person.firstName();
     const context = { userId: faker.string.uuid() };
@@ -78,13 +92,13 @@ describe("Auth.mail.sendOnboardingMail Test", () => {
     });
   });
 
-  it("should handle mail service errors gracefully", async () => {
+  it('should handle mail service errors gracefully', async () => {
     const email = faker.internet.email();
     const name = faker.person.firstName();
     const context = { userId: faker.string.uuid() };
 
     mockMail.sendWelcomeMail.mockRejectedValueOnce(
-      new Error("Mail service error"),
+      new Error('Mail service error')
     );
 
     const result = await handler!({

@@ -1,5 +1,5 @@
-import { ContextUserSchema } from "@template/app-defs";
-import z from "zod";
+import { ContextUserSchema } from '@template/app-defs';
+import z from 'zod';
 
 export const UseCodeSchema = z.object({
   email: z.string().email(),

@@ -1,11 +1,11 @@
 // Main exports for resend package
 
-import Env from "@template/env";
-import { makeLogger } from "@template/logging";
-import { Resend } from "resend";
-import type { IResend, SendEmailOptions } from "./__defs__";
+import Env from '@template/env';
+import { makeLogger } from '@template/logging';
+import { Resend } from 'resend';
+import type { IResend, SendEmailOptions } from './__defs__';
 
-const logger = makeLogger("Resend");
+const logger = makeLogger('Resend');
 
 export class ResendService implements IResend {
   #client: Resend;
@@ -17,7 +17,7 @@ export class ResendService implements IResend {
     const { error } = await this.#client.emails.send(input);
 
     if (error) {
-      logger.error("Could not send mail", error);
+      logger.error('Could not send mail', error);
     }
   }
 }

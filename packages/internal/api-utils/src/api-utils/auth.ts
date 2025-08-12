@@ -3,14 +3,16 @@ import {
   type ContextUserSchema,
   type HonoRequest,
   SessionSchema,
-} from "@template/app-defs";
-import cache from "@template/cache";
-import Env from "@template/env";
-import { makeError } from "@template/error";
-import jwt from "jsonwebtoken";
-import { makeSessionKey } from "./session";
+} from '@template/app-defs';
+import cache from '@template/cache';
+import Env from '@template/env';
+import { makeError } from '@template/error';
+import jwt from 'jsonwebtoken';
+import { makeSessionKey } from './session';
 
-export async function getAppActor(req: HonoRequest): Promise<{
+export async function getAppActor(
+  req: HonoRequest
+): Promise<{
   context: AppContext;
   user: ContextUserSchema;
 }> {
@@ -22,11 +24,13 @@ export async function getAppActor(req: HonoRequest): Promise<{
     }
 
     const payload = verifyJwt<string>(bearerToken);
-    const userSession = await SessionSchema.parseAsync(payload);
+    const userSession =
+      await SessionSchema.parseAsync(payload);
 
     const sessionKey = makeSessionKey(userSession.user.id);
 
-    const session = await cache.get<SessionSchema>(sessionKey);
+    const session =
+      await cache.get<SessionSchema>(sessionKey);
 
     if (!session) {
       throw Error;
@@ -45,29 +49,33 @@ export async function getAppActor(req: HonoRequest): Promise<{
     };
   } catch {
     throw makeError({
-      type: "UNAUTHORIZED",
-      message: "Unauthorized",
+      type: 'UNAUTHORIZED',
+      message: 'Unauthorized',
     });
   }
 }
 
 const BearerRXP = /[Bb]earer/g;
 
-export function getBearerToken(req: HonoRequest): string | undefined {
-  return decodeURIComponent(req.raw.headers.get("authorization") || "")
-    ?.replace(BearerRXP, "")
+export function getBearerToken(
+  req: HonoRequest
+): string | undefined {
+  return decodeURIComponent(
+    req.raw.headers.get('authorization') || ''
+  )
+    ?.replace(BearerRXP, '')
     .trim();
 }
 
 export function getJwtExpiresIn() {
   const expiresMap = {
-    production: "3Days",
-    development: "30Days",
-    testing: "1Hours",
-    staging: "3Days",
+    production: '3Days',
+    development: '30Days',
+    testing: '1Hours',
+    staging: '3Days',
   } as const;
 
-  return expiresMap[Env.NODE_ENV] ?? "3Days";
+  return expiresMap[Env.NODE_ENV] ?? '3Days';
 }
 
 export function signJwt(payload: object): string {

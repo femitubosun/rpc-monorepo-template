@@ -1,9 +1,9 @@
-import { ContextUserSchema } from "@template/app-defs";
-import db from "@template/db";
-import { zodToPrismaSelect } from "@template/db-utils";
-import { verifyString } from "@template/hash-utils";
-import module from "../_module";
-import { createSessionForUser } from "../logic";
+import { ContextUserSchema } from '@template/app-defs';
+import db from '@template/db';
+import { zodToPrismaSelect } from '@template/db-utils';
+import { verifyString } from '@template/hash-utils';
+import module from '../_module';
+import { createSessionForUser } from '../logic';
 
 module.registerHandlers({
   useCode: async ({ context, input, makeError }) => {
@@ -16,8 +16,8 @@ module.registerHandlers({
 
     if (!user) {
       throw makeError({
-        message: "Invalid credentials",
-        type: "BAD_REQUEST",
+        message: 'Invalid credentials',
+        type: 'BAD_REQUEST',
         data: input,
       });
     }
@@ -28,7 +28,7 @@ module.registerHandlers({
         expiresAt: {
           gt: new Date(),
         },
-        type: "AUTH",
+        type: 'AUTH',
         isUsed: false,
       },
       select: {
@@ -39,18 +39,21 @@ module.registerHandlers({
 
     if (!otpToken) {
       throw makeError({
-        message: "Invalid credentials",
-        type: "BAD_REQUEST",
+        message: 'Invalid credentials',
+        type: 'BAD_REQUEST',
         data: input,
       });
     }
 
-    const isValidOtp = await verifyString(otpToken.tokenHash, input.otp);
+    const isValidOtp = await verifyString(
+      otpToken.tokenHash,
+      input.otp
+    );
 
     if (!isValidOtp) {
       throw makeError({
-        message: "Invalid credentials",
-        type: "BAD_REQUEST",
+        message: 'Invalid credentials',
+        type: 'BAD_REQUEST',
         data: input,
       });
     }
@@ -69,7 +72,7 @@ module.registerHandlers({
               },
             },
             {
-              type: "AUTH",
+              type: 'AUTH',
             },
           ],
         },

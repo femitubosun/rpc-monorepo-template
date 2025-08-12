@@ -1,28 +1,36 @@
-import { makeLogger } from "@template/logging";
-import type { Redis } from "@template/redis";
+import { makeLogger } from '@template/logging';
+import type { Redis } from '@template/redis';
 import {
   Queue as BullQ,
   type JobsOptions,
   QueueEvents,
   Worker,
   type WorkerOptions,
-} from "bullmq";
+} from 'bullmq';
 
 export class Queue {
   private _queues = new Map<string, BullQ>();
   private _workers = new Map<string, Worker>();
   private _events = new Map<string, QueueEvents>();
-  #logger = makeLogger("AppQueue");
+  #logger = makeLogger('AppQueue');
 
   constructor(public redisConn: Redis) {}
 
-  async scheduleJob(q: string, data: string, settings?: JobsOptions) {
+  async scheduleJob(
+    q: string,
+    data: string,
+    settings?: JobsOptions
+  ) {
     const queue = this.getOrCreateQ(q);
 
     return await queue.add(q, data, settings);
   }
 
-  async executeJob(q: string, data: string, settings?: JobsOptions) {
+  async executeJob(
+    q: string,
+    data: string,
+    settings?: JobsOptions
+  ) {
     const job = this.scheduleJob(q, data, settings);
     const qEvents = this.getOrCreateQEvents(q);
 
@@ -34,7 +42,9 @@ export class Queue {
 
     if (q) return q;
 
-    const newQ = new BullQ(name, { connection: this.redisConn });
+    const newQ = new BullQ(name, {
+      connection: this.redisConn,
+    });
     this._queues.set(name, newQ);
 
     return newQ;
@@ -43,14 +53,19 @@ export class Queue {
   async getOrCreateWorker(
     name: string,
     workerFn: Function,
-    settings?: WorkerOptions,
+    settings?: WorkerOptions
   ) {
     const worker = this._workers.get(name);
 
     if (worker) return worker;
 
-    const wrappedFn = async (job: any) => workerFn(job.data);
-    const newWorker = this.createWorker(name, wrappedFn, settings);
+    const wrappedFn = async (job: any) =>
+      workerFn(job.data);
+    const newWorker = this.createWorker(
+      name,
+      wrappedFn,
+      settings
+    );
     this._workers.set(name, newWorker);
 
     return newWorker;
@@ -59,7 +74,7 @@ export class Queue {
   createWorker(
     name: string,
     workerFn: (job: unknown) => Promise<any>,
-    settings?: WorkerOptions,
+    settings?: WorkerOptions
   ) {
     return new Worker(name, workerFn, settings);
   }
@@ -82,12 +97,15 @@ export class Queue {
   }
 
   #attachEventHandlers(qEvent: QueueEvents, name: string) {
-    qEvent.on("error", this.#getErrorEventHandler(name));
+    qEvent.on('error', this.#getErrorEventHandler(name));
   }
 
   #getErrorEventHandler(name: string) {
     return (error: any) =>
-      this.#logger.error(`Queue Event Error  for ${name}`, error);
+      this.#logger.error(
+        `Queue Event Error  for ${name}`,
+        error
+      );
   }
 
   async clean() {
@@ -110,8 +128,11 @@ export class Queue {
         queue
           .close()
           .catch((error) =>
-            this.#logger.error(`Error closing queue ${name}`, error),
-          ),
+            this.#logger.error(
+              `Error closing queue ${name}`,
+              error
+            )
+          )
       );
     }
 
@@ -126,8 +147,11 @@ export class Queue {
         queue
           .close()
           .catch((error) =>
-            this.#logger.error(`Error closing workers ${name}`, error),
-          ),
+            this.#logger.error(
+              `Error closing workers ${name}`,
+              error
+            )
+          )
       );
     }
 
@@ -142,8 +166,11 @@ export class Queue {
         queue
           .close()
           .catch((error) =>
-            this.#logger.error(`Error closing events ${name}`, error),
-          ),
+            this.#logger.error(
+              `Error closing events ${name}`,
+              error
+            )
+          )
       );
     }
 

@@ -53,5 +53,7 @@ export interface IGoogle {
     input: RequestAuthTokenOptions
   ): Promise<RequestAuthTokenResponse | null>;
 
-  getGoogleUser(authToken: string): Promise<GoogleUser | null>;
+  getGoogleUser(
+    authToken: string
+  ): Promise<GoogleUser | null>;
 }

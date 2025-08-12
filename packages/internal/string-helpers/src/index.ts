@@ -1,5 +1,7 @@
 export function capitalize(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  return (
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  );
 }
 
 export function capitalizeWords(str: string): string {
@@ -15,13 +17,17 @@ export function capitalizeFirst(str: string): string {
 
 export function toCamelCase(str: string): string {
   return str
-    .replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase())
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, char) =>
+      char.toUpperCase()
+    )
     .replace(/^[A-Z]/, (char) => char.toLowerCase());
 }
 
 export function toPascalCase(str: string): string {
   const camelCase = toCamelCase(str);
-  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+  return (
+    camelCase.charAt(0).toUpperCase() + camelCase.slice(1)
+  );
 }
 
 export function toKebabCase(str: string): string {
@@ -72,5 +78,8 @@ export function escapeHtml(str: string): string {
     "'": '&#39;',
   };
 
-  return str.replace(/[&<>"']/g, (char) => htmlEscapes[char]);
+  return str.replace(
+    /[&<>"']/g,
+    (char) => htmlEscapes[char]
+  );
 }

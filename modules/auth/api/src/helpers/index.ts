@@ -1,4 +1,4 @@
-import { AppError } from "@template/error";
+import { AppError } from '@template/error';
 
 /**
  * Appends an appropriate authentication error message to the given redirect URL.
@@ -7,28 +7,40 @@ import { AppError } from "@template/error";
  */
 export function appendErrorToRedirectUrl(
   error: AppError | unknown,
-  redirectUrl: URL,
+  redirectUrl: URL
 ) {
   if (error instanceof AppError) {
     switch (error.type) {
-      case "NOT_FOUND":
-        redirectUrl.searchParams.append("error", "session_expired");
+      case 'NOT_FOUND':
+        redirectUrl.searchParams.append(
+          'error',
+          'session_expired'
+        );
         break;
-      case "BAD_REQUEST":
-        redirectUrl.searchParams.append("error", "invalid_request");
+      case 'BAD_REQUEST':
+        redirectUrl.searchParams.append(
+          'error',
+          'invalid_request'
+        );
         break;
       default:
-        redirectUrl.searchParams.append("error", "auth_failed");
+        redirectUrl.searchParams.append(
+          'error',
+          'auth_failed'
+        );
     }
   } else {
-    redirectUrl.searchParams.append("error", "auth_failed");
+    redirectUrl.searchParams.append('error', 'auth_failed');
   }
 }
 
-export function getSuccessRedirectUrl(url: URL, authToken: string): string {
-  url.pathname = `${url.pathname.replace(/\/$/, "")}/auth`;
+export function getSuccessRedirectUrl(
+  url: URL,
+  authToken: string
+): string {
+  url.pathname = `${url.pathname.replace(/\/$/, '')}/auth`;
 
-  url.searchParams.append("authToken", authToken);
+  url.searchParams.append('authToken', authToken);
 
   return url.toString();
 }

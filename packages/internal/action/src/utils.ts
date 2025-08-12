@@ -15,7 +15,9 @@ import { runtime } from './runtime';
  * @param input
  * @constructor
  */
-export const callAction = async <T extends ActionDef<any, any>>(
+export const callAction = async <
+  T extends ActionDef<any, any>,
+>(
   action: T,
   input: {
     context: any;
@@ -27,7 +29,9 @@ export const callAction = async <T extends ActionDef<any, any>>(
 }> => {
   const res = await executeSyncHandler(action.name, input);
 
-  return res as Promise<z.infer<ExtractActionTypes<T, 'output'>>>;
+  return res as Promise<
+    z.infer<ExtractActionTypes<T, 'output'>>
+  >;
 };
 
 /**
@@ -36,7 +40,9 @@ export const callAction = async <T extends ActionDef<any, any>>(
  * @param input
  * @constructor
  */
-export const scheduleAction = async <T extends ActionDef<any, any>>(
+export const scheduleAction = async <
+  T extends ActionDef<any, any>,
+>(
   action: T,
   input: {
     context: any;

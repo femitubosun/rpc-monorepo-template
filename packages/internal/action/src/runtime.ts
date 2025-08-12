@@ -1,36 +1,42 @@
-import Env from "@template/env";
-import { makeLogger } from "@template/logging";
-import type z from "zod";
-import type { ActionDef } from "./__defs__";
-import { CRON, type ExtractActionTypes } from "./__defs__";
-import { getWrapperHandler } from "./helpers/handlers";
-import type { Module, ModuleAction } from "./module";
-import type { Queue } from "./queue";
+import Env from '@template/env';
+import { makeLogger } from '@template/logging';
+import type z from 'zod';
+import type { ActionDef } from './__defs__';
+import { CRON, type ExtractActionTypes } from './__defs__';
+import { getWrapperHandler } from './helpers/handlers';
+import type { Module, ModuleAction } from './module';
+import type { Queue } from './queue';
 
-const logger = makeLogger("AppRuntime");
+const logger = makeLogger('AppRuntime');
 
 class Runtime {
-  public _appActions: Map<string, ModuleAction<ActionDef<z.ZodAny, z.ZodAny>>> =
-    new Map();
+  public _appActions: Map<
+    string,
+    ModuleAction<ActionDef<z.ZodAny, z.ZodAny>>
+  > = new Map();
   public _appCrons: Array<string> = [];
   public _queue?: Queue;
 
   init(modules: Array<Module<any>>, queue?: Queue) {
-    this._appActions = new Map(modules.flatMap((m) => [...m._actions]));
+    this._appActions = new Map(
+      modules.flatMap((m) => [...m._actions])
+    );
     this._queue = queue;
-    this._appCrons.push(...modules.flatMap((m) => m._crons));
+    this._appCrons.push(
+      ...modules.flatMap((m) => m._crons)
+    );
   }
 
   async start() {
     if (!this._appActions.size) {
-      logger.warn("No app actions or handlers found");
+      logger.warn('No app actions or handlers found');
 
       return;
     }
 
     if (!this.#shouldStartQueue()) {
       logger.warn(
-        `No Queue Connection OR In Test environment. Skipping Cron Creation....`,
+        `No Queue Connection OR In Test environment. Skipping Cron Creation....`
       );
       return;
     }
@@ -53,8 +59,8 @@ class Runtime {
     action: T,
     input: {
       context: any;
-      input: z.infer<ExtractActionTypes<T, "input">>;
-    },
+      input: z.infer<ExtractActionTypes<T, 'input'>>;
+    }
   ) {
     const queue = this.#validateQueue();
     if (!queue) {
@@ -70,7 +76,10 @@ class Runtime {
 
     const actionQueue = queue.getOrCreateQ(action.name);
 
-    const wrappedHandler = getWrapperHandler(action.name, actionDef.handler!);
+    const wrappedHandler = getWrapperHandler(
+      action.name,
+      actionDef.handler!
+    );
 
     queue.getOrCreateWorker(action.name, wrappedHandler, {
       connection: queue.redisConn!,
@@ -110,24 +119,26 @@ class Runtime {
         repeat: {
           pattern,
         },
-      },
+      }
     );
 
-    logger.log(`Started cron ${name}: ${action.def._settings?.cron}`);
+    logger.log(
+      `Started cron ${name}: ${action.def._settings?.cron}`
+    );
   }
 
   #shouldStartQueue() {
-    return this._queue && Env.NODE_ENV !== "testing";
+    return this._queue && Env.NODE_ENV !== 'testing';
   }
 
   #validateQueue() {
     if (!this._queue) {
-      logger.warn("No queue. Cannot start cron");
+      logger.warn('No queue. Cannot start cron');
       return null;
     }
 
     if (!this._queue.redisConn) {
-      logger.warn("No connection. Cannot start cron");
+      logger.warn('No connection. Cannot start cron');
       return null;
     }
 
@@ -138,12 +149,12 @@ class Runtime {
     const action = this._appActions.get(name);
 
     if (!action) {
-      logger.warn("Handler not found");
+      logger.warn('Handler not found');
       return;
     }
 
     if (!action.def._settings?.cron) {
-      logger.warn("Cannot find cron settings");
+      logger.warn('Cannot find cron settings');
 
       return;
     }
@@ -155,7 +166,7 @@ class Runtime {
     const action = this._appActions.get(name);
 
     if (!action) {
-      logger.warn("Handler not found");
+      logger.warn('Handler not found');
       return;
     }
 

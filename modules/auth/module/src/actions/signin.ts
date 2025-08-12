@@ -1,10 +1,10 @@
-import { scheduleAction } from "@template/action";
-import AuthAction from "@template/auth-action-defs";
-import db from "@template/db";
-import Env from "@template/env";
-import { hashString } from "@template/hash-utils";
-import module from "../_module";
-import { generateOtp, getOtpExpiration } from "../logic";
+import { scheduleAction } from '@template/action';
+import AuthAction from '@template/auth-action-defs';
+import db from '@template/db';
+import Env from '@template/env';
+import { hashString } from '@template/hash-utils';
+import module from '../_module';
+import { generateOtp, getOtpExpiration } from '../logic';
 
 module.registerHandlers({
   signIn: async ({ context, input, makeError }) => {
@@ -21,8 +21,8 @@ module.registerHandlers({
 
     if (!user) {
       throw makeError({
-        type: "BAD_REQUEST",
-        message: "Invalid Credentials",
+        type: 'BAD_REQUEST',
+        message: 'Invalid Credentials',
         data: input,
       });
     }
@@ -34,7 +34,7 @@ module.registerHandlers({
 
     await db.otp.updateMany({
       where: {
-        type: "AUTH",
+        type: 'AUTH',
         userId: user.id,
         isUsed: false,
       },
@@ -47,7 +47,7 @@ module.registerHandlers({
       db.otp.create({
         data: {
           tokenHash,
-          type: "AUTH",
+          type: 'AUTH',
           userId: user.id,
           expiresAt,
         },
@@ -59,7 +59,7 @@ module.registerHandlers({
         context,
         input: {
           email: user.email,
-          name: user.name ?? user.email.split("@")[0],
+          name: user.name ?? user.email.split('@')[0],
           otp: otp,
         },
       }),
@@ -69,7 +69,11 @@ module.registerHandlers({
       context,
       data: {
         message: `Check email for further instructions`,
-        ...(["development", "testing"].includes(Env.NODE_ENV) ? { otp } : {}),
+        ...(['development', 'testing'].includes(
+          Env.NODE_ENV
+        )
+          ? { otp }
+          : {}),
       },
     };
   },

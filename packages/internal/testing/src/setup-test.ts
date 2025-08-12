@@ -1,4 +1,4 @@
-import startActionRuntime from "@template/worker-service";
+import startActionRuntime from '@template/worker-service';
 
 export async function setUpTestEnvironment() {
   await startRuntime();

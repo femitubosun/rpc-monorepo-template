@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { vi } from 'vitest';
 
 export const createMockBuilder = () => {
   const mocks = new Map();
@@ -9,7 +9,7 @@ export const createMockBuilder = () => {
       mocks.set(moduleName, mockValue);
 
       vi.mock(moduleName, async (importOriginal) => {
-        if (moduleName.startsWith("@template/")) {
+        if (moduleName.startsWith('@template/')) {
           const actual: any = await importOriginal();
           return { ...actual, ...mockValue };
         }

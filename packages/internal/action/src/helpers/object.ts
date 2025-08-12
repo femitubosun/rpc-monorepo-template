@@ -1,10 +1,20 @@
 import { ActionDef } from '../__defs__';
 
-export const flattenActionGroup = <T>(o: object): Record<string, T> =>
-  flattenObject<T>(o, (value: unknown) => value instanceof ActionDef);
+export const flattenActionGroup = <T>(
+  o: object
+): Record<string, T> =>
+  flattenObject<T>(
+    o,
+    (value: unknown) => value instanceof ActionDef
+  );
 
-export const flattenActionHandlers = <T>(o: object): Record<string, T> =>
-  flattenObject<T>(o, (value: unknown) => typeof value === 'function');
+export const flattenActionHandlers = <T>(
+  o: object
+): Record<string, T> =>
+  flattenObject<T>(
+    o,
+    (value: unknown) => typeof value === 'function'
+  );
 
 export function flattenObject<T>(
   o: object,
@@ -26,7 +36,9 @@ export function flattenObject<T>(
     visited.add(obj);
 
     for (const [key, value] of Object.entries(obj)) {
-      const path = currentPrefix ? `${currentPrefix}.${key}` : key;
+      const path = currentPrefix
+        ? `${currentPrefix}.${key}`
+        : key;
 
       if (comparisonFn(value)) {
         result[path] = value as T;

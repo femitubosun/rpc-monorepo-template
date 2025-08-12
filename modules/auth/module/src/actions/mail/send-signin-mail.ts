@@ -1,5 +1,5 @@
-import mail from "@template/mail";
-import module from "../../_module";
+import mail from '@template/mail';
+import module from '../../_module';
 
 module.registerHandlers({
   mail: {
@@ -7,7 +7,7 @@ module.registerHandlers({
       const { email, otp } = input;
 
       try {
-        await mail.sendLoginOtp("", email, otp);
+        await mail.sendLoginOtp('', email, otp);
       } catch (e) {
         logger.error(`Error sending email`, e);
       }

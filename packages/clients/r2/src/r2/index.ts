@@ -4,17 +4,17 @@ import {
   HeadObjectCommand,
   PutObjectCommand,
   S3Client,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import Env from "@template/env";
-import { AppError, makeError } from "@template/error";
-import { makeLogger } from "@template/logging";
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import Env from '@template/env';
+import { AppError, makeError } from '@template/error';
+import { makeLogger } from '@template/logging';
 import type {
   RequestDeleteObjectOptions,
   RequestGetObjectOptions,
   RequestUploadOptions,
   RequestVerifyObjectExistsOptions,
-} from "./__defs__";
+} from './__defs__';
 
 class R2 {
   /**
@@ -26,7 +26,7 @@ class R2 {
    */
 
   #s3Client: S3Client;
-  #logger = makeLogger("R2Client");
+  #logger = makeLogger('R2Client');
 
   constructor() {
     this.#s3Client = new S3Client({
@@ -35,12 +35,12 @@ class R2 {
         accessKeyId: Env.R2_ACCESS_KEY_ID,
         secretAccessKey: Env.R2_ACCESS_KEY,
       },
-      region: "auto",
+      region: 'auto',
     });
   }
 
   async generatePresignedUploadUrl(
-    input: RequestUploadOptions,
+    input: RequestUploadOptions
   ): Promise<string | null> {
     const { fileName } = input;
 
@@ -50,13 +50,20 @@ class R2 {
         Key: fileName,
       });
 
-      const presignedUrl = await getSignedUrl(this.#s3Client, upload, {
-        expiresIn: 3600,
-      });
+      const presignedUrl = await getSignedUrl(
+        this.#s3Client,
+        upload,
+        {
+          expiresIn: 3600,
+        }
+      );
 
       return presignedUrl;
     } catch (e) {
-      this.#logger.error("Error generating presigned URL", e);
+      this.#logger.error(
+        'Error generating presigned URL',
+        e
+      );
 
       return null;
     }
@@ -69,7 +76,7 @@ class R2 {
    * @returns {boolean} Whether the object exists
    */
   async verifyObjectExists(
-    input: RequestVerifyObjectExistsOptions,
+    input: RequestVerifyObjectExistsOptions
   ): Promise<boolean> {
     const { objectKey } = input;
 
@@ -83,7 +90,10 @@ class R2 {
 
       return true;
     } catch (e) {
-      this.#logger.error("Error verifying object exists", e);
+      this.#logger.error(
+        'Error verifying object exists',
+        e
+      );
       return false;
     }
   }
@@ -94,7 +104,9 @@ class R2 {
    *   - objectKey: The key of the object to delete
    * @returns {boolean} Whether the object was deleted
    */
-  async deleteObject(input: RequestDeleteObjectOptions): Promise<boolean> {
+  async deleteObject(
+    input: RequestDeleteObjectOptions
+  ): Promise<boolean> {
     const { objectKey } = input;
 
     try {
@@ -106,7 +118,7 @@ class R2 {
       await this.#s3Client.send(deleteCommand);
       return true;
     } catch (e) {
-      this.#logger.error("Error deleting object", e);
+      this.#logger.error('Error deleting object', e);
       return false;
     }
   }
@@ -117,7 +129,9 @@ class R2 {
    *   - objectKey: The key of the object to get
    * @returns {string | null} The presigned URL or null if an error occurred
    */
-  async getObjectUrl(input: RequestGetObjectOptions): Promise<string | null> {
+  async getObjectUrl(
+    input: RequestGetObjectOptions
+  ): Promise<string | null> {
     const { objectKey, range } = input;
 
     try {
@@ -127,13 +141,17 @@ class R2 {
         Range: range,
       });
 
-      const presignedUrl = await getSignedUrl(this.#s3Client, getCommand, {
-        expiresIn: 900,
-      });
+      const presignedUrl = await getSignedUrl(
+        this.#s3Client,
+        getCommand,
+        {
+          expiresIn: 900,
+        }
+      );
 
       return presignedUrl;
     } catch (e) {
-      this.#logger.error("Error getting object", e);
+      this.#logger.error('Error getting object', e);
       return null;
     }
   }
@@ -154,18 +172,19 @@ class R2 {
         new GetObjectCommand({
           Bucket: Bucket,
           Key,
-        }),
+        })
       );
 
       if (!response.Body) {
         throw makeError({
           message: `Object body not found: ${Key}`,
-          type: "INTERNAL",
+          type: 'INTERNAL',
         });
       }
 
       const chunks: Uint8Array[] = [];
-      const reader = response.Body.transformToWebStream().getReader();
+      const reader =
+        response.Body.transformToWebStream().getReader();
 
       while (true) {
         const { done, value } = await reader.read();
@@ -177,21 +196,33 @@ class R2 {
 
       return Buffer.concat(chunks);
     } catch (error: any) {
-      if (error.name === "NoSuchKey" || error.name === "NotFound") {
-        this.#logger.error(`Asset not found in storage: ${Key}`, error);
+      if (
+        error.name === 'NoSuchKey' ||
+        error.name === 'NotFound'
+      ) {
+        this.#logger.error(
+          `Asset not found in storage: ${Key}`,
+          error
+        );
 
         throw makeError({
           message: `Asset not found in storage: ${Key}`,
-          type: "INTERNAL",
+          type: 'INTERNAL',
         });
       }
 
-      if (error.name === "AccessDenied" || error.name === "Forbidden") {
-        this.#logger.error(`"Unable to access storage"`, error);
+      if (
+        error.name === 'AccessDenied' ||
+        error.name === 'Forbidden'
+      ) {
+        this.#logger.error(
+          `"Unable to access storage"`,
+          error
+        );
 
         throw makeError({
-          message: "Unable to access storage",
-          type: "INTERNAL",
+          message: 'Unable to access storage',
+          type: 'INTERNAL',
         });
       }
 
@@ -201,11 +232,14 @@ class R2 {
         throw error;
       }
 
-      this.#logger.error("Something went wrong with R2", error);
+      this.#logger.error(
+        'Something went wrong with R2',
+        error
+      );
 
       throw makeError({
         message: `Storage error: ${error.message}`,
-        type: "INTERNAL",
+        type: 'INTERNAL',
       });
     }
   }

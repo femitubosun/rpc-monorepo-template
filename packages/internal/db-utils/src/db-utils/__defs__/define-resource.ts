@@ -4,7 +4,10 @@ export interface ResourceConfig<
   T extends z.ZodType,
   ListItem extends z.ZodType,
   Filters extends z.ZodType,
-  TCustomSchemas extends Record<string, z.ZodType> = Record<string, never>,
+  TCustomSchemas extends Record<string, z.ZodType> = Record<
+    string,
+    never
+  >,
 > {
   name: string;
   base: T;
@@ -16,7 +19,9 @@ export interface ResourceConfig<
   };
 }
 
-export interface ResourceOperations<T extends z.ZodObject<any>> {
+export interface ResourceOperations<
+  T extends z.ZodObject<any>,
+> {
   create?: readonly (keyof T['shape'])[];
   update?: readonly (keyof T['shape'])[];
 }
@@ -25,8 +30,14 @@ export interface DefineResourceConfig<
   T extends z.ZodObject<any>,
   ListItem extends z.ZodType,
   Filters extends z.ZodType,
-  TCustomSchemas extends Record<string, z.ZodType> = Record<string, never>,
-  TOperations extends ResourceOperations<T> = Record<string, never>,
+  TCustomSchemas extends Record<string, z.ZodType> = Record<
+    string,
+    never
+  >,
+  TOperations extends ResourceOperations<T> = Record<
+    string,
+    never
+  >,
 > {
   name: string;
   base: T;

@@ -68,7 +68,9 @@ export type HonoOptions<E extends Env> = {
   getPath?: GetPath<E>;
 };
 type MountOptionHandler = (c: Context) => unknown;
-type MountReplaceRequest = (originalRequest: Request) => Request;
+type MountReplaceRequest = (
+  originalRequest: Request
+) => Request;
 type MountOptions =
   | MountOptionHandler
   | {
@@ -121,7 +123,11 @@ declare class Hono<
     app: Hono<SubEnv, SubSchema, SubBasePath>
   ): Hono<
     E,
-    MergeSchemaPath<SubSchema, MergePath<BasePath, SubPath>> | S,
+    | MergeSchemaPath<
+        SubSchema,
+        MergePath<BasePath, SubPath>
+      >
+    | S,
     BasePath
   >;
   /**
@@ -156,7 +162,9 @@ declare class Hono<
    * })
    * ```
    */
-  onError: (handler: ErrorHandler<E>) => Hono<E, S, BasePath>;
+  onError: (
+    handler: ErrorHandler<E>
+  ) => Hono<E, S, BasePath>;
   /**
    * `.notFound()` allows you to customize a Not Found Response.
    *
@@ -172,7 +180,9 @@ declare class Hono<
    * })
    * ```
    */
-  notFound: (handler: NotFoundHandler<E>) => Hono<E, S, BasePath>;
+  notFound: (
+    handler: NotFoundHandler<E>
+  ) => Hono<E, S, BasePath>;
   /**
    * `.mount()` allows you to mount applications built with other frameworks into your Hono application.
    *

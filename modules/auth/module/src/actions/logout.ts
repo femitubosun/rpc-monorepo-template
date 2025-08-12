@@ -1,6 +1,6 @@
-import { makeSessionKey } from "@template/api-utils";
-import cache from "@template/cache";
-import module from "../_module";
+import { makeSessionKey } from '@template/api-utils';
+import cache from '@template/cache';
+import module from '../_module';
 
 module.registerHandlers({
   logout: async ({ context }) => {
@@ -10,7 +10,7 @@ module.registerHandlers({
     return {
       context,
       data: {
-        message: "logout successful",
+        message: 'logout successful',
       },
     };
   },
