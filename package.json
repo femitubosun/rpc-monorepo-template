@@ -1,5 +1,5 @@
 {
-  "name": "@template/source",
+  "name": "@axon-ai-mvp/source",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -7,25 +7,33 @@
     "build:all": "nx run-many -t build",
     "clean": "node ./scripts/clean.js",
     "dev": "nx run-many -t dev",
-    "api:dev": "nx run api:dev",
-    "entry:dev": "nx run entry:dev",
+    "entry:dev": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.dev nx run entry:dev",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "check-types": "nx run-many -t check-types",
-    "test": "nx run-many -t test --projects=\"modules/*/module\"",
-    "test:watch": "nx run-many -t test:watch --projects=\"modules/*/module\"",
-    "test:modules": "nx run-many -t test --projects=\"modules/*/module\"",
+    "test": "CI=true NX_TERMINAL_OUTPUT=static NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test  -- nx run-many -t test --projects=\"modules/*/__testing__\"",
+    "test:ci": "CI=true NX_TERMINAL_OUTPUT=static nx run-many -t test --projects=\"modules/*/__testing__\"",
+    "test:watch": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- nx run-many -t test:watch --projects=\"modules/*/module\"",
     "create:app": "node scripts/add-app.js",
     "create:package:internal": "hygen create package-internal",
     "create:package:client": "hygen create package-client",
     "create:module": "hygen create module",
     "create:infrastructure": "node scripts/add-infrastructure.js",
-    "db:migrate": "pnpm --filter=@template/db migrate",
-    "db:generate": "pnpm --filter=@template/db generate",
-    "db": "pnpm --filter=@template/db prisma",
-    "ensure-prisma-ci": "pnpm --filter=@template/db generate && pnpm --filter=@template/prisma-defs transform"
+    "db:migrate": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.dev -- pnpm --filter=@axon-ai/db migrate",
+    "db:migrate:prod": "NX_LOAD_DOT_ENV_FILES=false pnpm --filter=@axon-ai/db migrate",
+    "db:migrate:ci": "NX_LOAD_DOT_ENV_FILES=false pnpm --filter=@axon-ai/db migrate",
+    "db:migrate:test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- pnpm --filter=@axon-ai/db migrate",
+    "db:generate": "NX_LOAD_DOT_ENV_FILES=false pnpm --filter=@axon-ai/db generate",
+    "db:generate:prod": "NX_LOAD_DOT_ENV_FILES=false pnpm --filter=@axon-ai/db generate",
+    "db:reset:test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- pnpm --filter=@axon-ai/db reset",
+    "db:dev": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.dev -- pnpm --filter=@axon-ai/db prisma",
+    "db:test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- pnpm --filter=@axon-ai/db prisma",
+    "db:prod": "NX_LOAD_DOT_ENV_FILES=false pnpm --filter=@axon-ai/db prisma",
+    "ensure-prisma-ci": "pnpm --filter=@axon-ai/db generate && pnpm --filter=@axon-ai/prisma-defs transform",
+    "hide:env": "pnpm dotenvx encrypt -f .env.dev && pnpm dotenvx encrypt -f .env.test",
+    "show:env": "pnpm dotenvx decrypt -f .env.dev && pnpm dotenvx decrypt -f .env.test"
   },
   "private": true,
   "devDependencies": {
@@ -41,6 +49,9 @@
     "typescript": "~5.8.2"
   },
   "engines": {
-    "node": "^22.11.0"
+    "node": "^22.17.1"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.48.3"
   }
 }

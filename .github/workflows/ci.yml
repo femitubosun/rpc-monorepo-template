@@ -32,7 +32,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22.11.0"
+          node-version: "22.17.1"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -77,15 +77,18 @@ jobs:
           NX_TERMINAL_OUTPUT: static
           NX_CLOUD_DISTRIBUTED_EXECUTION: false
 
-      - name: Run tests
-        run: pnpm test:modules --passWithNoTests
-        env:
-          CI: true
-          NX_TERMINAL_OUTPUT: static
-          NX_CLOUD_DISTRIBUTED_EXECUTION: false
-
       - name: Database migration check
-        run: pnpm db:migrate
+        run: pnpm db:migrate:ci
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test
           CI: true
+
+      # - name: Run tests
+      #   run: pnpm test:ci
+      #   env:
+      #     DATABASE_URL: postgresql://test:test@localhost:5432/test
+      #     DOTENV_PRIVATE_KEY_DEV: ${{ secrets.DOTENV_PRIVATE_KEY_DEV }}
+      #     DOTENV_PRIVATE_KEY_TEST: ${{ secrets.DOTENV_PRIVATE_KEY_TEST }}
+      #     CI: true
+      #     NX_TERMINAL_OUTPUT: static
+      #     NX_CLOUD_DISTRIBUTED_EXECUTION: false

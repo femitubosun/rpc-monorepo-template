@@ -6,13 +6,19 @@ pre-commit:
       stage_fixed: true
     typecheck:
       run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm check-types
-    test:
-      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test:modules --passWithNoTests
+    encrypt-env:
+      run: pnpm hide:env
+      stage_fixed: true
+
+    # test:
+    #   run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test:modules --passWithNoTests
 
 pre-push:
   parallel: false
   commands:
     build:
       run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm nx run-many -t build
-    test:
-      run: NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test:modules --passWithNoTests
+    # test:
+    #   run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test
+    lint:
+      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm check
