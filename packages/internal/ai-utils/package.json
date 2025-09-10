@@ -1,0 +1,27 @@
+{
+  "name": "@template/ai-utils",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check-types": "tsc --noEmit --incremental",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@anthropic-ai/tokenizer": "^0.0.4",
+    "@template/env": "workspace:*",
+    "@template/string-utils": "workspace:*",
+    "@langchain/core": "^0.3.66",
+    "langchain": "^0.3.30",
+    "vitest": "^3.2.4",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "typescript": "5.8.2"
+  }
+}

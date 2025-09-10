@@ -14,8 +14,7 @@ class Mail {
           "Less noise. More signal. \n Here's what to do next",
         action: [
           {
-            instructions:
-              '1. Upload a project or connect your repo',
+            instructions: '1. Upload a project or connect your repo',
             button: {
               color: '#22BC66',
               text: 'Connect your repository',
@@ -24,8 +23,7 @@ class Mail {
           },
 
           {
-            instructions:
-              '2. Upload your resume or input your LinkedIn',
+            instructions: '2. Upload your resume or input your LinkedIn',
             button: {
               color: '#22BC66',
               text: 'Upload resume',
@@ -59,11 +57,7 @@ class Mail {
     });
   }
 
-  async sendLoginOtp(
-    name: string,
-    email: string,
-    otp: string
-  ) {
+  async sendLoginOtp(name: string, email: string, otp: string) {
     const emailParams = {
       body: {
         name,

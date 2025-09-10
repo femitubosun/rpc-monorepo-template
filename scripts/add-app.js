@@ -30,14 +30,14 @@ try {
   const packageJson = generatePackageJson(appName, appType);
   await writeFile(
     join(appDir, "package.json"),
-    JSON.stringify(packageJson, null, 2)
+    JSON.stringify(packageJson, null, 2),
   );
 
   // Generate TypeScript config
   const tsConfig = generateTsConfig(appType);
   await writeFile(
     join(appDir, "tsconfig.json"),
-    JSON.stringify(tsConfig, null, 2)
+    JSON.stringify(tsConfig, null, 2),
   );
 
   // Generate starter files
@@ -75,7 +75,7 @@ function generatePackageJson(name, type) {
           dev: "next dev --turbopack",
           build: "next build",
           start: "next start",
-          "check-types": "tsc --noEmit",
+          "check-types": "tsc --noEmit --incremental",
           lint: "next lint --max-warnings 0",
         },
         dependencies: {
@@ -97,8 +97,7 @@ function generatePackageJson(name, type) {
           dev: "tsx watch src/index.ts",
           build: "tsc",
           start: "node dist/index.js",
-          "check-types": "tsc --noEmit",
-          lint: "eslint src --max-warnings 0",
+          "check-types": "tsc --noEmit --incremental",
         },
         dependencies: {
           hono: "^4.8.3",
@@ -120,7 +119,7 @@ function generatePackageJson(name, type) {
           dev: "tsx watch src/index.ts",
           build: "tsc",
           start: "node dist/index.js",
-          "check-types": "tsc --noEmit",
+          "check-types": "tsc --noEmit --incremental",
           lint: "eslint src --max-warnings 0",
         },
         dependencies: {
@@ -206,7 +205,7 @@ function generateStarterFiles(type) {
 
 export const metadata: Metadata = {
   title: 'My App',
-  description: 'Created with Template workspace',
+  description: 'Created with Axon AI workspace',
 }
 
 export default function RootLayout({

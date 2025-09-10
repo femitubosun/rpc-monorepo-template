@@ -41,9 +41,7 @@ class Cache {
       return JSON.parse(cachedValue) as TResult;
     }
 
-    this.logger.log(
-      `Cache MISS for key: ${cacheKey}. Fetching from resolver.`
-    );
+    this.logger.log(`Cache MISS for key: ${cacheKey}. Fetching from resolver.`);
     const result = await config.resolver();
 
     if (config.ttlSeconds) {
@@ -53,10 +51,7 @@ class Cache {
         JSON.stringify(result)
       );
     } else {
-      await this.redis.set(
-        cacheKey,
-        JSON.stringify(result)
-      );
+      await this.redis.set(cacheKey, JSON.stringify(result));
     }
 
     if (config.tags && config.tags.length > 0) {
@@ -83,9 +78,7 @@ class Cache {
     }
 
     await this.redis.del(...keysToDelete);
-    this.logger.log(
-      `Invalidated key(s): ${keysToDelete.join(', ')}`
-    );
+    this.logger.log(`Invalidated key(s): ${keysToDelete.join(', ')}`);
   }
 
   /**
@@ -94,22 +87,14 @@ class Cache {
    * @param prefix The prefix to match (e.g., "transactions:user:").
    */
   async invalidateByPrefix(prefix: string): Promise<void> {
-    this.logger.log(
-      `Attempting to invalidate keys with prefix: ${prefix}`
-    );
+    this.logger.log(`Attempting to invalidate keys with prefix: ${prefix}`);
     const keysToDelete: string[] = [];
 
-    const scanPattern = makeKey(
-      prefix.endsWith('*') ? prefix : `${prefix}*`
-    );
+    const scanPattern = makeKey(prefix.endsWith('*') ? prefix : `${prefix}*`);
 
     let cursor = '0';
     do {
-      const result = await this.redis.scan(
-        cursor,
-        'MATCH',
-        scanPattern
-      );
+      const result = await this.redis.scan(cursor, 'MATCH', scanPattern);
       cursor = result[0];
       const keys = result[1];
       for (const key of keys) {
@@ -126,9 +111,7 @@ class Cache {
         keysToDelete
       );
     } else {
-      this.logger.log(
-        `No keys found with prefix: ${prefix}`
-      );
+      this.logger.log(`No keys found with prefix: ${prefix}`);
     }
   }
 
@@ -136,9 +119,7 @@ class Cache {
    * Invalidates all cache keys associated with given tag(s).
    * @param tags A single tag or array of tags to invalidate.
    */
-  async invalidateByTag(
-    tags: string | string[]
-  ): Promise<void> {
+  async invalidateByTag(tags: string | string[]): Promise<void> {
     const tagArray = Array.isArray(tags) ? tags : [tags];
     const allKeysToInvalidate = new Set<string>();
     const tagSetKeys: string[] = [];
@@ -150,11 +131,10 @@ class Cache {
         `Attempting to invalidate keys for tag: ${tag} (set key: ${tagSetKey})`
       );
 
-      const keysForTag =
-        await this.redis.smembers(tagSetKey);
-      keysForTag.forEach((key: string) =>
-        allKeysToInvalidate.add(key)
-      );
+      const keysForTag = await this.redis.smembers(tagSetKey);
+      keysForTag.forEach((key: string) => {
+        allKeysToInvalidate.add(key);
+      });
 
       if (keysForTag.length > 0) {
         this.logger.log(
@@ -167,19 +147,14 @@ class Cache {
     }
 
     if (allKeysToInvalidate.size > 0) {
-      const allKeysToDelete = [
-        ...allKeysToInvalidate,
-        ...tagSetKeys,
-      ];
+      const allKeysToDelete = [...allKeysToInvalidate, ...tagSetKeys];
       await this.redis.del(...allKeysToDelete);
 
       this.logger.log(
         `Invalidated ${allKeysToInvalidate.size} keys and removed ${tagSetKeys.length} tag sets.`
       );
     } else {
-      this.logger.log(
-        `No keys found for any of the provided tags.`
-      );
+      this.logger.log(`No keys found for any of the provided tags.`);
     }
   }
 
@@ -189,23 +164,12 @@ class Cache {
    * @param value
    * @param ttlSeconds
    */
-  async set(
-    key: string,
-    value: unknown,
-    ttlSeconds?: number
-  ) {
+  async set(key: string, value: unknown, ttlSeconds?: number) {
     const cacheKey = makeKey(key);
     if (ttlSeconds) {
-      return this.redis.setex(
-        cacheKey,
-        ttlSeconds,
-        JSON.stringify(value)
-      );
+      return this.redis.setex(cacheKey, ttlSeconds, JSON.stringify(value));
     } else {
-      return this.redis.set(
-        cacheKey,
-        JSON.stringify(value)
-      );
+      return this.redis.set(cacheKey, JSON.stringify(value));
     }
   }
 

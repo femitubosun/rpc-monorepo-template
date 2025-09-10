@@ -14,14 +14,10 @@ type KnownPrismaError = {
 
 const isProd = Env.NODE_ENV === 'production';
 
-const formatError = (
-  err: AppError
-): Record<string, unknown> =>
+const formatError = (err: AppError): Record<string, unknown> =>
   isProd ? err.toProdJSON() : err.toJSON();
 
-const formatInternalError = (
-  err: AppError
-): Record<string, unknown> =>
+const formatInternalError = (err: AppError): Record<string, unknown> =>
   isProd
     ? { message: 'Something went wrong' }
     : {
@@ -30,9 +26,7 @@ const formatInternalError = (
         data: err.toJSON(),
       };
 
-export function parseError(
-  err: unknown
-): HttpErrorResponse {
+export function parseError(err: unknown): HttpErrorResponse {
   // ---- AppError ----
   if (err instanceof AppError) {
     if (err.code === 500) {
@@ -49,9 +43,7 @@ export function parseError(
 
   // ---- Objects with a message ----
   if (has(err, 'message')) {
-    const message = String(
-      (err as { message: unknown }).message
-    );
+    const message = String((err as { message: unknown }).message);
 
     // Action fail reason
     if (message.includes('type')) {
@@ -65,12 +57,10 @@ export function parseError(
     // Prisma known request errors
     if (
       has(err, 'name') &&
-      (err as KnownPrismaError).name ===
-        'PrismaClientKnownRequestError'
+      (err as KnownPrismaError).name === 'PrismaClientKnownRequestError'
     ) {
       const prismaErr = err as KnownPrismaError;
-      const modelName =
-        prismaErr.meta?.modelName ?? 'Resource';
+      const modelName = prismaErr.meta?.modelName ?? 'Resource';
 
       if (prismaErr.code === 'P2002') {
         const error = new AppError({
@@ -121,6 +111,4 @@ export function parseError(
 }
 
 const has = (input: unknown, prop: string): boolean =>
-  typeof input === 'object' &&
-  input !== null &&
-  prop in input;
+  typeof input === 'object' && input !== null && prop in input;

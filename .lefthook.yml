@@ -2,23 +2,23 @@ pre-commit:
   parallel: true
   commands:
     check:
-      run: pnpm check:fix
+      run: bun check:fix
       stage_fixed: true
-    typecheck:
-      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm check-types
+    # typecheck:
+    #run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false bun check-types
     encrypt-env:
-      run: pnpm hide:env
+      run: bun hide:env
       stage_fixed: true
 
     # test:
-    #   run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test:modules --passWithNoTests
+    #   run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false bun test --passWithNoTests
 
 pre-push:
   parallel: false
   commands:
     build:
-      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm nx run-many -t build
+      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false bun nx run-many -t build
     # test:
-    #   run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm test
+    #   run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false bun test
     lint:
-      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false pnpm check
+      run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false bun check

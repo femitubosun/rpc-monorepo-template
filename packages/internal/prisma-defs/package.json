@@ -2,16 +2,17 @@
   "name": "@template/prisma-defs",
   "type": "module",
   "version": "0.0.0",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "transform": "node prisma-transformer.cjs",
-    "dev": "tsc --watch",
-    "check-types": "tsc --noEmit",
+    "build": "bun build src/index.ts --outdir ./dist --target node",
+    "transform": "bun prisma-transformer.cjs",
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "check-types": "tsc --noEmit --incremental",
     "lint": "biome lint src",
     "format": "biome format --write src"
   },
@@ -23,5 +24,10 @@
     "@template/db": "workspace:*",
     "@types/node": "^22.15.3",
     "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
   }
 }

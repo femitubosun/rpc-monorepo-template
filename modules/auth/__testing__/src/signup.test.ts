@@ -28,9 +28,7 @@ vi.mock('@template/action', async () => {
 const mockScheduleAction = vi.mocked(scheduleAction);
 
 describe('Auth.signup Test', () => {
-  let handler: ReturnType<
-    typeof module.getHandler<typeof AuthAction.signup>
-  >;
+  let handler: ReturnType<typeof module.getHandler<typeof AuthAction.signup>>;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
@@ -44,7 +42,6 @@ describe('Auth.signup Test', () => {
 
   afterEach(async () => {
     await db.otp.deleteMany({});
-    await db.developerProfile.deleteMany({});
     await db.user.deleteMany({});
   });
 
@@ -81,35 +78,25 @@ describe('Auth.signup Test', () => {
 
   describe.each([
     {
-      name: 'developer profile',
-      table: 'developerProfile',
-      countMethod: () => db.developerProfile.count(),
-    },
-    {
       name: 'OTP token',
       table: 'otp',
       countMethod: () => db.otp.count(),
     },
-  ])(
-    'should create $name for a new user',
-    ({ name, countMethod }) => {
-      it(`should create ${name}`, async () => {
-        const initialCount = await countMethod();
-        const email = faker.internet.email();
+  ])('should create $name for a new user', ({ name, countMethod }) => {
+    it(`should create ${name}`, async () => {
+      const initialCount = await countMethod();
+      const email = faker.internet.email();
 
-        await handler!({
-          ...createActionMocks(),
-          input: {
-            email,
-          },
-        });
-
-        expect(initialCount + 1).toEqual(
-          await countMethod()
-        );
+      await handler!({
+        ...createActionMocks(),
+        input: {
+          email,
+        },
       });
-    }
-  );
+
+      expect(initialCount + 1).toEqual(await countMethod());
+    });
+  });
 
   it('should create an otpToken that expires in the in the future ', async () => {
     const email = faker.internet.email();
@@ -133,9 +120,7 @@ describe('Auth.signup Test', () => {
       },
     });
 
-    expect(otp?.expiresAt.getTime()).toBeGreaterThan(
-      Date.now()
-    );
+    expect(otp?.expiresAt.getTime()).toBeGreaterThan(Date.now());
   });
 
   it('should schedule both email actions', async () => {

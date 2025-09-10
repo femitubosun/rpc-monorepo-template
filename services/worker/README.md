@@ -5,13 +5,13 @@ queue package for Axon AI platform.
 ## Installation
 
 ```bash
-pnpm add @template/queue
+pnpm add @template/worker-service
 ```
 
 ## Usage
 
 ```typescript
-import { /* exports */ } from '@template/queue';
+import { /* exports */ } from '@template/worker-service';
 ```
 
 ## Development

@@ -3,14 +3,8 @@ import github from '@template/github';
 
 module.registerHandlers({
   github: {
-    getUserProfile: async ({
-      input,
-      context,
-      makeError,
-    }) => {
-      const profile = await github.getGithubUser(
-        input.token
-      );
+    getUserProfile: async ({ input, context, makeError }) => {
+      const profile = await github.getGithubUser(input.token);
 
       if (!profile) {
         throw makeError({

@@ -2,7 +2,7 @@
 to: modules/<%=name%>/__action__/package.json
 ---
 {
-  "name": "@axon-ai/<%=name%>-action-defs",
+  "name": "@template/<%=name%>-action-defs",
   "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
@@ -14,15 +14,15 @@ to: modules/<%=name%>/__action__/package.json
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "zod": "3.25.74",
-    "@axon-ai/prisma-defs": "workspace:*",
-    "@axon-ai/logging": "workspace:*",
-    "@axon-ai/env": "workspace:*",
-    "@axon-ai/action": "workspace:*",
-    "@axon-ai/<%=name%>-defs": "workspace:*"
+    "@template/prisma-defs": "workspace:*",
+    "@template/logging": "workspace:*",
+    "@template/env": "workspace:*",
+    "@template/action": "workspace:*",
+    "@template/<%=name%>-defs": "workspace:*"
 
   },
   "devDependencies": {

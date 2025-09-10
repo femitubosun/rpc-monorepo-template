@@ -6,13 +6,7 @@ import {
   faker,
   setUpTestEnvironment,
 } from '@template/testing';
-import {
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 describe('auth.session.get Test', async () => {
   let handler: ReturnType<
@@ -23,9 +17,6 @@ describe('auth.session.get Test', async () => {
     id: userId,
     email: faker.internet.email(),
     name: faker.person.fullName(),
-    developerProfile: {
-      id: faker.string.uuid(),
-    },
   };
 
   beforeAll(async () => {

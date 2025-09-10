@@ -10,9 +10,7 @@ import { makeError } from '@template/error';
 import jwt from 'jsonwebtoken';
 import { makeSessionKey } from './session';
 
-export async function getAppActor(
-  req: HonoRequest
-): Promise<{
+export async function getAppActor(req: HonoRequest): Promise<{
   context: AppContext;
   user: ContextUserSchema;
 }> {
@@ -24,13 +22,11 @@ export async function getAppActor(
     }
 
     const payload = verifyJwt<string>(bearerToken);
-    const userSession =
-      await SessionSchema.parseAsync(payload);
+    const userSession = await SessionSchema.parseAsync(payload);
 
     const sessionKey = makeSessionKey(userSession.user.id);
 
-    const session =
-      await cache.get<SessionSchema>(sessionKey);
+    const session = await cache.get<SessionSchema>(sessionKey);
 
     if (!session) {
       throw Error;
@@ -43,7 +39,6 @@ export async function getAppActor(
     return {
       context: {
         userId: session.user.id,
-        developerId: session.user.developerProfile?.id,
       },
       user: session.user,
     };
@@ -57,12 +52,8 @@ export async function getAppActor(
 
 const BearerRXP = /[Bb]earer/g;
 
-export function getBearerToken(
-  req: HonoRequest
-): string | undefined {
-  return decodeURIComponent(
-    req.raw.headers.get('authorization') || ''
-  )
+export function getBearerToken(req: HonoRequest): string | undefined {
+  return decodeURIComponent(req.raw.headers.get('authorization') || '')
     ?.replace(BearerRXP, '')
     .trim();
 }

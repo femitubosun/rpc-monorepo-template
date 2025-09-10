@@ -3,7 +3,7 @@ import z from 'zod';
 
 export type AppContext = {
   userId?: string;
-  developerId?: string;
+  actionName?: string;
 };
 
 export interface Logger {
@@ -19,17 +19,10 @@ export const ContextUserSchema = UserSchema.pick({
   id: true,
   email: true,
   name: true,
-}).extend({
-  developerProfile: z
-    .object({
-      id: z.string(),
-    })
-    .nullish(),
+  profileImgUrl: true,
 });
 
-export type ContextUserSchema = z.infer<
-  typeof ContextUserSchema
->;
+export type ContextUserSchema = z.infer<typeof ContextUserSchema>;
 
 export const SessionSchema = z.object({
   user: ContextUserSchema,
@@ -45,3 +38,27 @@ export const MessageSchema = z.object({
 });
 
 export type MessageSchema = z.infer<typeof MessageSchema>;
+
+export const UserIdSchema = z.object({
+  userId: z.string(),
+});
+
+export type UserIdSchema = z.infer<typeof UserIdSchema>;
+
+export const IdSchema = z.object({
+  id: z.string(),
+});
+
+export const DeletedOutputSchema = z.object({
+  deleted: z.boolean(),
+});
+
+export const IdAndMaybeCreatorIdSchema = z.object({
+  id: z.string(),
+  creatorId: z.string().optional(),
+});
+
+export const IdAndMaybeBrandIdSchema = z.object({
+  id: z.string(),
+  brandId: z.string().optional(),
+});

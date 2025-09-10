@@ -51,7 +51,5 @@ export interface IGithub {
 
   getGithubUser(authToken: string): Promise<any>;
 
-  getRepository(
-    input: RequestGithubRepoOptions
-  ): Promise<any>;
+  getRepository(input: RequestGithubRepoOptions): Promise<any>;
 }

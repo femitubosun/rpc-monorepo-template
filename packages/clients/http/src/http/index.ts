@@ -1,8 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
-import type {
-  ApiResponse,
-  RequestPayloadOptions,
-} from './__defs__';
+import type { ApiResponse, RequestPayloadOptions } from './__defs__';
 
 class HttpService {
   private readonly client: AxiosInstance;
@@ -14,8 +11,7 @@ class HttpService {
   public async get<ResponseType = unknown>(
     getRequestPayloadOptions: RequestPayloadOptions
   ): Promise<ApiResponse<ResponseType>> {
-    const { endpointUrl, requestConfig } =
-      getRequestPayloadOptions;
+    const { endpointUrl, requestConfig } = getRequestPayloadOptions;
     const response = await this.client.get<ResponseType>(
       endpointUrl,
       requestConfig
@@ -26,10 +22,7 @@ class HttpService {
     };
   }
 
-  public async post<
-    RequestType = unknown,
-    ResponseType = unknown,
-  >(
+  public async post<RequestType = unknown, ResponseType = unknown>(
     postRequestPayloadOptions: RequestPayloadOptions<RequestType>
   ): Promise<ApiResponse<ResponseType>> {
     const { endpointUrl, dataPayload, requestConfig } =
@@ -46,10 +39,7 @@ class HttpService {
     };
   }
 
-  public async put<
-    RequestType = unknown,
-    ResponseType = unknown,
-  >(
+  public async put<RequestType = unknown, ResponseType = unknown>(
     putRequestPayloadOptions: RequestPayloadOptions<RequestType>
   ): Promise<ApiResponse<ResponseType>> {
     const { endpointUrl, dataPayload, requestConfig } =
@@ -65,10 +55,7 @@ class HttpService {
     };
   }
 
-  public async patch<
-    RequestType = unknown,
-    ResponseType = unknown,
-  >(
+  public async patch<RequestType = unknown, ResponseType = unknown>(
     patchRequestPayloadOptions: RequestPayloadOptions<RequestType>
   ): Promise<ApiResponse<ResponseType>> {
     const { endpointUrl, dataPayload, requestConfig } =

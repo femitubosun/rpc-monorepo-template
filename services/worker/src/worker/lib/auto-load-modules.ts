@@ -9,13 +9,13 @@ interface ModuleModule {
   default: Module<ActionGroup>;
 }
 
-export async function autoLoadModules(): Promise<
-  Module<ActionGroup>[]
-> {
+export async function autoLoadModules(): Promise<Module<ActionGroup>[]> {
   const modules: Module<ActionGroup>[] = [];
 
   try {
     const allEntries = await readdir(APP_DIRS.MODULES_DIR);
+
+    console.log(`ROOT DIR ${APP_DIRS.ROOT}`);
     const moduleNames = [];
 
     for (const name of allEntries) {
@@ -31,14 +31,10 @@ export async function autoLoadModules(): Promise<
 
       try {
         if (Env.NODE_ENV !== 'testing') {
-          logger.info(
-            `Attempting to auto-load namespace ${modulePackageName}`
-          );
+          logger.info(`Attempting to auto-load namespace ${modulePackageName}`);
         }
 
-        const moduleModule: ModuleModule = await import(
-          modulePackageName
-        );
+        const moduleModule: ModuleModule = await import(modulePackageName);
 
         if (Env.NODE_ENV !== 'testing') {
           logger.log(`Imported package`);
@@ -49,16 +45,12 @@ export async function autoLoadModules(): Promise<
         }
       } catch (e) {
         console.error(e);
-        logger.warn(
-          `Failed to auto-load namespace ${modulePackageName}`
-        );
+        logger.warn(`Failed to auto-load namespace ${modulePackageName}`);
       }
     }
 
     if (Env.NODE_ENV !== 'testing') {
-      logger.info(
-        `Successfully loaded ${modules.length} namespace modules`
-      );
+      logger.info(`Successfully loaded ${modules.length} namespace modules`);
     }
 
     return modules;

@@ -1,22 +1,33 @@
 import {
+  AbortMultipartUploadCommand,
+  CompleteMultipartUploadCommand,
+  CreateMultipartUploadCommand,
   DeleteObjectCommand,
   GetObjectCommand,
   HeadObjectCommand,
   PutObjectCommand,
   S3Client,
+  UploadPartCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import Env from '@template/env';
 import { AppError, makeError } from '@template/error';
 import { makeLogger } from '@template/logging';
 import type {
+  AbortMultipartUploadOptions,
+  CompleteMultipartUploadOptions,
+  CompleteMultipartUploadResult,
+  GenerateChunkUploadUrlOptions,
+  GenerateChunkUploadUrlResult,
+  InitiateMultipartUploadOptions,
+  InitiateMultipartUploadResult,
   RequestDeleteObjectOptions,
   RequestGetObjectOptions,
   RequestUploadOptions,
   RequestVerifyObjectExistsOptions,
 } from './__defs__';
 
-class R2 {
+export class R2Service {
   /**
    * Generates a presigned URL for uploading an object to R2 Bucket.
    * @param input {RequestUploadOptions} - Object containing parameters for constructing the request:
@@ -50,20 +61,13 @@ class R2 {
         Key: fileName,
       });
 
-      const presignedUrl = await getSignedUrl(
-        this.#s3Client,
-        upload,
-        {
-          expiresIn: 3600,
-        }
-      );
+      const presignedUrl = await getSignedUrl(this.#s3Client, upload, {
+        expiresIn: 3600,
+      });
 
       return presignedUrl;
     } catch (e) {
-      this.#logger.error(
-        'Error generating presigned URL',
-        e
-      );
+      this.#logger.error('Error generating presigned URL', e);
 
       return null;
     }
@@ -90,10 +94,7 @@ class R2 {
 
       return true;
     } catch (e) {
-      this.#logger.error(
-        'Error verifying object exists',
-        e
-      );
+      this.#logger.error('Error verifying object exists', e);
       return false;
     }
   }
@@ -104,9 +105,7 @@ class R2 {
    *   - objectKey: The key of the object to delete
    * @returns {boolean} Whether the object was deleted
    */
-  async deleteObject(
-    input: RequestDeleteObjectOptions
-  ): Promise<boolean> {
+  async deleteObject(input: RequestDeleteObjectOptions): Promise<boolean> {
     const { objectKey } = input;
 
     try {
@@ -129,9 +128,7 @@ class R2 {
    *   - objectKey: The key of the object to get
    * @returns {string | null} The presigned URL or null if an error occurred
    */
-  async getObjectUrl(
-    input: RequestGetObjectOptions
-  ): Promise<string | null> {
+  async getObjectUrl(input: RequestGetObjectOptions): Promise<string | null> {
     const { objectKey, range } = input;
 
     try {
@@ -141,13 +138,9 @@ class R2 {
         Range: range,
       });
 
-      const presignedUrl = await getSignedUrl(
-        this.#s3Client,
-        getCommand,
-        {
-          expiresIn: 900,
-        }
-      );
+      const presignedUrl = await getSignedUrl(this.#s3Client, getCommand, {
+        expiresIn: 900,
+      });
 
       return presignedUrl;
     } catch (e) {
@@ -183,8 +176,7 @@ class R2 {
       }
 
       const chunks: Uint8Array[] = [];
-      const reader =
-        response.Body.transformToWebStream().getReader();
+      const reader = response.Body.transformToWebStream().getReader();
 
       while (true) {
         const { done, value } = await reader.read();
@@ -196,14 +188,8 @@ class R2 {
 
       return Buffer.concat(chunks);
     } catch (error: any) {
-      if (
-        error.name === 'NoSuchKey' ||
-        error.name === 'NotFound'
-      ) {
-        this.#logger.error(
-          `Asset not found in storage: ${Key}`,
-          error
-        );
+      if (error.name === 'NoSuchKey' || error.name === 'NotFound') {
+        this.#logger.error(`Asset not found in storage: ${Key}`, error);
 
         throw makeError({
           message: `Asset not found in storage: ${Key}`,
@@ -211,14 +197,8 @@ class R2 {
         });
       }
 
-      if (
-        error.name === 'AccessDenied' ||
-        error.name === 'Forbidden'
-      ) {
-        this.#logger.error(
-          `"Unable to access storage"`,
-          error
-        );
+      if (error.name === 'AccessDenied' || error.name === 'Forbidden') {
+        this.#logger.error(`"Unable to access storage"`, error);
 
         throw makeError({
           message: 'Unable to access storage',
@@ -232,10 +212,7 @@ class R2 {
         throw error;
       }
 
-      this.#logger.error(
-        'Something went wrong with R2',
-        error
-      );
+      this.#logger.error('Something went wrong with R2', error);
 
       throw makeError({
         message: `Storage error: ${error.message}`,
@@ -243,6 +220,207 @@ class R2 {
       });
     }
   }
+
+  /**
+   * Initiates a multipart upload for large files
+   * @param input - Object containing file name, content type, and optional bucket
+   * @returns Promise<InitiateMultipartUploadResult> - Upload ID and metadata
+   */
+  async initiateMultipartUpload(
+    input: InitiateMultipartUploadOptions
+  ): Promise<InitiateMultipartUploadResult | null> {
+    const { fileName, contentType, bucket = Env.R2_DEFAULT_APP_BUCKET } = input;
+
+    try {
+      const command = new CreateMultipartUploadCommand({
+        Bucket: bucket,
+        Key: fileName,
+        ContentType: contentType,
+      });
+
+      const response = await this.#s3Client.send(command);
+
+      if (!response.UploadId) {
+        throw makeError({
+          message: 'Failed to initiate multipart upload',
+          type: 'INTERNAL',
+        });
+      }
+
+      return {
+        uploadId: response.UploadId,
+        bucket: bucket,
+        key: fileName,
+      };
+    } catch (error: any) {
+      this.#logger.error('Error initiating multipart upload', error);
+      return null;
+    }
+  }
+
+  /**
+   * Generates a presigned URL for uploading a specific chunk/part
+   * @param input - Object containing file name, upload ID, part number, and optional bucket
+   * @returns Promise<GenerateChunkUploadUrlResult | null> - Presigned URL for chunk upload
+   */
+  async generateChunkUploadUrl(
+    input: GenerateChunkUploadUrlOptions
+  ): Promise<GenerateChunkUploadUrlResult | null> {
+    const {
+      fileName,
+      uploadId,
+      partNumber,
+      bucket = Env.R2_DEFAULT_APP_BUCKET,
+    } = input;
+
+    try {
+      const command = new UploadPartCommand({
+        Bucket: bucket,
+        Key: fileName,
+        UploadId: uploadId,
+        PartNumber: partNumber,
+      });
+
+      const presignedUrl = await getSignedUrl(this.#s3Client, command, {
+        expiresIn: 3600,
+      });
+
+      return {
+        uploadUrl: presignedUrl,
+        partNumber: partNumber,
+      };
+    } catch (error: any) {
+      this.#logger.error('Error generating chunk upload URL', error);
+      return null;
+    }
+  }
+
+  /**
+   * Completes a multipart upload by combining all uploaded parts
+   * @param input - Object containing file name, upload ID, parts list, and optional bucket
+   * @returns Promise<CompleteMultipartUploadResult | null> - Final object metadata
+   */
+  async completeMultipartUpload(
+    input: CompleteMultipartUploadOptions
+  ): Promise<CompleteMultipartUploadResult | null> {
+    const {
+      fileName,
+      uploadId,
+      parts,
+      bucket = Env.R2_DEFAULT_APP_BUCKET,
+    } = input;
+
+    try {
+      const command = new CompleteMultipartUploadCommand({
+        Bucket: bucket,
+        Key: fileName,
+        UploadId: uploadId,
+        MultipartUpload: {
+          Parts: parts.map((part) => ({
+            ETag: part.etag,
+            PartNumber: part.partNumber,
+          })),
+        },
+      });
+
+      const response = await this.#s3Client.send(command);
+
+      if (!response.Location || !response.ETag) {
+        throw makeError({
+          message: 'Failed to complete multipart upload',
+          type: 'INTERNAL',
+        });
+      }
+
+      return {
+        location: response.Location,
+        bucket: bucket,
+        key: fileName,
+        etag: response.ETag,
+      };
+    } catch (error: any) {
+      this.#logger.error('Error completing multipart upload', error);
+      return null;
+    }
+  }
+
+  /**
+   * Aborts a multipart upload and cleans up any uploaded parts
+   * @param input - Object containing file name, upload ID, and optional bucket
+   * @returns Promise<boolean> - Whether the abort was successful
+   */
+  async abortMultipartUpload(
+    input: AbortMultipartUploadOptions
+  ): Promise<boolean> {
+    const { fileName, uploadId, bucket = Env.R2_DEFAULT_APP_BUCKET } = input;
+
+    try {
+      const command = new AbortMultipartUploadCommand({
+        Bucket: bucket,
+        Key: fileName,
+        UploadId: uploadId,
+      });
+
+      await this.#s3Client.send(command);
+      return true;
+    } catch (error: any) {
+      this.#logger.error('Error aborting multipart upload', error);
+      return false;
+    }
+  }
+
+  /**
+   * Directly uploads an object to R2 storage without using presigned URLs
+   * @param input - Object containing key, buffer, content type, and optional bucket
+   * @returns Promise<boolean> - Whether the upload was successful
+   */
+  async putObject(input: {
+    key: string;
+    body: Buffer;
+    contentType: string;
+    bucket?: string;
+  }): Promise<boolean> {
+    const {
+      key,
+      body,
+      contentType,
+      bucket = Env.R2_DEFAULT_APP_BUCKET,
+    } = input;
+
+    try {
+      const command = new PutObjectCommand({
+        Bucket: bucket,
+        Key: key,
+        Body: body,
+        ContentType: contentType,
+      });
+
+      await this.#s3Client.send(command);
+
+      this.#logger.info('Object uploaded successfully', {
+        key,
+        bucket,
+        contentType,
+        size: body.length,
+      });
+
+      return true;
+    } catch (error: any) {
+      this.#logger.error('Error uploading object', {
+        key,
+        bucket,
+        contentType,
+        error,
+      });
+      return false;
+    }
+  }
 }
 
-export default new R2();
+import { R2Noop } from './r2.noop';
+
+export const r2 = ['testing'].includes(Env.NODE_ENV)
+  ? new R2Noop()
+  : new R2Service();
+
+export default r2;

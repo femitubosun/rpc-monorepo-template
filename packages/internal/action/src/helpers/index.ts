@@ -23,6 +23,10 @@ export async function executeSyncHandler(
   try {
     return await handler({
       ...data,
+      context: {
+        ...data.context,
+        actionName: action,
+      },
       ...getActionProps(action),
     });
   } catch (error) {

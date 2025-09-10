@@ -13,8 +13,7 @@ module.registerHandlers({
     refresh: async ({ context, input, makeError }) => {
       const sessionKey = makeSessionKey(input.id);
 
-      const currSession =
-        await cache.get<SessionSchema>(sessionKey);
+      const currSession = await cache.get<SessionSchema>(sessionKey);
 
       if (!currSession) {
         throw makeError({
@@ -25,16 +24,9 @@ module.registerHandlers({
 
       const newVersion = currSession.version + 1;
 
-      const newSession = makeSessionObject(
-        input,
-        newVersion
-      );
+      const newSession = makeSessionObject(input, newVersion);
 
-      await cache.set(
-        sessionKey,
-        newSession,
-        getSessionTtl()
-      );
+      await cache.set(sessionKey, newSession, getSessionTtl());
 
       return {
         data: newSession,

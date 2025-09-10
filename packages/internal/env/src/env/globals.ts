@@ -3,15 +3,10 @@ import { makeDefinition } from './utils';
 
 const GLOBALS = makeDefinition({
   NODE_ENV: z
-    .enum([
-      'development',
-      'staging',
-      'testing',
-      'production',
-    ])
+    .enum(['development', 'staging', 'testing', 'production'])
     .default('production'),
   PORT: z.coerce.number().default(3000),
-  APP_NAME: z.string().default('axon-ai'),
+  APP_NAME: z.string().default('template'),
   APP_URL: z.string().url(),
   API_URL: z.string().url(),
 

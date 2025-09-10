@@ -1,9 +1,18 @@
+export interface QJobRetrySettings {
+  attempts: number;
+  backoff?: {
+    type: 'exponential' | 'fixed';
+    delay: number;
+  };
+}
+
 export interface QSettings {
   validateInput: boolean;
   validateOutput: boolean;
   timeout: number;
   concurrency: number;
   cron?: CronExpression;
+  jobRetry?: QJobRetrySettings;
 }
 
 export const Q_GRACEFUL_SHUTDOWN_TIMEOUT = 30_000;

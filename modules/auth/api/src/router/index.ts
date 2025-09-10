@@ -14,11 +14,7 @@ export const _router = {
   signup: Route.post('/auth/signup')
     .jsonBody(EmailSchema)
     .tags(['Auth'])
-    .jsonResponse(
-      201,
-      'Signup successful',
-      SignupResponseSchema
-    )
+    .jsonResponse(201, 'Signup successful', SignupResponseSchema)
     .build(),
 
   signIn: Route.post('auth/sign-in')

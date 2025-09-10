@@ -8,8 +8,7 @@ module.registerHandlers({
     get: async ({ context, input }) => {
       const sessionKey = makeSessionKey(input.userId);
 
-      const data =
-        await cache.get<SessionSchema>(sessionKey);
+      const data = await cache.get<SessionSchema>(sessionKey);
 
       if (!data) {
         return {

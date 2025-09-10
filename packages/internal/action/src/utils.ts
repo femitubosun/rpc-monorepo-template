@@ -1,3 +1,4 @@
+import { ActionCacheKey } from '@template/cache-utils';
 import type z from 'zod';
 import {
   ActionDef,
@@ -15,9 +16,7 @@ import { runtime } from './runtime';
  * @param input
  * @constructor
  */
-export const callAction = async <
-  T extends ActionDef<any, any>,
->(
+export const callAction = async <T extends ActionDef<any, any>>(
   action: T,
   input: {
     context: any;
@@ -29,9 +28,7 @@ export const callAction = async <
 }> => {
   const res = await executeSyncHandler(action.name, input);
 
-  return res as Promise<
-    z.infer<ExtractActionTypes<T, 'output'>>
-  >;
+  return res as Promise<z.infer<ExtractActionTypes<T, 'output'>>>;
 };
 
 /**
@@ -40,16 +37,28 @@ export const callAction = async <
  * @param input
  * @constructor
  */
-export const scheduleAction = async <
-  T extends ActionDef<any, any>,
->(
+export const scheduleAction = async <T extends ActionDef<any, any>>(
   action: T,
   input: {
     context: any;
     input: z.infer<ExtractActionTypes<T, 'input'>>;
+    scheduledAt?: Date;
   }
-): Promise<void> => {
+): Promise<{ jobId: string; job: any }> => {
   return await runtime.scheduleJob(action, input);
+};
+
+/**
+ * Function to cancel a scheduled action
+ * @param action
+ * @param jobId
+ * @constructor
+ */
+export const cancelScheduledAction = async <T extends ActionDef<any, any>>(
+  action: T,
+  jobId: string
+): Promise<boolean> => {
+  return await runtime.cancelScheduledJob(action.name, jobId);
 };
 
 /**
@@ -80,4 +89,16 @@ export function G<T extends ActionGroup>(def: T): T {
  */
 export function A(name: string) {
   return new ActionDef(name);
+}
+
+/**
+ * Creates an ActionCacheKey from an action definition or action name string
+ * This ensures uniformity across the codebase for cache key creation
+ */
+export function makeActionCacheKey(
+  actionOrName: { name: string } | string
+): ActionCacheKey {
+  const actionName =
+    typeof actionOrName === 'string' ? actionOrName : actionOrName.name;
+  return new ActionCacheKey(actionName);
 }

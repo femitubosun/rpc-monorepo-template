@@ -7,19 +7,10 @@ import {
   faker,
   setUpTestEnvironment,
 } from '@template/testing';
-import {
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 describe('Auth.logout', async () => {
-  let handler: ReturnType<
-    typeof module.getHandler<typeof AuthAction.logout>
-  >;
+  let handler: ReturnType<typeof module.getHandler<typeof AuthAction.logout>>;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
@@ -37,13 +28,11 @@ describe('Auth.logout', async () => {
 
   it('should logout successfully and return success message', async () => {
     const userId = faker.string.uuid();
-    const developerId = faker.string.uuid();
 
     const result = await handler!({
       ...createActionMocks(),
       context: {
         userId,
-        developerId,
       },
       input: {},
     });
@@ -54,20 +43,17 @@ describe('Auth.logout', async () => {
       },
       context: {
         userId,
-        developerId,
       },
     });
   });
 
   it('should delete session from cache', async () => {
     const userId = faker.string.uuid();
-    const developerId = faker.string.uuid();
 
     await handler!({
       ...createActionMocks(),
       context: {
         userId,
-        developerId,
       },
       input: {},
     });
@@ -78,13 +64,11 @@ describe('Auth.logout', async () => {
   it('should handle logout with different user IDs', async () => {
     const userId1 = faker.string.uuid();
     const userId2 = faker.string.uuid();
-    const developerId = faker.string.uuid();
 
     await handler!({
       ...createActionMocks(),
       context: {
         userId: userId1,
-        developerId,
       },
       input: {},
     });
@@ -93,16 +77,11 @@ describe('Auth.logout', async () => {
       ...createActionMocks(),
       context: {
         userId: userId2,
-        developerId,
       },
       input: {},
     });
 
-    expect(
-      await cache.get(`session:${userId1}`)
-    ).toBeNull();
-    expect(
-      await cache.get(`session:${userId2}`)
-    ).toBeNull();
+    expect(await cache.get(`session:${userId1}`)).toBeNull();
+    expect(await cache.get(`session:${userId2}`)).toBeNull();
   });
 });

@@ -2,21 +2,23 @@
   "name": "@template/worker-service",
   "type": "module",
   "version": "0.0.0",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "check-types": "tsc --noEmit"
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist --target node",
+    "start": "bun src/index.ts",
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "zod": "3.25.74",
     "@template/env": "workspace:*",
     "@template/logging": "workspace:*",
     "@template/action": "workspace:*",
+    "@template/assets-module": "workspace:*",
     "@template/auth-module": "workspace:*",
     "@template/redis": "workspace:*",
     "@template/app-defs": "workspace:*",
@@ -26,5 +28,10 @@
     "@types/node": "^22.15.3",
     "eslint": "^9.30.0",
     "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
   }
 }

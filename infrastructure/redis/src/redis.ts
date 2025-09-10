@@ -47,11 +47,7 @@ function createMockRedis(): Redis {
       store.set(key, value);
       return 'OK';
     },
-    setex: async (
-      key: string,
-      _ttl: number,
-      value: string
-    ) => {
+    setex: async (key: string, _ttl: number, value: string) => {
       store.set(key, value);
       return 'OK';
     },
@@ -92,9 +88,7 @@ function createMockRedis(): Redis {
 
 function setupRedisEvents(redis: Redis) {
   redis.on('connect', () => logger.info('Redis connected'));
-  redis.on('error', (err) =>
-    logger.error('Redis Error', err)
-  );
+  redis.on('error', (err) => logger.error('Redis Error', err));
   redis.on('ready', () => logger.info('Redis Ready'));
 
   // Graceful shutdown

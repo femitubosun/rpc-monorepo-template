@@ -31,10 +31,7 @@ export default function createApp() {
       c.var.logger.error('🚨 Error', err);
     }
 
-    return c.json(
-      error.body,
-      error.statusCode as ContentfulStatusCode
-    );
+    return c.json(error.body, error.statusCode as ContentfulStatusCode);
   });
 
   return app;

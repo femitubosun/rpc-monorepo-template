@@ -1,0 +1,30 @@
+{
+  "name": "@template/asset-providers",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "check-types": "tsc --noEmit --incremental"
+  },
+  "dependencies": {
+    "zod": "3.25.74",
+    "@template/env": "workspace:*",
+    "@template/logging": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  }
+}

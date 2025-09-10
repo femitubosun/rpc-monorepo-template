@@ -87,19 +87,14 @@ describe('New Module Test', () => {
     const singleActionGroup = G({
       first: A('test.single.first')
         .input(z.object({ id: z.string() }))
-        .output(
-          z.object({ id: z.string(), message: z.string() })
-        ),
+        .output(z.object({ id: z.string(), message: z.string() })),
     });
 
-    const singleModule = makeModule(
-      'SingleTest',
-      singleActionGroup
-    );
+    const singleModule = makeModule('SingleTest', singleActionGroup);
 
-    const handler: ActionHandler<
-      typeof singleActionGroup.first
-    > = async ({ input: _input }) => {
+    const handler: ActionHandler<typeof singleActionGroup.first> = async ({
+      input: _input,
+    }) => {
       return {
         context: {},
         data: {
@@ -127,19 +122,14 @@ describe('New Module Test', () => {
     const getHandlerGroup = G({
       first: A('test.gethandler.first')
         .input(z.object({ id: z.string() }))
-        .output(
-          z.object({ id: z.string(), message: z.string() })
-        ),
+        .output(z.object({ id: z.string(), message: z.string() })),
     });
 
-    const getHandlerModule = new Module(
-      'GetHandlerTest',
-      getHandlerGroup
-    );
+    const getHandlerModule = new Module('GetHandlerTest', getHandlerGroup);
 
-    const handler: ActionHandler<
-      typeof getHandlerGroup.first
-    > = async ({ input: _input }) => {
+    const handler: ActionHandler<typeof getHandlerGroup.first> = async ({
+      input: _input,
+    }) => {
       return {
         context: {},
         data: {
@@ -153,71 +143,69 @@ describe('New Module Test', () => {
       first: handler,
     });
 
-    expect(
-      getHandlerModule.getHandler(getHandlerGroup.first)
-    ).toBe(handler);
+    expect(getHandlerModule.getHandler(getHandlerGroup.first)).toBe(handler);
   });
 
   it('should add a multiple hanlders to the action def when registerHanlders is called', () => {
     const moduleTwo = new Module('Test', group);
 
-    const firstHandler: ActionHandler<
-      typeof group.first
-    > = async ({ context }) => {
+    const firstHandler: ActionHandler<typeof group.first> = async ({
+      context,
+    }) => {
       return { data: { id: '', message: '' }, context };
     };
 
-    const secondHandler: ActionHandler<
-      typeof group.second
-    > = async ({ context }) => {
+    const secondHandler: ActionHandler<typeof group.second> = async ({
+      context,
+    }) => {
       return { data: { result: '' }, context };
     };
 
-    const thirdHandler: ActionHandler<
-      typeof group.third
-    > = async ({ context }) => {
+    const thirdHandler: ActionHandler<typeof group.third> = async ({
+      context,
+    }) => {
       return { data: { total: 0 }, context };
     };
 
-    const fourthHandler: ActionHandler<
-      typeof group.fourth
-    > = async ({ context }) => {
+    const fourthHandler: ActionHandler<typeof group.fourth> = async ({
+      context,
+    }) => {
       return { data: { status: '' }, context };
     };
 
-    const fifthHandler: ActionHandler<
-      typeof group.fifth
-    > = async ({ context }) => {
+    const fifthHandler: ActionHandler<typeof group.fifth> = async ({
+      context,
+    }) => {
       return { data: { processed: 0 }, context };
     };
 
-    const sixthHandler: ActionHandler<
-      typeof group.sixth
-    > = async ({ context }) => {
+    const sixthHandler: ActionHandler<typeof group.sixth> = async ({
+      context,
+    }) => {
       return { data: { valid: true }, context };
     };
 
-    const seventhHandler: ActionHandler<
-      typeof group.seventh
-    > = async ({ context }) => {
+    const seventhHandler: ActionHandler<typeof group.seventh> = async ({
+      context,
+    }) => {
       return { data: { formatted: '' }, context };
     };
 
-    const eighthHandler: ActionHandler<
-      typeof group.eighth
-    > = async ({ context }) => {
+    const eighthHandler: ActionHandler<typeof group.eighth> = async ({
+      context,
+    }) => {
       return { data: { count: 0 }, context };
     };
 
-    const ninthHandler: ActionHandler<
-      typeof group.ninth
-    > = async ({ context }) => {
+    const ninthHandler: ActionHandler<typeof group.ninth> = async ({
+      context,
+    }) => {
       return { data: { timestamp: 0 }, context };
     };
 
-    const tenthHandler: ActionHandler<
-      typeof group.tenth
-    > = async ({ context }) => {
+    const tenthHandler: ActionHandler<typeof group.tenth> = async ({
+      context,
+    }) => {
       return { data: { applied: true }, context };
     };
 

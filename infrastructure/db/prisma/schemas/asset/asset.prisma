@@ -1,0 +1,94 @@
+enum AssetUploadStatus {
+  PENDING
+  FAILED
+  PROCESSING
+  READY
+}
+
+enum AssetProvider {
+  R2
+  S3
+  GCS
+  BUNNY
+}
+
+enum AssetType {
+  IMAGE
+  VIDEO
+  PDF
+  DOCX
+  MARKDOWN
+}
+
+enum UploadMode {
+  SINGLE
+  CHUNKED
+}
+
+model Asset {
+  id String @id @default(cuid())
+
+  // Original meta
+  originalFilename String
+  originalSize     BigInt /// @zod.custom.use(z.coerce.bigint())
+
+  // Provider info
+  provider   AssetProvider @default(R2)
+  bucketKey  String?
+  bucketName String?
+
+  uploadMode UploadMode @default(SINGLE)
+  uploadId   String? // For multipart uploads
+
+  // general info
+  url      String?
+  metadata Json? /// @zod.custom.use(z.record(z.any()))
+  status   AssetUploadStatus @default(PENDING)
+  type     AssetType
+
+  thumbnailUrl String?
+  testCol      String?
+
+  // Optimization tracking
+  optimizationRequested Boolean @default(false)
+  optimizationConfig    Json? /// @zod.custom.use(z.record(z.any()))
+
+  // Relationships
+  chunks AssetChunk[]
+
+  // Meta
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model AssetChunk {
+  id String @id @default(cuid())
+
+  // Data Fields
+  status AssetUploadStatus @default(PENDING)
+  index  Int
+  total  Int
+  size   BigInt /// @zod.custom.use(z.coerce.bigint())
+  etag   String?
+
+  // Upload Fields
+  uploadUrl     String?
+  uploadSession String?
+  provider      AssetProvider @default(R2)
+  fileBucket    String
+  filePath      String
+
+  // Relations
+  assetId String
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  // Utils
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([assetId, index]) // Prevent duplicate chunks
+  @@index([assetId])
+  @@index([status])
+  @@index([uploadSession])
+}

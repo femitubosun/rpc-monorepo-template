@@ -8,68 +8,41 @@ import type { MiddlewareHandler } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
 import type { ZodType } from 'zod';
 
-type Method =
-  | 'get'
-  | 'post'
-  | 'put'
-  | 'delete'
-  | 'patch'
-  | 'head'
-  | 'options';
+type Method = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options';
 
-class RouteBuilder<
-  T extends Partial<BaseRouteConfig> = {},
-> {
+class RouteBuilder<T extends Partial<BaseRouteConfig> = {}> {
   private readonly config: T;
 
   constructor(config: T = {} as T) {
     this.config = config;
   }
 
-  path<P extends string>(
-    path: P
-  ): RouteBuilder<T & { path: P }> {
+  path<P extends string>(path: P): RouteBuilder<T & { path: P }> {
     this.config.path = path;
 
     return this as unknown as RouteBuilder<T & { path: P }>;
   }
 
-  method<M extends Method>(
-    method: M
-  ): RouteBuilder<T & { method: M }> {
+  method<M extends Method>(method: M): RouteBuilder<T & { method: M }> {
     this.config.method = method;
 
-    return this as unknown as RouteBuilder<
-      T & { method: M }
-    >;
+    return this as unknown as RouteBuilder<T & { method: M }>;
   }
 
-  summary(
-    summary: string
-  ): RouteBuilder<T & { summary: string }> {
+  summary(summary: string): RouteBuilder<T & { summary: string }> {
     this.config.summary = summary;
-    return this as unknown as RouteBuilder<
-      T & { summary: string }
-    >;
+    return this as unknown as RouteBuilder<T & { summary: string }>;
   }
 
-  description(
-    description: string
-  ): RouteBuilder<T & { description: string }> {
+  description(description: string): RouteBuilder<T & { description: string }> {
     this.config.description = description;
 
-    return this as unknown as RouteBuilder<
-      T & { description: string }
-    >;
+    return this as unknown as RouteBuilder<T & { description: string }>;
   }
 
-  tags(
-    tags: string[]
-  ): RouteBuilder<T & { tags: string[] }> {
+  tags(tags: string[]): RouteBuilder<T & { tags: string[] }> {
     this.config.tags = tags;
-    return this as unknown as RouteBuilder<
-      T & { tags: string[] }
-    >;
+    return this as unknown as RouteBuilder<T & { tags: string[] }>;
   }
 
   params<P extends ZodType>(
@@ -88,9 +61,7 @@ class RouteBuilder<
 
     return this as unknown as RouteBuilder<
       T & {
-        request: (T extends { request: infer R }
-          ? R
-          : {}) & { params: P };
+        request: (T extends { request: infer R } ? R : {}) & { params: P };
       }
     >;
   }
@@ -111,9 +82,7 @@ class RouteBuilder<
 
     return this as unknown as RouteBuilder<
       T & {
-        request: (T extends { request: infer R }
-          ? R
-          : {}) & { query: Q };
+        request: (T extends { request: infer R } ? R : {}) & { query: Q };
       }
     >;
   }
@@ -134,9 +103,7 @@ class RouteBuilder<
 
     return this as unknown as RouteBuilder<
       T & {
-        request: (T extends { request: infer R }
-          ? R
-          : {}) & { headers: H };
+        request: (T extends { request: infer R } ? R : {}) & { headers: H };
       }
     >;
   }
@@ -157,9 +124,7 @@ class RouteBuilder<
 
     return this as unknown as RouteBuilder<
       T & {
-        request: (T extends { request: infer R }
-          ? R
-          : {}) & { cookies: C };
+        request: (T extends { request: infer R } ? R : {}) & { cookies: C };
       }
     >;
   }
@@ -195,9 +160,7 @@ class RouteBuilder<
 
     return this as unknown as RouteBuilder<
       T & {
-        request: (T extends { request: infer R }
-          ? R
-          : {}) & {
+        request: (T extends { request: infer R } ? R : {}) & {
           body: {
             content: {
               'application/json': {
@@ -241,9 +204,7 @@ class RouteBuilder<
 
     return this as unknown as RouteBuilder<
       T & {
-        request: (T extends { request: infer R }
-          ? R
-          : {}) & {
+        request: (T extends { request: infer R } ? R : {}) & {
           body: {
             content: {
               'application/x-www-form-urlencoded': {
@@ -258,18 +219,13 @@ class RouteBuilder<
   }
 
   // Response types
-  response<
-    Status extends StatusCode,
-    Content extends ZodContentObject,
-  >(
+  response<Status extends StatusCode, Content extends ZodContentObject>(
     status: Status,
     description: string,
     content?: Content
   ): RouteBuilder<
     T & {
-      responses: (T extends { responses: infer R }
-        ? R
-        : {}) & {
+      responses: (T extends { responses: infer R } ? R : {}) & {
         [K in Status]: {
           description: string;
           content: Content;
@@ -287,9 +243,7 @@ class RouteBuilder<
 
     return this as unknown as RouteBuilder<
       T & {
-        responses: (T extends { responses: infer R }
-          ? R
-          : {}) & {
+        responses: (T extends { responses: infer R } ? R : {}) & {
           [K in Status]: {
             description: string;
             content: Content;
@@ -299,18 +253,13 @@ class RouteBuilder<
     >;
   }
 
-  jsonResponse<
-    Status extends StatusCode,
-    S extends ZodType,
-  >(
+  jsonResponse<Status extends StatusCode, S extends ZodType>(
     status: Status,
     description: string,
     schema: S
   ): RouteBuilder<
     T & {
-      responses: (T extends { responses: infer R }
-        ? R
-        : {}) & {
+      responses: (T extends { responses: infer R } ? R : {}) & {
         [K in Status]: {
           description: string;
           content: {
@@ -330,33 +279,23 @@ class RouteBuilder<
   }
 
   // Middleware
-  middleware<
-    M extends MiddlewareHandler | MiddlewareHandler[],
-  >(middleware: M): RouteBuilder<T & { middleware: M }> {
+  middleware<M extends MiddlewareHandler | MiddlewareHandler[]>(
+    middleware: M
+  ): RouteBuilder<T & { middleware: M }> {
     this.config.middleware = middleware;
-    return this as unknown as RouteBuilder<
-      T & { middleware: M }
-    >;
+    return this as unknown as RouteBuilder<T & { middleware: M }>;
   }
 
   // Hide from documentation
-  hide(
-    hide: boolean = true
-  ): RouteBuilder<T & { hide: boolean }> {
+  hide(hide: boolean = true): RouteBuilder<T & { hide: boolean }> {
     this.config.hide = hide;
-    return this as unknown as RouteBuilder<
-      T & { hide: boolean }
-    >;
+    return this as unknown as RouteBuilder<T & { hide: boolean }>;
   }
 
   // Build the final route
-  build(): T extends { path: string; method: string }
-    ? T
-    : never {
+  build(): T extends { path: string; method: string } ? T : never {
     if (!this.config.path || !this.config.method) {
-      throw new Error(
-        'Route must have both path and method defined'
-      );
+      throw new Error('Route must have both path and method defined');
     }
     return createRoute(this.config as any);
   }

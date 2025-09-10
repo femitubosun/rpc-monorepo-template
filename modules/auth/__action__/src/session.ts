@@ -1,8 +1,5 @@
 import { A, G } from '@template/action';
-import {
-  ContextUserSchema,
-  SessionSchema,
-} from '@template/app-defs';
+import { ContextUserSchema, SessionSchema } from '@template/app-defs';
 
 import z from 'zod';
 
@@ -19,9 +16,7 @@ export const session = G({
       })
     )
     .output(SessionSchema),
-  invalidate: A('auth.session.invalidate')
-    .input(userIdSchema)
-    .output(z.null()),
+  invalidate: A('auth.session.invalidate').input(userIdSchema).output(z.null()),
   refresh: A('auth.session.refresh')
     .input(ContextUserSchema)
     .output(SessionSchema),

@@ -1,9 +1,0 @@
-packages:
-  - "packages/*"
-  - "packages/**/*"
-  - "apps/*"
-  - "infrastructure/*"
-  - "infrastructure/**/*"
-  - "modules/*"
-  - "modules/**/*"
-  - "services/**/*"

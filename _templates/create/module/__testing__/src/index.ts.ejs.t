@@ -2,9 +2,9 @@
 to: modules/<%=name%>/__testing__/src/<%=name%>.test.ts
 ---
 
-// import <%=h.changeCase.pascal(name)%>Action from "@axon-ai/<%=name%>-action-defs";
-// import module from "@axon-ai/<%=name%>-module";
-import { setUpTestEnvironment } from "@axon-ai/testing";
+// import <%=h.changeCase.pascal(name)%>Action from "@template/<%=name%>-action-defs";
+// import module from "@template/<%=name%>-module";
+import { setUpTestEnvironment } from "@template/testing";
 import { beforeAll, describe, expect, it } from "vitest";
 
 describe("<%=h.changeCase.pascal(name)%> Tests", () => {

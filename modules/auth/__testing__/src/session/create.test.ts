@@ -6,27 +6,16 @@ import {
   faker,
   setUpTestEnvironment,
 } from '@template/testing';
-import {
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 describe('auth.session.create Test', async () => {
   let handler: ReturnType<
-    typeof module.getHandler<
-      typeof AuthAction.session.create
-    >
+    typeof module.getHandler<typeof AuthAction.session.create>
   >;
   const user = {
     id: faker.string.uuid(),
     email: faker.internet.email(),
     name: faker.person.fullName(),
-    developerProfile: {
-      id: faker.string.uuid(),
-    },
   };
 
   beforeAll(async () => {
@@ -64,9 +53,7 @@ describe('auth.session.create Test', async () => {
       },
     });
 
-    const cachedSession = await cache.get(
-      `session:${user.id}`
-    );
+    const cachedSession = await cache.get(`session:${user.id}`);
     expect(cachedSession).toMatchObject({
       user,
       version: 1,

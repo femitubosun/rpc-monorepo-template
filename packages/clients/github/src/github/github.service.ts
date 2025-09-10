@@ -26,23 +26,12 @@ export class Github implements IGithub {
   generateAuthUrl(input: RequestAuthOptions): string {
     const { state, scopes, codeChallenge } = input;
 
-    const endpointUrl = new URL(
-      Env.GITHUB_REQUEST_IDENTITY_URL
-    );
+    const endpointUrl = new URL(Env.GITHUB_REQUEST_IDENTITY_URL);
 
-    endpointUrl.searchParams.append(
-      'client_id',
-      Env.GITHUB_CLIENT_ID
-    );
+    endpointUrl.searchParams.append('client_id', Env.GITHUB_CLIENT_ID);
     endpointUrl.searchParams.append('state', state);
-    endpointUrl.searchParams.append(
-      'code_challenge',
-      codeChallenge
-    );
-    endpointUrl.searchParams.append(
-      'code_challenge_method',
-      'S256'
-    );
+    endpointUrl.searchParams.append('code_challenge', codeChallenge);
+    endpointUrl.searchParams.append('code_challenge_method', 'S256');
     endpointUrl.searchParams.append(
       'scope',
       (scopes ?? ['user:email']).join(',')
@@ -124,17 +113,14 @@ export class Github implements IGithub {
     const { repo, owner } = input;
     const octoKit = new Octokit();
     try {
-      const result = await octoKit.request(
-        'GET /repos/{owner}/{repo}',
-        {
-          owner,
-          repo,
-          headers: {
-            'X-GitHub-Api-Version': '2022-11-28',
-            accept: 'application/vnd.github+json',
-          },
-        }
-      );
+      const result = await octoKit.request('GET /repos/{owner}/{repo}', {
+        owner,
+        repo,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+          accept: 'application/vnd.github+json',
+        },
+      });
 
       return result.data;
     } catch (e) {

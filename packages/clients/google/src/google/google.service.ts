@@ -24,31 +24,17 @@ export class Google implements IGoogle {
   generateAuthUrl(input: RequestAuthOptions): string {
     const { state, scopes, codeChallenge } = input;
 
-    const endpointUrl = new URL(
-      Env.GOOGLE_REQUEST_IDENTITY_URL
-    );
+    const endpointUrl = new URL(Env.GOOGLE_REQUEST_IDENTITY_URL);
 
-    endpointUrl.searchParams.append(
-      'client_id',
-      Env.GOOGLE_CLIENT_ID
-    );
-    endpointUrl.searchParams.append(
-      'response_type',
-      'code'
-    );
+    endpointUrl.searchParams.append('client_id', Env.GOOGLE_CLIENT_ID);
+    endpointUrl.searchParams.append('response_type', 'code');
     endpointUrl.searchParams.append(
       'scope',
       (scopes ?? ['openid', 'email', 'profile']).join(' ')
     );
     endpointUrl.searchParams.append('state', state);
-    endpointUrl.searchParams.append(
-      'code_challenge',
-      codeChallenge
-    );
-    endpointUrl.searchParams.append(
-      'code_challenge_method',
-      'S256'
-    );
+    endpointUrl.searchParams.append('code_challenge', codeChallenge);
+    endpointUrl.searchParams.append('code_challenge_method', 'S256');
     endpointUrl.searchParams.append(
       'redirect_uri',
       `${Env.API_URL}/api/v1/auth/google/callback`
@@ -65,15 +51,11 @@ export class Google implements IGoogle {
     const endpointUrl = Env.GOOGLE_REQUEST_TOKEN_URL;
 
     try {
-      const response = await http.post<
-        any,
-        RequestAuthTokenResponse
-      >({
+      const response = await http.post<any, RequestAuthTokenResponse>({
         endpointUrl,
         requestConfig: {
           headers: {
-            'Content-Type':
-              'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
         },
         dataPayload: new URLSearchParams({
@@ -88,10 +70,7 @@ export class Google implements IGoogle {
 
       return response.apiResponse;
     } catch (e) {
-      logger.error(
-        'Error requesting authentication token',
-        e
-      );
+      logger.error('Error requesting authentication token', e);
 
       return null;
     }

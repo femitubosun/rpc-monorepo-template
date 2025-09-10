@@ -3,9 +3,7 @@ import { z } from 'zod';
 export const dotSeparatedWordsSchema = z
   .string()
   .regex(/^[a-zA-Z-]+(\.[a-zA-Z-]+)+$/);
-export type DotSeparatedWords = z.infer<
-  typeof dotSeparatedWordsSchema
->;
+export type DotSeparatedWords = z.infer<typeof dotSeparatedWordsSchema>;
 
 export class ActionCacheKey {
   private segments: string[] = [];
@@ -14,8 +12,7 @@ export class ActionCacheKey {
   private prefix: string;
 
   constructor(action: string) {
-    const validatedActionName =
-      ActionCacheKey.validateAction(action);
+    const validatedActionName = ActionCacheKey.validateAction(action);
 
     this.prefix = this.#dotToColumn(validatedActionName);
   }
@@ -44,9 +41,7 @@ export class ActionCacheKey {
   /**
    * Add parameters to the cache key
    */
-  listParams(
-    parameters: Record<string, any>
-  ): ActionCacheKey {
+  listParams(parameters: Record<string, any>): ActionCacheKey {
     this.parameters = {
       ...this.parameters,
       ...this.#sortObjectKeys(parameters),
@@ -72,9 +67,7 @@ export class ActionCacheKey {
   }
 
   #makeSegementString() {
-    return this.segments.length
-      ? `:${this.segments.join(':')}`
-      : '';
+    return this.segments.length ? `:${this.segments.join(':')}` : '';
   }
 
   #makeBaseKey() {
@@ -87,10 +80,7 @@ export class ActionCacheKey {
     }
 
     const paramString = Object.entries(this.parameters)
-      .map(
-        ([k, v]) =>
-          `${k}=${encodeURIComponent(this.#serializeValue(v))}`
-      )
+      .map(([k, v]) => `${k}=${encodeURIComponent(this.#serializeValue(v))}`)
       .join('&');
 
     return `${baseKey}:${paramString}`;
@@ -124,9 +114,7 @@ export class ActionCacheKey {
   /**
    * Sorts the keys of an object alphabetically (deep sort)
    */
-  #sortObjectKeys(
-    obj: Record<string, any>
-  ): Record<string, any> {
+  #sortObjectKeys(obj: Record<string, any>): Record<string, any> {
     if (typeof obj !== 'object' || obj === null) {
       return obj;
     }
@@ -146,9 +134,7 @@ export class ActionCacheKey {
           } else if (Array.isArray(value)) {
             result[key] = value?.map((item) =>
               // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-              typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item)
+              typeof item === 'object' && item !== null && !Array.isArray(item)
                 ? // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                   this.#sortObjectKeys(item)
                 : item
@@ -167,5 +153,4 @@ export class ActionCacheKey {
 /**
  * Factory function to create a new CacheKeyBuilder instance
  */
-export const ckMaker = (action: string) =>
-  new ActionCacheKey(action);
+export const ckMaker = (action: string) => new ActionCacheKey(action);

@@ -61,11 +61,7 @@ module.registerHandlers({
       context,
       data: {
         message: 'Signup successful',
-        ...(['development', 'testing'].includes(
-          Env.NODE_ENV
-        )
-          ? { otp }
-          : {}),
+        ...(['development', 'testing'].includes(Env.NODE_ENV) ? { otp } : {}),
       },
     };
   },

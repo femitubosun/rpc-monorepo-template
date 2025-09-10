@@ -29,7 +29,7 @@ export declare const MESSAGE_MATCHER_IS_ALREADY_BUILT =
 /**
  * Interface representing a router.
  *
- * @template T - The type of the handler.
+ * @collab T - The type of the handler.
  */
 export interface Router<T> {
   /**
@@ -97,9 +97,7 @@ export type Params = Record<string, string>;
  * ]
  * ```
  */
-export type Result<T> =
-  | [[T, ParamIndexMap][], ParamStash]
-  | [[T, Params][]];
+export type Result<T> = [[T, ParamIndexMap][], ParamStash] | [[T, Params][]];
 /**
  * Error class representing an unsupported path error.
  */

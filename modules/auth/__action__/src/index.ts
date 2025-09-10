@@ -44,13 +44,9 @@ const AuthAction = G({
       .input(SendSignInCodeMailSchema)
       .async(),
   },
-  useCode: A('auth.useCode')
-    .input(UseCodeSchema)
-    .output(AuthResponseSchema),
+  useCode: A('auth.useCode').input(UseCodeSchema).output(AuthResponseSchema),
 
-  requestCode: A('auth.requestCode')
-    .input(EmailSchema)
-    .output(MessageSchema),
+  requestCode: A('auth.requestCode').input(EmailSchema).output(MessageSchema),
 
   session,
   github,

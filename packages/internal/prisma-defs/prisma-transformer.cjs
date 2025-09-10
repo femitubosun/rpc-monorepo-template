@@ -1,28 +1,21 @@
-const { readFile, writeFile, rm } = require('fs/promises');
-const { join } = require('path');
-const { execSync } = require('child_process');
-const glob = require('glob');
+const { readFile, writeFile, rm } = require("fs/promises");
+const { join } = require("path");
+const glob = require("glob");
 
 // Use __dirname to get the correct package directory
 const currentDir = __dirname;
 
+// Individual file formatting removed - we'll format all files at once at the end
 function formatWithBiome(filePath) {
-  try {
-    execSync(`npx biome format --write "${filePath}"`, { 
-      cwd: join(currentDir, '../../..'),
-      stdio: 'pipe' 
-    });
-  } catch (error) {
-    console.warn(`Warning: Could not format ${filePath} with Biome`);
-  }
+  // No-op - formatting handled in bulk at the end
 }
 
 const names = [
-  'InputJsonValueSchema',
-  'JsonNullValueFilterSchema',
-  'JsonNullValueInputSchema',
-  'JsonValueSchema',
-  'NullableJsonNullValueInputSchema',
+  "InputJsonValueSchema",
+  "JsonNullValueFilterSchema",
+  "JsonNullValueInputSchema",
+  "JsonValueSchema",
+  "NullableJsonNullValueInputSchema",
 ];
 
 async function handleFile(filePath) {
@@ -32,9 +25,9 @@ async function handleFile(filePath) {
     return;
   }
 
-  const fileContents = await readFile(filePath, 'utf-8');
+  const fileContents = await readFile(filePath, "utf-8");
 
-  const lines = fileContents.split('\n');
+  const lines = fileContents.split("\n");
 
   const blocking = false;
 
@@ -51,10 +44,10 @@ async function handleFile(filePath) {
     }
   }
 
-  let text = newLines.join('\n');
+  let text = newLines.join("\n");
 
   // replace all z.string().cuid() with z.string()
-  text = text.replace(/z\.string\(\)\.cuid\(\)/g, 'z.string()');
+  text = text.replace(/z\.string\(\)\.cuid\(\)/g, "z.string()");
 
   // Replace file contents with new lines
   await writeFile(filePath, text);
@@ -63,35 +56,37 @@ async function handleFile(filePath) {
 
 async function exportAllTypes() {
   // Generate index.ts for inputTypeSchemas
-  const inputFiles = glob.sync(join(currentDir, 'src/inputTypeSchemas', '*.ts'));
+  const inputFiles = glob.sync(
+    join(currentDir, "src/inputTypeSchemas", "*.ts"),
+  );
   const inputLines = [];
 
   for (const file of inputFiles) {
-    if (file.includes('index.ts')) continue;
-    
-    const fileName = file.split('/').pop().split('.')[0];
+    if (file.includes("index.ts")) continue;
+
+    const fileName = file.split("/").pop().split(".")[0];
     inputLines.push(`export * from './${fileName}';`);
   }
 
   inputLines.sort();
-  const inputIndexPath = join(currentDir, 'src/inputTypeSchemas/index.ts');
-  await writeFile(inputIndexPath, inputLines.join('\n') + '\n');
+  const inputIndexPath = join(currentDir, "src/inputTypeSchemas/index.ts");
+  await writeFile(inputIndexPath, inputLines.join("\n") + "\n");
   formatWithBiome(inputIndexPath);
 
   // Generate index.ts for modelSchema
-  const modelFiles = glob.sync(join(currentDir, 'src/modelSchema', '*.ts'));
+  const modelFiles = glob.sync(join(currentDir, "src/modelSchema", "*.ts"));
   const modelLines = [];
 
   for (const file of modelFiles) {
-    if (file.includes('index.ts')) continue;
-    
-    const fileName = file.split('/').pop().split('.')[0];
+    if (file.includes("index.ts")) continue;
+
+    const fileName = file.split("/").pop().split(".")[0];
     modelLines.push(`export * from './${fileName}';`);
   }
 
   modelLines.sort();
-  const modelIndexPath = join(currentDir, 'src/modelSchema/index.ts');
-  await writeFile(modelIndexPath, modelLines.join('\n') + '\n');
+  const modelIndexPath = join(currentDir, "src/modelSchema/index.ts");
+  await writeFile(modelIndexPath, modelLines.join("\n") + "\n");
   formatWithBiome(modelIndexPath);
 }
 
@@ -99,17 +94,17 @@ async function generateMainIndex() {
   // Generate the main index.ts file with sorted exports
   const exports = [
     `export * from './inputTypeSchemas';`,
-    `export * from './modelSchema';`
+    `export * from './modelSchema';`,
   ].sort();
 
-  const indexPath = join(currentDir, 'src/index.ts');
-  await writeFile(indexPath, exports.join('\n') + '\n');
+  const indexPath = join(currentDir, "src/index.ts");
+  await writeFile(indexPath, exports.join("\n") + "\n");
   formatWithBiome(indexPath);
 }
 
 async function main() {
   // Get every file in the src directory (recursively)
-  const files = glob.sync(join(currentDir, 'src', '**/*.ts'));
+  const files = glob.sync(join(currentDir, "src", "**/*.ts"));
 
   // Handle each file
   for (const file of files) {
@@ -118,17 +113,10 @@ async function main() {
 
   exportAllTypes();
   generateMainIndex();
-  
-  // Format and organize imports for all files in src directory with Biome
-  try {
-    execSync(`npx biome check --write src`, { 
-      cwd: join(currentDir, '../../..'),
-      stdio: 'pipe' 
-    });
-    console.log('✅ Formatted and organized imports for all prisma-defs files with Biome');
-  } catch (error) {
-    console.warn('Warning: Could not format all files with Biome');
-  }
+
+  console.log(
+    "✅ Processed and organized all prisma-defs files (formatting skipped for generated files)",
+  );
 }
 
 main();

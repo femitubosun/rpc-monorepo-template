@@ -1,0 +1,35 @@
+{
+  "name": "@template/ai",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./providers": {
+      "import": "./src/providers.ts"
+    },
+    "./embeddings": {
+      "import": "./src/embeddings.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check-types": "tsc --noEmit --incremental"
+  },
+  "dependencies": {
+    "@template/env": "workspace:*",
+    "@langchain/core": "^0.3.66",
+    "@langchain/google-genai": "^0.2.15",
+    "@langchain/ollama": "^0.2.3",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "typescript": "5.8.2"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@template/assets-testing",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=../../../.env.test -- vitest run"
+  },
+  "dependencies": {
+    "@template/action": "workspace:*",
+    "@template/api-utils": "workspace:*",
+    "@template/app-utils": "workspace:*",
+    "@template/assets-action-defs": "workspace:*",
+    "@template/assets-defs": "workspace:*",
+    "@template/assets-module": "workspace:*",
+    "@template/env": "workspace:*",
+    "@template/logging": "workspace:*",
+    "@template/testing": "workspace:*",
+    "vitest": "^3.2.4",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "5.8.2",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}

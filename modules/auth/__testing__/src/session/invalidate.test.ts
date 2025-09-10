@@ -6,35 +6,22 @@ import {
   faker,
   setUpTestEnvironment,
 } from '@template/testing';
-import {
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 describe('auth.session.invalidate Test', async () => {
   let handler: ReturnType<
-    typeof module.getHandler<
-      typeof AuthAction.session.invalidate
-    >
+    typeof module.getHandler<typeof AuthAction.session.invalidate>
   >;
   const userId = faker.string.uuid();
   const user = {
     id: userId,
     email: faker.internet.email(),
     name: faker.person.fullName(),
-    developerProfile: {
-      id: faker.string.uuid(),
-    },
   };
 
   beforeAll(async () => {
     await setUpTestEnvironment();
-    handler = module.getHandler(
-      AuthAction.session.invalidate
-    );
+    handler = module.getHandler(AuthAction.session.invalidate);
   });
 
   afterEach(async () => {
@@ -62,9 +49,7 @@ describe('auth.session.invalidate Test', async () => {
 
     await cache.set(`session:${userId}`, sessionData);
 
-    const cachedSessionBefore = await cache.get(
-      `session:${userId}`
-    );
+    const cachedSessionBefore = await cache.get(`session:${userId}`);
     expect(cachedSessionBefore).toMatchObject(sessionData);
 
     await handler!({
@@ -74,9 +59,7 @@ describe('auth.session.invalidate Test', async () => {
       },
     });
 
-    const cachedSessionAfter = await cache.get(
-      `session:${userId}`
-    );
+    const cachedSessionAfter = await cache.get(`session:${userId}`);
     expect(cachedSessionAfter).toBeNull();
   });
 

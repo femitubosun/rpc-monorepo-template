@@ -1,8 +1,5 @@
 import { faker } from '@faker-js/faker';
-import type {
-  AppContext,
-  Logger,
-} from '@template/app-defs';
+import type { AppContext, Logger } from '@template/app-defs';
 import { ckMaker } from '@template/cache-utils';
 import { makeError } from '@template/error';
 
@@ -15,10 +12,7 @@ export function createMockUser() {
   };
 }
 
-export function createMockApiResponse<T>(
-  data: T,
-  success = true
-) {
+export function createMockApiResponse<T>(data: T, success = true) {
   return {
     data,
     message: success ? 'Success' : 'Error',
@@ -29,7 +23,6 @@ export function createMockApiResponse<T>(
 export function createMockContext(): AppContext {
   return {
     userId: faker.string.uuid(),
-    developerId: faker.string.uuid(),
   };
 }
 
@@ -60,15 +53,10 @@ export function createMockCacheKey() {
 }
 
 export function createActionMocks() {
-  const mockDeveloper = {
-    id: faker.string.uuid(),
-  };
-
   return {
     cacheKey: createMockCacheKey(),
     context: {
       userId: faker.string.uuid(),
-      developerId: mockDeveloper.id,
     },
     logger: createMockLogger(),
     makeError,

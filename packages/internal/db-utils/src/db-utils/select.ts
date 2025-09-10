@@ -1,35 +1,27 @@
 import { z } from 'zod';
 /* eslint-disable */
 
-export type DeepZodToPrismaSelectMapper<
-  T extends z.ZodTypeAny,
-> = T extends z.ZodObject<infer Shape>
-  ? {
-      select: {
-        [K in keyof Shape]: DeepZodToPrismaSelectMapper<
-          Shape[K]
-        >;
-      };
-    }
-  : T extends z.ZodArray<infer Item>
-    ? DeepZodToPrismaSelectMapper<Item>
-    : true;
+export type DeepZodToPrismaSelectMapper<T extends z.ZodTypeAny> =
+  T extends z.ZodObject<infer Shape>
+    ? {
+        select: {
+          [K in keyof Shape]: DeepZodToPrismaSelectMapper<Shape[K]>;
+        };
+      }
+    : T extends z.ZodArray<infer Item>
+      ? DeepZodToPrismaSelectMapper<Item>
+      : true;
 
-export type ZodToPrismaSelectMapper<
-  T extends z.ZodTypeAny,
-> = T extends z.ZodObject<infer Shape>
-  ? {
-      [K in keyof Shape]: DeepZodToPrismaSelectMapper<
-        Shape[K]
-      >;
-    }
-  : T extends z.ZodArray<infer Item>
-    ? DeepZodToPrismaSelectMapper<Item>
-    : true;
+export type ZodToPrismaSelectMapper<T extends z.ZodTypeAny> =
+  T extends z.ZodObject<infer Shape>
+    ? {
+        [K in keyof Shape]: DeepZodToPrismaSelectMapper<Shape[K]>;
+      }
+    : T extends z.ZodArray<infer Item>
+      ? DeepZodToPrismaSelectMapper<Item>
+      : true;
 
-function extractInnerType(
-  type: z.ZodTypeAny
-): z.ZodTypeAny {
+function extractInnerType(type: z.ZodTypeAny): z.ZodTypeAny {
   if (
     type instanceof z.ZodOptional ||
     type instanceof z.ZodNullable ||
@@ -41,9 +33,9 @@ function extractInnerType(
   return type;
 }
 
-export function zodToPrismaSelect<
-  T extends z.ZodType<any, any>,
->(schema: T): ZodToPrismaSelectMapper<T> {
+export function zodToPrismaSelect<T extends z.ZodType<any, any>>(
+  schema: T
+): ZodToPrismaSelectMapper<T> {
   const fields = schema._def.shape();
   const result = {};
   for (const key in fields) {
@@ -52,17 +44,17 @@ export function zodToPrismaSelect<
       field._def.typeName === 'ZodArray' &&
       field._def.type._def.typeName === 'ZodObject'
     ) {
-      // @ts-ignore
+      // @ts-expect-error
       result[key] = {
         select: zodToPrismaSelect(field._def.type),
       };
     } else if (field._def.typeName === 'ZodObject') {
-      // @ts-ignore
+      // @ts-expect-error
       result[key] = {
         select: zodToPrismaSelect(field),
       };
     } else {
-      // @ts-ignore
+      // @ts-expect-error
       result[key] = true;
     }
   }
@@ -72,10 +64,7 @@ export function zodToPrismaSelect<
 export function zodPick<
   T extends z.ZodObject<any>,
   K extends readonly (keyof T['shape'])[],
->(
-  schema: T,
-  keys: K
-): z.ZodObject<Pick<T['shape'], K[number]>> {
+>(schema: T, keys: K): z.ZodObject<Pick<T['shape'], K[number]>> {
   const pickedShape = {} as Pick<T['shape'], K[number]>;
 
   for (const key of keys) {

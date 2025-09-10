@@ -1,0 +1,24 @@
+{
+  "name": "@template/vector",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check-types": "tsc --noEmit --incremental"
+  },
+  "dependencies": {
+    "zod": "3.25.74",
+    "@template/env": "workspace:*",
+    "@template/logging": "workspace:*",
+    "@template/error": "workspace:*",
+    "@template/ai": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "typescript": "5.8.2"
+  }
+}

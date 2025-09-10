@@ -12,32 +12,20 @@ export function appendErrorToRedirectUrl(
   if (error instanceof AppError) {
     switch (error.type) {
       case 'NOT_FOUND':
-        redirectUrl.searchParams.append(
-          'error',
-          'session_expired'
-        );
+        redirectUrl.searchParams.append('error', 'session_expired');
         break;
       case 'BAD_REQUEST':
-        redirectUrl.searchParams.append(
-          'error',
-          'invalid_request'
-        );
+        redirectUrl.searchParams.append('error', 'invalid_request');
         break;
       default:
-        redirectUrl.searchParams.append(
-          'error',
-          'auth_failed'
-        );
+        redirectUrl.searchParams.append('error', 'auth_failed');
     }
   } else {
     redirectUrl.searchParams.append('error', 'auth_failed');
   }
 }
 
-export function getSuccessRedirectUrl(
-  url: URL,
-  authToken: string
-): string {
+export function getSuccessRedirectUrl(url: URL, authToken: string): string {
   url.pathname = `${url.pathname.replace(/\/$/, '')}/auth`;
 
   url.searchParams.append('authToken', authToken);

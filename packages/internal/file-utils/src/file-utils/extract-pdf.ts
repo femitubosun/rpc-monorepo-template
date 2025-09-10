@@ -3,9 +3,7 @@ import { pdfToText } from 'pdf-ts';
 import type { FileContentExtractor } from './__defs__';
 import { logger } from './logger';
 
-export const extractPdf: FileContentExtractor = async (
-  buffer: Buffer
-) => {
+export const extractPdf: FileContentExtractor = async (buffer: Buffer) => {
   try {
     const result = await pdfToText(buffer);
 

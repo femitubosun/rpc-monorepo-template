@@ -2,7 +2,7 @@
 to: packages/internal/<%= name %>/package.json
 ---
 {
-  "name": "@axon-ai/<%= name %>",
+  "name": "@template/<%= name %>",
   "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
@@ -15,11 +15,11 @@ to: packages/internal/<%= name %>/package.json
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "zod": "3.25.74",
-    "@axon-ai/env": "workspace:*"
+    "@template/env": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

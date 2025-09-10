@@ -1,7 +1,4 @@
-import type {
-  AppContext,
-  Logger,
-} from '@template/app-defs';
+import type { AppContext, Logger } from '@template/app-defs';
 import type { ActionCacheKey } from '@template/cache-utils';
 import type {
   preMakeAsyncActionError,
@@ -28,8 +25,7 @@ export type ActionHandler<T extends Action> = (args: {
   context: AppContext;
   logger: Logger;
   makeError: ReturnType<
-    | typeof preMakeAsyncActionError
-    | typeof preMakeSyncActionError
+    typeof preMakeAsyncActionError | typeof preMakeSyncActionError
   >;
   cacheKey: ActionCacheKey;
 }) => Promise<{

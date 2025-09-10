@@ -1,5 +1,6 @@
 import Env from '@template/env';
-import { PrismaClient } from '../prisma/dist/generated/prisma/index.js';
+import { Prisma, PrismaClient } from '../prisma/dist/generated/prisma/index.js';
+export { Prisma };
 
 const db = new PrismaClient({
   datasources: {

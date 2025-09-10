@@ -1,1 +1,1 @@
-export * from './hash-utils/__defs__';
+export * from './hash-utils';

@@ -1,4 +1,1 @@
-export {
-  ActionCacheKey,
-  ckMaker,
-} from './cache-key-builder';
+export { ActionCacheKey, ckMaker } from './cache-key-builder';

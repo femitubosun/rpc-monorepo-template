@@ -69,11 +69,7 @@ module.registerHandlers({
       context,
       data: {
         message: `Check email for further instructions`,
-        ...(['development', 'testing'].includes(
-          Env.NODE_ENV
-        )
-          ? { otp }
-          : {}),
+        ...(['development', 'testing'].includes(Env.NODE_ENV) ? { otp } : {}),
       },
     };
   },

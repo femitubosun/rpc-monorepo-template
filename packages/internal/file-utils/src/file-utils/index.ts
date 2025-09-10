@@ -1,7 +1,4 @@
-import type {
-  ExtractableFile,
-  FileContentExtractor,
-} from './__defs__';
+import type { ExtractableFile, FileContentExtractor } from './__defs__';
 import { extractDocx } from './extract-docx';
 import { extractMarkdown } from './extract-markdown';
 import { extractPdf } from './extract-pdf';

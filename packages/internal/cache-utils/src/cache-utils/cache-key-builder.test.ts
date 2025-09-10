@@ -13,9 +13,7 @@ describe('CacheKeyBuilder Test', () => {
   });
 
   it('should throw error for invalid action key', () => {
-    expect(
-      () => new ActionCacheKey('myAction')
-    ).toThrowError(z.ZodError);
+    expect(() => new ActionCacheKey('myAction')).toThrowError(z.ZodError);
   });
 
   it('should define action key', () => {
@@ -36,9 +34,7 @@ describe('CacheKeyBuilder Test', () => {
 
     cK.owner(userId).single(itemId);
 
-    expect(cK.toString()).toBe(
-      `devProfile:get:${userId}:${itemId}`
-    );
+    expect(cK.toString()).toBe(`devProfile:get:${userId}:${itemId}`);
   });
 
   it('should properly define owner key for listParams', () => {
@@ -65,9 +61,7 @@ describe('CacheKeyBuilder Test', () => {
     const cK = new ActionCacheKey('devProfile.list');
     cK.listParams({ all: true, before: 12 });
 
-    expect(cK.toString()).toBe(
-      `devProfile:list:all=true&before=12`
-    );
+    expect(cK.toString()).toBe(`devProfile:list:all=true&before=12`);
   });
 
   it('should return appropriate ownerTag', () => {

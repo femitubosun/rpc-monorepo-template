@@ -3,10 +3,7 @@ export function setupTestUtils() {
   console.log('Test utilities initialized');
 }
 
-export function createTestId(
-  component: string,
-  element?: string
-): string {
+export function createTestId(component: string, element?: string): string {
   return element ? `${component}-${element}` : component;
 }
 

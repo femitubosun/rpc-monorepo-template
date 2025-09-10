@@ -1,11 +1,4 @@
-import {
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@template/mail', () => ({
   default: {
@@ -26,17 +19,13 @@ const mockMail = vi.mocked(mail);
 
 describe('Auth.mail.sendOnboardingMail Test', () => {
   let handler: ReturnType<
-    typeof module.getHandler<
-      typeof AuthAction.mail.sendOnboardingMail
-    >
+    typeof module.getHandler<typeof AuthAction.mail.sendOnboardingMail>
   >;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
 
-    handler = module.getHandler(
-      AuthAction.mail.sendOnboardingMail
-    );
+    handler = module.getHandler(AuthAction.mail.sendOnboardingMail);
   }, 3000);
 
   beforeEach(() => {
@@ -66,10 +55,7 @@ describe('Auth.mail.sendOnboardingMail Test', () => {
       data: null,
     });
 
-    expect(mockMail.sendWelcomeMail).toHaveBeenCalledWith(
-      email,
-      name
-    );
+    expect(mockMail.sendWelcomeMail).toHaveBeenCalledWith(email, name);
   });
 
   it('should return correct response structure', async () => {

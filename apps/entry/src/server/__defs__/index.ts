@@ -1,7 +1,4 @@
-import type {
-  OpenAPIHono,
-  RouteConfig,
-} from '@hono/zod-openapi';
+import type { OpenAPIHono, RouteConfig } from '@hono/zod-openapi';
 import type { PinoLogger } from 'hono-pino';
 
 export interface AppBindings {
@@ -30,7 +27,4 @@ type ZodMediaTypeValue = DefinedContent extends Record<
 >
   ? V
   : never;
-export type AppZodResponse = Exclude<
-  ZodMediaTypeValue,
-  undefined
->['schema'];
+export type AppZodResponse = Exclude<ZodMediaTypeValue, undefined>['schema'];

@@ -6,27 +6,16 @@ import {
   faker,
   setUpTestEnvironment,
 } from '@template/testing';
-import {
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 describe('auth.session.refresh Test', async () => {
   let handler: ReturnType<
-    typeof module.getHandler<
-      typeof AuthAction.session.refresh
-    >
+    typeof module.getHandler<typeof AuthAction.session.refresh>
   >;
   const user = {
     id: faker.string.uuid(),
     email: faker.internet.email(),
     name: faker.person.fullName(),
-    developerProfile: {
-      id: faker.string.uuid(),
-    },
   };
 
   beforeAll(async () => {
@@ -81,9 +70,7 @@ describe('auth.session.refresh Test', async () => {
       input: user,
     });
 
-    const cachedSession = await cache.get(
-      `session:${user.id}`
-    );
+    const cachedSession = await cache.get(`session:${user.id}`);
     expect(cachedSession).toMatchObject({
       user,
       version: 4,
@@ -112,9 +99,7 @@ describe('auth.session.refresh Test', async () => {
 
     expect(result2.data.version).toBe(3);
 
-    const cachedSession: any = await cache.get(
-      `session:${user.id}`
-    );
+    const cachedSession: any = await cache.get(`session:${user.id}`);
     expect(cachedSession?.version).toBe(3);
   });
 });

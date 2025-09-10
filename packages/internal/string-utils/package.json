@@ -1,0 +1,26 @@
+{
+  "name": "@template/string-utils",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check-types": "tsc --noEmit --incremental"
+  },
+  "dependencies": {
+    "cuid": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "eslint": "^9.30.0",
+    "typescript": "5.8.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  }
+}

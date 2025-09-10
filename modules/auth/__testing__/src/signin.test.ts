@@ -28,9 +28,7 @@ vi.mock('@template/action', async () => {
 const mockScheduleAction = vi.mocked(scheduleAction);
 
 describe('Auth.signin Test', () => {
-  let handler: ReturnType<
-    typeof module.getHandler<typeof AuthAction.signIn>
-  >;
+  let handler: ReturnType<typeof module.getHandler<typeof AuthAction.signIn>>;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
@@ -46,7 +44,6 @@ describe('Auth.signin Test', () => {
 
   afterEach(async () => {
     await db.otp.deleteMany({});
-    await db.developerProfile.deleteMany({});
     await db.user.deleteMany({});
   });
 
@@ -58,9 +55,6 @@ describe('Auth.signin Test', () => {
     await db.user.create({
       data: {
         email,
-        developerProfile: {
-          create: {},
-        },
       },
     });
 
@@ -82,9 +76,6 @@ describe('Auth.signin Test', () => {
     const user = await db.user.create({
       data: {
         email,
-        developerProfile: {
-          create: {},
-        },
         otpTokens: {
           create: [
             {
@@ -143,9 +134,6 @@ describe('Auth.signin Test', () => {
     await db.user.create({
       data: {
         email,
-        developerProfile: {
-          create: {},
-        },
       },
     });
 

@@ -1,7 +1,4 @@
-import {
-  generateSessionId,
-  makeOauthSessionCacheKey,
-} from '@logic';
+import { generateSessionId, makeOauthSessionCacheKey } from '@logic';
 import module from '@module';
 import cache from '@template/cache';
 import google from '@template/google';
@@ -10,12 +7,10 @@ import pkce from '@template/pkce';
 module.registerHandlers({
   google: {
     generateAuthUrl: async ({ input, context }) => {
-      const sessionId =
-        input.sessionId || generateSessionId();
+      const sessionId = input.sessionId || generateSessionId();
 
       const codeVerifier = pkce.generateCodeVerifier();
-      const codeChallenge =
-        pkce.generateCodeChallenge(codeVerifier);
+      const codeChallenge = pkce.generateCodeChallenge(codeVerifier);
 
       const state = pkce.generateState();
 

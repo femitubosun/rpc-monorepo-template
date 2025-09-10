@@ -28,6 +28,4 @@ export type ActionStructure<T extends ActionGroup> = {
 export type ExtractActionHandler<
   _AG extends ActionGroup,
   ActionPath extends ActionDef<any, any>,
-> = ActionPath extends Action
-  ? ActionHandler<ActionPath>
-  : never;
+> = ActionPath extends Action ? ActionHandler<ActionPath> : never;

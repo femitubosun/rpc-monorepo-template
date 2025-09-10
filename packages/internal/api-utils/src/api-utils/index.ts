@@ -7,8 +7,4 @@ export {
 } from './auth';
 export { THIRTY_DAYS_TTL } from './constants';
 export * from './cookie';
-export {
-  getSessionTtl,
-  makeSessionKey,
-  makeSessionObject,
-} from './session';
+export { getSessionTtl, makeSessionKey, makeSessionObject } from './session';

@@ -11,10 +11,7 @@ const defaults: Record<string, unknown> = Object.keys(
   (acc, next) => {
     const key = next as keyof typeof envDefinition.shape;
     const def = envDefinition.shape[key]._def;
-    const value =
-      'defaultValue' in def
-        ? def.defaultValue?.()
-        : undefined;
+    const value = 'defaultValue' in def ? def.defaultValue?.() : undefined;
     return {
       // eslint-disable-line
       ...acc,
@@ -27,8 +24,7 @@ const defaults: Record<string, unknown> = Object.keys(
 
 for (const key in envDefinition.shape) {
   const typedKey = key as keyof typeof envDefinition.shape;
-  let value =
-    process.env[key] ?? (defaults[key] as unknown);
+  let value = process.env[key] ?? (defaults[key] as unknown);
   try {
     value = envDefinition.shape[typedKey].parse(value);
   } catch {}

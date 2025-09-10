@@ -3,14 +3,8 @@ import google from '@template/google';
 
 module.registerHandlers({
   google: {
-    getUserProfile: async ({
-      input,
-      context,
-      makeError,
-    }) => {
-      const profile = await google.getGoogleUser(
-        input.token
-      );
+    getUserProfile: async ({ input, context, makeError }) => {
+      const profile = await google.getGoogleUser(input.token);
 
       if (!profile) {
         throw makeError({

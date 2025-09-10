@@ -2,15 +2,12 @@
   "name": "@template/auth-module",
   "type": "module",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "tsc --watch",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "@template/action": "workspace:*",

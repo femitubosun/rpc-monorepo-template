@@ -1,11 +1,4 @@
-import {
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@template/mail', () => ({
   default: {
@@ -26,17 +19,13 @@ const mockMail = vi.mocked(mail);
 
 describe('Auth.mail.sendSignInCode Test', () => {
   let handler: ReturnType<
-    typeof module.getHandler<
-      typeof AuthAction.mail.sendSignInCode
-    >
+    typeof module.getHandler<typeof AuthAction.mail.sendSignInCode>
   >;
 
   beforeAll(async () => {
     await setUpTestEnvironment();
 
-    handler = module.getHandler(
-      AuthAction.mail.sendSignInCode
-    );
+    handler = module.getHandler(AuthAction.mail.sendSignInCode);
   }, 3000);
 
   beforeEach(() => {
@@ -70,11 +59,7 @@ describe('Auth.mail.sendSignInCode Test', () => {
     });
 
     // Verify that the mail service was called with the correct parameters
-    expect(mockMail.sendLoginOtp).toHaveBeenCalledWith(
-      '',
-      email,
-      otp
-    );
+    expect(mockMail.sendLoginOtp).toHaveBeenCalledWith('', email, otp);
   });
 
   it('should return correct response structure', async () => {

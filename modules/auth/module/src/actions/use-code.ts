@@ -45,10 +45,7 @@ module.registerHandlers({
       });
     }
 
-    const isValidOtp = await verifyString(
-      otpToken.tokenHash,
-      input.otp
-    );
+    const isValidOtp = await verifyString(otpToken.tokenHash, input.otp);
 
     if (!isValidOtp) {
       throw makeError({

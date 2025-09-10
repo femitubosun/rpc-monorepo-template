@@ -2,9 +2,7 @@ import { makeError } from '@template/error';
 import type { FileContentExtractor } from './__defs__';
 import { logger } from './logger';
 
-export const extractMarkdown: FileContentExtractor = async (
-  buffer: Buffer
-) => {
+export const extractMarkdown: FileContentExtractor = async (buffer: Buffer) => {
   try {
     return {
       content: buffer.toString('utf-8'),

@@ -93,7 +93,4 @@ export type StatusCode =
   | ServerErrorStatusCode
   | UnofficialStatusCode;
 export type ContentlessStatusCode = 101 | 204 | 205 | 304;
-export type ContentfulStatusCode = Exclude<
-  StatusCode,
-  ContentlessStatusCode
->;
+export type ContentfulStatusCode = Exclude<StatusCode, ContentlessStatusCode>;

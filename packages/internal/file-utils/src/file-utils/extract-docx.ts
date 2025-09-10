@@ -3,9 +3,7 @@ import mammoth from 'mammoth';
 import type { FileContentExtractor } from './__defs__';
 import { logger } from './logger';
 
-export const extractDocx: FileContentExtractor = async (
-  input: Buffer
-) => {
+export const extractDocx: FileContentExtractor = async (input: Buffer) => {
   try {
     const result = await mammoth.extractRawText({
       buffer: input,

@@ -12,7 +12,6 @@ export const github = G({
   generateAuthUrl: A('auth.github.generateAuthUrl')
     .input(GenerateGithubAuthUrlInputSchema)
     .output(GenerateGithubAuthUrlOutputSchema),
-
   handleCallbackUrl: A('auth.github.handleCallback')
     .input(HandleCallbackInputSchema)
     .output(AuthResponseSchema)

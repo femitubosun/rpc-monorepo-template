@@ -2,7 +2,7 @@
 to: modules/<%=name%>/module/package.json
 ---
 {
-  "name": "@axon-ai/<%=name%>-module",
+  "name": "@template/<%=name%>-module",
   "type": "module",
   "version": "0.0.0",
   "main": "dist/index.js",
@@ -14,18 +14,18 @@ to: modules/<%=name%>/module/package.json
   "scripts": {
     "build": "tsc && tsc-alias",
     "dev": "tsc --watch",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "zod": "3.25.74",
-    "@axon-ai/prisma-defs": "workspace:*",
-    "@axon-ai/app-defs": "workspace:*",
-    "@axon-ai/logging": "workspace:*",
-    "@axon-ai/env": "workspace:*",
-    "@axon-ai/action": "workspace:*",
-    "@axon-ai/<%=name%>-defs": "workspace:*",
-    "@axon-ai/<%=name%>-action-defs": "workspace:*",
-    "@axon-ai/db": "workspace:*"
+    "@template/prisma-defs": "workspace:*",
+    "@template/app-defs": "workspace:*",
+    "@template/logging": "workspace:*",
+    "@template/env": "workspace:*",
+    "@template/action": "workspace:*",
+    "@template/<%=name%>-defs": "workspace:*",
+    "@template/<%=name%>-action-defs": "workspace:*",
+    "@template/db": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

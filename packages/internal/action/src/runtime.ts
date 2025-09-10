@@ -1,4 +1,5 @@
 import Env from '@template/env';
+import { makeError } from '@template/error';
 import { makeLogger } from '@template/logging';
 import type z from 'zod';
 import type { ActionDef } from './__defs__';
@@ -10,21 +11,15 @@ import type { Queue } from './queue';
 const logger = makeLogger('AppRuntime');
 
 class Runtime {
-  public _appActions: Map<
-    string,
-    ModuleAction<ActionDef<z.ZodAny, z.ZodAny>>
-  > = new Map();
+  public _appActions: Map<string, ModuleAction<ActionDef<z.ZodAny, z.ZodAny>>> =
+    new Map();
   public _appCrons: Array<string> = [];
   public _queue?: Queue;
 
   init(modules: Array<Module<any>>, queue?: Queue) {
-    this._appActions = new Map(
-      modules.flatMap((m) => [...m._actions])
-    );
+    this._appActions = new Map(modules.flatMap((m) => [...m._actions]));
     this._queue = queue;
-    this._appCrons.push(
-      ...modules.flatMap((m) => m._crons)
-    );
+    this._appCrons.push(...modules.flatMap((m) => m._crons));
   }
 
   async start() {
@@ -41,6 +36,7 @@ class Runtime {
       return;
     }
 
+    await this.#cleanupRepeatableJobs();
     await this.startCrons();
   }
 
@@ -55,38 +51,87 @@ class Runtime {
     return this._appActions.get(name)?.handler;
   }
 
+  getQueue() {
+    return this._queue;
+  }
+
   async scheduleJob<T extends ActionDef<any, any>>(
     action: T,
     input: {
       context: any;
       input: z.infer<ExtractActionTypes<T, 'input'>>;
+      scheduledAt?: Date;
     }
-  ) {
+  ): Promise<{ jobId: string; job: any }> {
     const queue = this.#validateQueue();
     if (!queue) {
       logger.warn(`Queue for scheduled job not found`);
-      return;
+      throw new Error('Queue not available');
     }
 
     const actionDef = this.#getValidAction(action.name);
     if (!actionDef) {
       logger.warn(`Action definition not found`);
-      return;
+      throw makeError({
+        type: 'INTERNAL',
+        message: `Action definition not found for ${action.name}`,
+      });
     }
 
     const actionQueue = queue.getOrCreateQ(action.name);
 
-    const wrappedHandler = getWrapperHandler(
-      action.name,
-      actionDef.handler!
-    );
+    const wrappedHandler = getWrapperHandler(action.name, actionDef.handler!);
 
     queue.getOrCreateWorker(action.name, wrappedHandler, {
       connection: queue.redisConn!,
       concurrency: action._settings?.concurrency ?? 10,
     });
 
-    await actionQueue!.add(action.name, input);
+    const jobSettings: any = {};
+
+    if (input.scheduledAt) {
+      const delayMs = input.scheduledAt.getTime() - Date.now();
+      if (delayMs <= 0) {
+        throw new Error(
+          `Scheduled time must be in the future. Provided: ${input.scheduledAt.toISOString()}`
+        );
+      }
+      jobSettings.delay = delayMs;
+    }
+
+    if (action._settings?.jobRetry) {
+      jobSettings.attempts = action._settings.jobRetry.attempts;
+      if (action._settings.jobRetry.backoff) {
+        jobSettings.backoff = {
+          type: action._settings.jobRetry.backoff.type,
+          delay: action._settings.jobRetry.backoff.delay,
+        };
+      }
+    }
+
+    const job = await actionQueue!.add(
+      action.name,
+      { context: input.context, input: input.input },
+      jobSettings
+    );
+
+    return {
+      jobId: job.id as string,
+      job,
+    };
+  }
+
+  async cancelScheduledJob(
+    actionName: string,
+    jobId: string
+  ): Promise<boolean> {
+    const queue = this.#validateQueue();
+    if (!queue) {
+      logger.warn(`Queue for cancel job not found`);
+      return false;
+    }
+
+    return await queue.cancelJobById(actionName, jobId);
   }
 
   async #startCron(name: string) {
@@ -107,7 +152,9 @@ class Runtime {
     const actionQueue = queue.getOrCreateQ(name);
     const pattern = CRON[action.def._settings!.cron!];
 
-    queue.getOrCreateWorker(name, action.handler!, {
+    const wrappedHandler = getWrapperHandler(name, action.handler!);
+
+    queue.getOrCreateWorker(name, wrappedHandler, {
       concurrency: action.def._settings?.concurrency ?? 10,
       connection: queue.redisConn!,
     });
@@ -122,9 +169,7 @@ class Runtime {
       }
     );
 
-    logger.log(
-      `Started cron ${name}: ${action.def._settings?.cron}`
-    );
+    logger.log(`Started cron ${name}: ${action.def._settings?.cron}`);
   }
 
   #shouldStartQueue() {
@@ -171,6 +216,43 @@ class Runtime {
     }
 
     return action;
+  }
+
+  async #cleanupRepeatableJobs() {
+    const queue = this.#validateQueue();
+    if (!queue) {
+      logger.warn('No queue available for cleanup');
+      return;
+    }
+
+    logger.log('Cleaning up existing repeatable jobs before startup');
+
+    try {
+      await queue.cleanAllRepeatableJobsFromAllQueues();
+      logger.log('Successfully cleaned up all existing repeatable jobs');
+    } catch (error) {
+      logger.error('Failed to clean up repeatable jobs', error);
+    }
+  }
+
+  async shutdown() {
+    logger.log('Starting graceful shutdown of action runtime...');
+
+    try {
+      if (this._queue) {
+        logger.log('Closing queue connections...');
+        await this._queue.clean();
+        logger.log('Queue connections closed successfully');
+      }
+
+      this._appActions.clear();
+      this._appCrons.length = 0;
+
+      logger.log('Action runtime shutdown complete');
+    } catch (error) {
+      logger.error('Error during action runtime shutdown', error);
+      throw error;
+    }
   }
 }
 

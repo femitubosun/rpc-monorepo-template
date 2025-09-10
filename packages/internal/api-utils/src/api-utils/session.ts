@@ -1,7 +1,4 @@
-import type {
-  ContextUserSchema,
-  SessionSchema,
-} from '@template/app-defs';
+import type { ContextUserSchema, SessionSchema } from '@template/app-defs';
 import Env from '@template/env';
 import { THIRTY_DAYS_TTL } from './constants';
 
