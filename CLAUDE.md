@@ -52,7 +52,7 @@ This is a TypeScript monorepo using **Nx** for orchestration and **Bun workspace
 ### Directory Structure
 ```
 axon/
-├── apps/entry/              # Main API server (Hono)
+├── apps/api/              # Main API server (Hono)
 ├── services/worker/         # Background job processor
 ├── modules/                 # Business logic modules
 │   └── auth/

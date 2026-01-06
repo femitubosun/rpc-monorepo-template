@@ -8,8 +8,6 @@
     "dist"
   ],
   "scripts": {
-    "dev": "bun --watch src/index.ts",
-    "build": "bun build src/index.ts --outdir ./dist --target node",
     "start": "bun src/index.ts",
     "check-types": "tsc --noEmit --incremental"
   },

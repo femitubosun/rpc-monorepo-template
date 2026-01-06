@@ -80,8 +80,6 @@ jobs:
       #   run: bun test:ci
       #   env:
       #     DATABASE_URL: postgresql://test:test@localhost:5432/test
-      #     DOTENV_PRIVATE_KEY_DEV: ${{ secrets.DOTENV_PRIVATE_KEY_DEV }}
-      #     DOTENV_PRIVATE_KEY_TEST: ${{ secrets.DOTENV_PRIVATE_KEY_TEST }}
       #     CI: true
       #     NX_TERMINAL_OUTPUT: static
       #     NX_CLOUD_DISTRIBUTED_EXECUTION: false

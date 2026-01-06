@@ -7,37 +7,34 @@
     "build:all": "nx run-many -t build",
     "clear": "node ./scripts/clean.js",
     "dev": "nx run-many -t dev",
-    "entry:dev": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.dev -- nx run entry:dev",
-    "api:dev": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.dev -- nx run entry:dev",
+    "api:dev": "nx run api:dev",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "check-types": "nx run-many -t check-types",
-    "test": "CI=true NX_TERMINAL_OUTPUT=static NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- nx run-many -t test --projects=\"modules/*/__testing__\"",
+    "test": "CI=true NX_TERMINAL_OUTPUT=static nx run-many -t test --projects=\"modules/*/__testing__\"",
     "test:ci": "CI=true NX_TERMINAL_OUTPUT=static nx run-many -t test --projects=\"modules/*/__testing__\"",
-    "test:watch": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- nx run-many -t test:watch --projects=\"modules/*/module\"",
+    "test:watch": "nx run-many -t test:watch --projects=\"modules/*/__testing__\"",
     "test:modules": "nx run-many -t test --projects=\"modules/*/__testing__\"",
     "create:app": "node scripts/add-app.js",
     "create:package:internal": "hygen create package-internal",
     "create:package:client": "hygen create package-client",
     "create:module": "hygen create module",
     "create:infrastructure": "node scripts/add-infrastructure.js",
-    "db:migrate": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.dev -- bun run --filter=@template/db migrate",
-    "db:migrate:prod": "NX_LOAD_DOT_ENV_FILES=false bun run --filter=@template/db migrate",
-    "db:migrate:ci": "NX_LOAD_DOT_ENV_FILES=false bun run --filter=@template/db migrate",
-    "db:migrate:test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- bun run --filter=@template/db migrate",
-    "db:generate": "NX_LOAD_DOT_ENV_FILES=false bun run --filter=@template/db generate && bun run --filter=@template/prisma-defs transform",
-    "db:generate:prod": "NX_LOAD_DOT_ENV_FILES=false bun run --filter=@template/db generate",
-    "db:reset:test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- bun run --filter=@template/db reset",
-    "db:dev": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.dev -- bun run --filter=@template/db prisma",
-    "db:test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=.env.test -- bun run --filter=@template/db prisma",
-    "db:prod": "NX_LOAD_DOT_ENV_FILES=false bun run --filter=@template/db prisma",
-    "db": "bun run --filter=@template/db prisma",
+    "db:migrate": "nx run db:migrate",
+    "db:migrate:prod": "nx run db:deploy",
+    "db:migrate:ci": "nx run db:deploy",
+    "db:migrate:test": "nx run db:migrate --configuration=test",
+    "db:generate": "nx run db:generate && nx run prisma-defs:transform",
+    "db:generate:prod": "nx run db:generate --configuration=prod",
+    "db:reset:test": "nx run db:reset --configuration=test",
+    "db:dev": "nx run db:prisma --configuration=dev",
+    "db:test": "nx run db:prisma --configuration=test",
+    "db:prod": "nx run db:prisma --configuration=prod",
+    "db": "nx run db:prisma",
     "ensure-prisma": "bun run db:generate:prod && bun run --filter=@template/prisma-defs transform",
-    "ensure-prisma-ci": "bun run db:generate:prod && bun run --filter=@template/prisma-defs transform",
-    "hide:env": "bun dotenvx encrypt -f .env.dev && bun dotenvx encrypt -f .env.test",
-    "show:env": "bun dotenvx decrypt -f .env.dev && bun dotenvx decrypt -f .env.test"
+    "ensure-prisma-ci": "bun run db:generate:prod && bun run --filter=@template/prisma-defs transform"
   },
   "private": true,
   "workspaces": [
@@ -66,8 +63,5 @@
   "engines": {
     "node": "^22.17.1"
   },
-  "packageManager": "bun@1.2.21",
-  "dependencies": {
-    "@dotenvx/dotenvx": "^1.48.3"
-  }
+  "packageManager": "bun@1.2.21"
 }

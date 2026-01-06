@@ -1,5 +1,6 @@
 import { readdirSync, statSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
+import { APP_DIRS } from '@template/app-utils';
 import { makeLogger } from '@template/logging';
 
 const logger = makeLogger('Router Loader');
@@ -8,9 +9,16 @@ interface ModuleRouter {
   default: any;
 }
 
-export async function autoLoadModules(): Promise<any[]> {
-  const modulesDir = resolve(process.cwd(), '../../modules');
-  const routers: any[] = [];
+export interface LoadedModule {
+  name: string;
+  router: any;
+}
+
+export async function autoLoadModules(): Promise<LoadedModule[]> {
+  const modulesDir = APP_DIRS.MODULES_DIR;
+  const routers: LoadedModule[] = [];
+
+  logger.info('Starting module auto-loading from directory:', modulesDir);
 
   try {
     const moduleNames = readdirSync(modulesDir).filter((name) => {

@@ -6,7 +6,7 @@ to: modules/<%=name%>/__testing__/package.json
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=../../../.env.test -- vitest run"
+    "test": "vitest run"
   },
   "devDependencies": {
     "@template/action": "workspace:*",

@@ -11,8 +11,8 @@ export async function main() {
 
   const routes = await autoLoadModules();
 
-  routes.forEach((route) => {
-    app.route('/api/v1/', route);
+  routes.forEach(({ router }) => {
+    app.route('/api/v1/', router);
   });
 
   showRoutes(app, {
@@ -28,6 +28,7 @@ export async function main() {
     },
     (info) => {
       logger.info(`Server is started at :${info.port}`);
+      logger.info('Server is ready to accept requests');
     }
   );
 }

@@ -6,9 +6,6 @@ pre-commit:
       stage_fixed: true
     # typecheck:
     #run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false bun check-types
-    encrypt-env:
-      run: bun hide:env
-      stage_fixed: true
 
     # test:
     #   run: CI=true NX_TERMINAL_OUTPUT="static" NX_CLOUD_DISTRIBUTED_EXECUTION=false bun test --passWithNoTests

@@ -7,7 +7,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "NX_LOAD_DOT_ENV_FILES=false dotenvx run --env-file=../../../.env.test -- vitest run"
+    "test": "vitest run"
   },
   "dependencies": {
     "@template/action": "workspace:*",

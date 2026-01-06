@@ -7,7 +7,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [
     tsconfigPaths({
-      projects: ["../module/tsconfig.json"],
+      root: "../../..",
+      loose: true,
     }),
   ],
   test: {

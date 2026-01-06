@@ -15,9 +15,7 @@
   ],
   "scripts": {
     "build": "bun run generate && bun build src/index.ts --outdir ./dist --target node",
-    "dev": "bun --watch src/index.ts",
     "test": "bun test",
-    "test:watch": "bun test --watch",
     "check-types": "tsc --noEmit --incremental",
     "lint": "eslint src --max-warnings 0",
     "generate": "prisma generate",

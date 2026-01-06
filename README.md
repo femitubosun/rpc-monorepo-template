@@ -5,9 +5,9 @@ A TypeScript monorepo using Nx for build orchestration and pnpm workspaces for p
 ## Architecture
 
 ```
-axon/
+template/
 ├── apps/
-│   └── entry/               # Main API server (Hono)
+│   └── api/               # Main API server (Hono)
 ├── services/
 │   └── worker/              # Background job processor
 ├── packages/
@@ -233,7 +233,7 @@ import { generateSessionId } from '@logic';
 ## Project Structure Details
 
 ### Applications (`apps/`)
-- **entry**: Main Hono-based REST API server
+- **api**: Main Hono-based REST API server
 
 ### Services (`services/`)
 - **worker**: Background job processor for the action system
@@ -288,10 +288,10 @@ You can also use Nx directly for more granular control:
 
 ```bash
 # Build specific package
-nx build @axon-ai/entry
+nx build @axon-ai/api
 
 # Run development mode for specific package
-nx dev @axon-ai/entry
+nx dev @axon-ai/api
 
 # Run any task for specific project
 nx <target> <project-name>

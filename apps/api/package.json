@@ -1,5 +1,5 @@
 {
-  "name": "@template/entry",
+  "name": "@template/api",
   "type": "module",
   "scripts": {
     "dev": "bun --watch src/index.ts",

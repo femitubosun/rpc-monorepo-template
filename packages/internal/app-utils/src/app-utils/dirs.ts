@@ -5,10 +5,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ROOT = path.join(__dirname, '../../../../../');
 
-console.log(__dirname);
-
-console.log(`ROOT_DIR ${ROOT}`);
-
 export const APP_DIRS = {
   ROOT,
   TMP_DIR: path.join(ROOT, 'tmp'),
