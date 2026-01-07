@@ -69,8 +69,6 @@ export default function createApp() {
     const isAlreadyLogged = (err as any).isLogged;
 
     if (isAlreadyLogged) {
-      // Error already logged at action layer with stack trace
-      // Just log HTTP context for correlation
       c.var.logger.warn('Request failed', {
         errorType: error.body.type,
         errorMessage: error.body.message,

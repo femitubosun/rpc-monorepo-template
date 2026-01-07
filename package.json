@@ -7,7 +7,7 @@
     "build:all": "nx run-many -t build",
     "clear": "node ./scripts/clean.js",
     "dev": "nx run-many -t dev",
-    "api:dev": "nx run api:dev",
+    "api:dev": "bun --preload ./apps/api/src/tracing.ts --watch apps/api/src/index.ts",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check .",

@@ -11,6 +11,7 @@ export class AppError extends Error {
   public action?: string;
   public data: any = {};
   public code?: number;
+  public isLogged: boolean = false;
 
   constructor({ message, type, code, data, action }: AppErrorOptions) {
     super(message);
@@ -35,6 +36,10 @@ export class AppError extends Error {
     });
 
     Object.setPrototypeOf(this, AppError.prototype);
+  }
+
+  markAsLogged() {
+    this.isLogged = true;
   }
 
   toJSON() {

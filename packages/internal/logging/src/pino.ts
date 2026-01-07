@@ -1,5 +1,6 @@
 import Env from '@template/env';
 import chalk from 'chalk';
+import type pino from 'pino';
 import pretty from 'pino-pretty';
 
 function formatLevel(level: number) {
@@ -65,3 +66,19 @@ export const nestStyleTransport = pretty({
   singleLine: false,
   levelFirst: false,
 });
+
+export function createOtelTransport(): pino.TransportSingleOptions | undefined {
+  if (!Env.OTEL_EXPORTER_OTLP_ENDPOINT) {
+    return undefined;
+  }
+
+  return {
+    target: 'pino-opentelemetry-transport',
+    options: {
+      resourceAttributes: {
+        'service.name': Env.OTEL_SERVICE_NAME || Env.APP_NAME,
+        'service.version': Env.OTEL_SERVICE_VERSION,
+      },
+    },
+  };
+}

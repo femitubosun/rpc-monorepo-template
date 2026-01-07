@@ -11,10 +11,11 @@
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
-    "@template/env": "workspace:*",
     "@template/app-defs": "workspace:*",
+    "@template/env": "workspace:*",
     "chalk": "^5.4.1",
     "pino": "^9.7.0",
+    "pino-opentelemetry-transport": "^2.0.0",
     "pino-pretty": "^13.0.0",
     "zod": "3.25.74"
   },

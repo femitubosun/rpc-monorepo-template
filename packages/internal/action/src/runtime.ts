@@ -1,3 +1,4 @@
+import { context, propagation } from '@opentelemetry/api';
 import Env from '@template/env';
 import { makeError } from '@template/error';
 import { makeLogger } from '@template/logging';
@@ -109,9 +110,12 @@ class Runtime {
       }
     }
 
+    const traceContext: Record<string, unknown> = {};
+    propagation.inject(context.active(), traceContext);
+
     const job = await actionQueue!.add(
       action.name,
-      { context: input.context, input: input.input },
+      { context: input.context, input: input.input, traceContext },
       jobSettings
     );
 

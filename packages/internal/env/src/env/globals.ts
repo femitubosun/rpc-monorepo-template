@@ -40,6 +40,11 @@ const GLOBALS = makeDefinition({
   SESSION_TTL_SECONDS: z.coerce.number().int(),
 
   GOOGLE_GEMINI_API_KEY: z.string(),
+
+  OTEL_EXPORTER_OTLP_ENDPOINT: z.string().optional(),
+  OTEL_EXPORTER_OTLP_HEADERS: z.string().optional(),
+  OTEL_SERVICE_NAME: z.string().optional(),
+  OTEL_SERVICE_VERSION: z.string().default('1.0.0'),
 });
 
 export default GLOBALS;

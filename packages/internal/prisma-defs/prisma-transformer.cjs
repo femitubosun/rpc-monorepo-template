@@ -52,8 +52,8 @@ async function handleFile(filePath) {
   // replace all jsonSchema references with z.any()
   text = text.replace(/jsonSchema/g, "z.any()");
 
-  // Replace {Model}ModelSchema with {Model}Schema (remove "Model" suffix)
-  // text = text.replace(/(\w+)ModelSchema/g, "$1Schema");
+  // Replace { Model }ModelSchema with { Model }Schema(remove "Model" suffix)
+  text = text.replace(/(\w+)ModelSchema/g, "$1Schema");
 
   // Replace file contents with new lines
   await writeFile(filePath, text);
@@ -69,8 +69,7 @@ async function generateMainIndex() {
   // Generate the main index.ts file with sorted exports
   // Export from the new prisma-zod-generator structure
   const exports = [
-    `export * from './schemas';`,
-    `export * from './helpers/json-helpers';`,
+    `export * from './schemas/models';`
   ].sort();
 
   const indexPath = join(currentDir, "src/index.ts");
