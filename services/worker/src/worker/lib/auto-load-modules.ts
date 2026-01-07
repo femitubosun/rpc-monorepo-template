@@ -14,6 +14,7 @@ export async function autoLoadModules(): Promise<Module<ActionGroup>[]> {
 
   try {
     const allEntries = await readdir(APP_DIRS.MODULES_DIR);
+    logger.info(`Loading modules from ${APP_DIRS.MODULES_DIR}`);
 
     const moduleNames = [];
 

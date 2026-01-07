@@ -49,6 +49,9 @@ async function handleFile(filePath) {
   // replace all z.string().cuid() with z.string()
   text = text.replace(/z\.string\(\)\.cuid\(\)/g, "z.string()");
 
+  // replace all jsonSchema references with z.any()
+  text = text.replace(/jsonSchema/g, "z.any()");
+
   // Replace file contents with new lines
   await writeFile(filePath, text);
   formatWithBiome(filePath);

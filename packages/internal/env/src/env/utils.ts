@@ -1,4 +1,4 @@
-import type { z } from 'zod';
+import { z } from 'zod';
 
 export function makeDefinition<T extends Record<string, z.ZodType>>(obj: T) {
   return obj;
@@ -10,4 +10,13 @@ export function validateEnv(
 ) {
   // TODO try catch, present error nicely. and then exit.
   return schema.parseAsync(env);
+}
+
+export function commaSeparated() {
+  return z.string().transform((val) =>
+    val
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+  );
 }

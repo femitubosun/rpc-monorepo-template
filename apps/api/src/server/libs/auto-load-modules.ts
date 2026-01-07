@@ -18,7 +18,7 @@ export async function autoLoadModules(): Promise<LoadedModule[]> {
   const modulesDir = APP_DIRS.MODULES_DIR;
   const routers: LoadedModule[] = [];
 
-  logger.info('Starting module auto-loading from directory:', modulesDir);
+  logger.info(`Starting module auto-loading from directory: ${modulesDir}`);
 
   try {
     const moduleNames = readdirSync(modulesDir).filter((name) => {
@@ -36,7 +36,10 @@ export async function autoLoadModules(): Promise<LoadedModule[]> {
         const moduleRouter: ModuleRouter = await import(modulePackageName);
 
         if (moduleRouter.default) {
-          routers.push(moduleRouter.default);
+          routers.push({
+            name: moduleName,
+            router: moduleRouter.default,
+          });
           logger.info(`Loaded module: ${moduleName}`);
         } else {
           logger.warn(`Module ${moduleName} does not export a default router`);

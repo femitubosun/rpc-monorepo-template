@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { makeDefinition } from './utils';
+import { commaSeparated, makeDefinition } from './utils';
 
 const GLOBALS = makeDefinition({
   NODE_ENV: z
@@ -9,6 +9,7 @@ const GLOBALS = makeDefinition({
   APP_NAME: z.string().default('template'),
   APP_URL: z.string().url(),
   API_URL: z.string().url(),
+  ALLOWED_HOSTS: commaSeparated(),
 
   DATABASE_URL: z.string(),
 
