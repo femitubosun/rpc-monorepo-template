@@ -15,6 +15,8 @@ datasource db {
 }
 
 generator zod {
-  provider = "prisma-zod-generator"
-  output   = "../../../../packages/internal/prisma-defs/src"
+  provider   = "prisma-zod-generator"
+  output     = "../../../../packages/internal/prisma-defs/src"
+  config     = "./zod-generator.config.json"
+  pureModels = true
 }

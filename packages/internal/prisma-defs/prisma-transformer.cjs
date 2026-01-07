@@ -52,52 +52,25 @@ async function handleFile(filePath) {
   // replace all jsonSchema references with z.any()
   text = text.replace(/jsonSchema/g, "z.any()");
 
+  // Replace {Model}ModelSchema with {Model}Schema (remove "Model" suffix)
+  // text = text.replace(/(\w+)ModelSchema/g, "$1Schema");
+
   // Replace file contents with new lines
   await writeFile(filePath, text);
   formatWithBiome(filePath);
 }
 
 async function exportAllTypes() {
-  // Generate index.ts for inputTypeSchemas
-  const inputFiles = glob.sync(
-    join(currentDir, "src/inputTypeSchemas", "*.ts"),
-  );
-  const inputLines = [];
-
-  for (const file of inputFiles) {
-    if (file.includes("index.ts")) continue;
-
-    const fileName = file.split("/").pop().split(".")[0];
-    inputLines.push(`export * from './${fileName}';`);
-  }
-
-  inputLines.sort();
-  const inputIndexPath = join(currentDir, "src/inputTypeSchemas/index.ts");
-  await writeFile(inputIndexPath, inputLines.join("\n") + "\n");
-  formatWithBiome(inputIndexPath);
-
-  // Generate index.ts for modelSchema
-  const modelFiles = glob.sync(join(currentDir, "src/modelSchema", "*.ts"));
-  const modelLines = [];
-
-  for (const file of modelFiles) {
-    if (file.includes("index.ts")) continue;
-
-    const fileName = file.split("/").pop().split(".")[0];
-    modelLines.push(`export * from './${fileName}';`);
-  }
-
-  modelLines.sort();
-  const modelIndexPath = join(currentDir, "src/modelSchema/index.ts");
-  await writeFile(modelIndexPath, modelLines.join("\n") + "\n");
-  formatWithBiome(modelIndexPath);
+  // prisma-zod-generator creates its own index files, so we don't need to generate them
+  // The new structure uses schemas/ and helpers/ directories
 }
 
 async function generateMainIndex() {
   // Generate the main index.ts file with sorted exports
+  // Export from the new prisma-zod-generator structure
   const exports = [
-    `export * from './inputTypeSchemas';`,
-    `export * from './modelSchema';`,
+    `export * from './schemas';`,
+    `export * from './helpers/json-helpers';`,
   ].sort();
 
   const indexPath = join(currentDir, "src/index.ts");
