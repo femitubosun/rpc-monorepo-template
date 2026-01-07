@@ -16,6 +16,7 @@
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
     "@template/app-defs": "workspace:*",
     "@template/app-utils": "workspace:*",
     "@template/cache-utils": "workspace:*",

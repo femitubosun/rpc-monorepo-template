@@ -1,19 +1,31 @@
 import type { Logger } from '@template/app-defs';
-import Env from '@template/env';
 import pino from 'pino';
-import { nestStyleTransport } from './pino';
+import { createOtelTransport, nestStyleTransport } from './pino';
 
-export const PrettyStream: pino.DestinationStream | undefined =
-  Env.NODE_ENV === 'production'
-    ? nestStyleTransport // TODO change
-    : nestStyleTransport;
+const otelTransport = createOtelTransport();
+
+const transport = otelTransport
+  ? pino.transport({
+      targets: [
+        {
+          target: 'pino/file',
+          level: 'debug',
+          options: { destination: 1 },
+        },
+        {
+          ...otelTransport,
+          level: 'info',
+        },
+      ],
+    })
+  : nestStyleTransport;
 
 const base = pino(
   {
     level: 'debug',
     timestamp: pino.stdTimeFunctions.epochTime,
   },
-  PrettyStream
+  transport
 );
 
 function wrapPino(p: pino.Logger): Logger {
@@ -44,3 +56,5 @@ export const logger = wrapPino(base);
 export const makeLogger = (name: string): Logger => {
   return wrapPino(base.child({ name }));
 };
+
+export const PrettyStream = transport;
