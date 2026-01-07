@@ -5,14 +5,8 @@ to: infrastructure/<%= name %>/package.json
   "name": "@template/<%= name %>",
   "type": "module",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "src/index.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
