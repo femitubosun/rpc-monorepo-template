@@ -5,16 +5,8 @@ to: packages/clients/<%= name %>/package.json
   "name": "@template/<%= name %>",
   "type": "module",
   "version": "0.0.0",
-  "main": "dist/index.js",
-
-  "types": "dist/index.d.ts",
-
-  "files": [
-    "dist"
-  ],
+  "main": "src/index.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
@@ -23,7 +15,6 @@ to: packages/clients/<%= name %>/package.json
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
-    "eslint": "^9.30.0",
     "typescript": "5.8.2"
   }
 }

@@ -5,15 +5,8 @@ to: modules/<%=name%>/module/package.json
   "name": "@template/<%=name%>-module",
   "type": "module",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-
-  "files": [
-    "dist"
-  ],
+  "main": "src/index.ts",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "tsc --watch",
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
