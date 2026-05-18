@@ -32,7 +32,7 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "biome lint {projectRoot}"
+        "command": "oxlint {projectRoot}"
       },
       "cache": true
     },
@@ -46,7 +46,7 @@
     "check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "biome check {projectRoot}"
+        "command": "oxlint {projectRoot}"
       },
       "cache": true
     },

@@ -13,8 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "check-types": "tsc --noEmit --incremental",
-    "lint": "eslint src --max-warnings 0"
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "@template/env": "workspace:*",
@@ -25,7 +24,6 @@
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
-    "eslint": "^9.30.0",
     "typescript": "5.8.2"
   }
 }
