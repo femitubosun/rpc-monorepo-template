@@ -28,7 +28,7 @@ export interface AssetChunkUpload {
 export interface AssetProvider {
   readonly name: string;
   readonly supportsMultipart: boolean;
-  readonly multipartThreshold: BigInt;
+  readonly multipartThreshold: bigint;
 
   generateUploadUrl(
     options: AssetUploadOptions
@@ -43,7 +43,7 @@ export interface AssetProvider {
 
 export interface ProviderConfig {
   provider: 'R2' | 'BUNNY' | 'S3' | 'GCS';
-  multipartThreshold?: BigInt;
+  multipartThreshold?: bigint;
 }
 
 export type ProviderFactory = (config: ProviderConfig) => AssetProvider | null;
