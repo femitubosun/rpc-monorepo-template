@@ -17,7 +17,7 @@
     "build": "bun run generate && bun build src/index.ts --outdir ./dist --target node",
     "test": "bun test",
     "check-types": "tsc --noEmit --incremental",
-    "generate": "prisma generate",
+    "generate": "prisma generate && cd ../../packages/internal/prisma-defs && bun run transform",
     "migrate": "prisma generate && prisma migrate dev",
     "deploy": "prisma generate && prisma migrate deploy",
     "studio": "prisma studio",
