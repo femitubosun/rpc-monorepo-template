@@ -14,9 +14,9 @@
     "@asteasolutions/zod-to-openapi": "^8.5.0",
     "@template/logging": "workspace:*",
     "@hono/zod-openapi": "^1.4.0",
-    "@scalar/hono-api-reference": "^0.9.7",
-    "hono": "^4.9.6",
-    "hono-pino": "^0.9.1",
+    "@scalar/hono-api-reference": "^0.10.16",
+    "hono": "^4.12.19",
+    "hono-pino": "^0.10.3",
     "zod": "4.4.3"
   },
   "devDependencies": {

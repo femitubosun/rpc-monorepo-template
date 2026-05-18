@@ -13,7 +13,7 @@
   "dependencies": {
     "@template/redis": "workspace:*",
     "@template/logging": "workspace:*",
-    "hono": "^4.9.6"
+    "hono": "^4.12.19"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
