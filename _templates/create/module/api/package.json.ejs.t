@@ -10,7 +10,7 @@ to: modules/<%=name%>/api/package.json
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
-    "zod": "3.25.74",
+    "zod": "4.4.3",
     "@template/action": "workspace:*",
     "@template/app-utils": "workspace:*",
     "@template/app-defs": "workspace:*",

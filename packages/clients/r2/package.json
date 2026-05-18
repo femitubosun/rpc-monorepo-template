@@ -15,7 +15,7 @@
     "@aws-sdk/client-s3": "^3.850.0",
     "@aws-sdk/s3-request-presigner": "^3.850.0",
     "@template/env": "workspace:*",
-    "zod": "3.25.74"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

@@ -14,7 +14,7 @@
     "@template/redis": "workspace:*",
     "@template/env": "workspace:*",
     "@template/logging": "workspace:*",
-    "zod": "3.25.74"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

@@ -10,7 +10,7 @@ to: infrastructure/<%= name %>/package.json
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
-    "zod": "3.25.74",
+    "zod": "4.4.3",
     "@template/env": "workspace:*"
   },
   "devDependencies": {

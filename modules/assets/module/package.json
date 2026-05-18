@@ -11,7 +11,7 @@
     "postinstall": "find node_modules/@ffprobe-installer -name 'ffprobe' -type f -exec chmod +x {} \\; 2>/dev/null || true && find node_modules/@ffmpeg-installer -name 'ffmpeg' -type f -exec chmod +x {} \\; 2>/dev/null || true"
   },
   "dependencies": {
-    "zod": "3.25.74",
+    "zod": "4.4.3",
     "@template/prisma-defs": "workspace:*",
     "@template/file-utils": "workspace:*",
     "@template/app-defs": "workspace:*",

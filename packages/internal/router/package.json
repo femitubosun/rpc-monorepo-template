@@ -11,13 +11,13 @@
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
-    "@asteasolutions/zod-to-openapi": "^7.3.4",
+    "@asteasolutions/zod-to-openapi": "^8.5.0",
     "@template/logging": "workspace:*",
-    "@hono/zod-openapi": "^0.19.9",
+    "@hono/zod-openapi": "^1.4.0",
     "@scalar/hono-api-reference": "^0.9.7",
     "hono": "^4.9.6",
     "hono-pino": "^0.9.1",
-    "zod": "3.25.74"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
