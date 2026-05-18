@@ -11,7 +11,13 @@ const defaults: Record<string, unknown> = Object.keys(
   (acc, next) => {
     const key = next as keyof typeof envDefinition.shape;
     const def = envDefinition.shape[key]._def;
-    const value = 'defaultValue' in def ? def.defaultValue?.() : undefined;
+    let value: unknown;
+    if (def.type === 'default') {
+      const defaultDef = def as { defaultValue: unknown };
+      value = typeof defaultDef.defaultValue === 'function'
+        ? defaultDef.defaultValue()
+        : defaultDef.defaultValue;
+    }
     return {
       // eslint-disable-line
       ...acc,

@@ -8,13 +8,13 @@ import type {
 } from './__defs__';
 import { flattenActionGroup, flattenActionHandlers } from './helpers/object';
 
-export type ModuleAction<T extends ActionDef<z.ZodAny, z.ZodAny>> = {
+export type ModuleAction<T extends ActionDef<z.ZodTypeAny, z.ZodTypeAny>> = {
   handler?: ActionHandler<T>;
   def: T;
 };
 
 export class Module<T extends ActionGroup> {
-  public _actions: Map<string, ModuleAction<ActionDef<z.ZodAny, z.ZodAny>>> =
+  public _actions: Map<string, ModuleAction<ActionDef<z.ZodTypeAny, z.ZodTypeAny>>> =
     new Map();
   private _actionKeys: Map<string, string> = new Map();
 
@@ -44,10 +44,10 @@ export class Module<T extends ActionGroup> {
     this.#mergeIntoAction(newHandlers);
   }
 
-  getHandler<A extends ActionDef<z.ZodSchema, z.ZodSchema>>(
+  getHandler<A extends ActionDef<z.ZodTypeAny, z.ZodTypeAny>>(
     actionPath: A
   ): ActionHandler<A> | undefined {
-    return this._actions.get(actionPath.name)?.handler;
+    return this._actions.get(actionPath.name)?.handler as ActionHandler<A> | undefined;
   }
 
   clearHandlers() {

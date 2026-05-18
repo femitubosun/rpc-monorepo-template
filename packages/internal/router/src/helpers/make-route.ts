@@ -1,5 +1,5 @@
 import { createRoute } from '@hono/zod-openapi';
-import type { ZodSchema } from 'zod';
+import type { ZodTypeAny } from 'zod';
 
 /**
  * ------------------------------------------
@@ -17,11 +17,11 @@ export function makeRoute<T extends Parameters<typeof createRoute>[0]>(
 type RouteOptions<TMethod extends string, TPath extends string> = {
   method: TMethod;
   path: TPath;
-  params?: ZodSchema;
-  body?: ZodSchema;
-  query?: ZodSchema;
+  params?: ZodTypeAny;
+  body?: ZodTypeAny;
+  query?: ZodTypeAny;
   response?: {
-    schema: ZodSchema;
+    schema: ZodTypeAny;
     statusCode?: number;
     description?: string;
   };
@@ -77,10 +77,10 @@ export function createFlexibleRoute<
 export function getRoute<TPath extends string>(
   path: TPath,
   options: {
-    params?: ZodSchema;
-    query?: ZodSchema;
+    params?: ZodTypeAny;
+    query?: ZodTypeAny;
     response?: {
-      schema: ZodSchema;
+      schema: ZodTypeAny;
       statusCode?: number;
       description?: string;
     };
@@ -96,10 +96,10 @@ export function getRoute<TPath extends string>(
 export function postRoute<TPath extends string>(
   path: TPath,
   options: {
-    params?: ZodSchema;
-    body?: ZodSchema;
+    params?: ZodTypeAny;
+    body?: ZodTypeAny;
     response?: {
-      schema: ZodSchema;
+      schema: ZodTypeAny;
       statusCode?: number;
       description?: string;
     };
@@ -115,10 +115,10 @@ export function postRoute<TPath extends string>(
 export function putRoute<TPath extends string>(
   path: TPath,
   options: {
-    params?: ZodSchema;
-    body?: ZodSchema;
+    params?: ZodTypeAny;
+    body?: ZodTypeAny;
     response?: {
-      schema: ZodSchema;
+      schema: ZodTypeAny;
       statusCode?: number;
       description?: string;
     };
@@ -134,9 +134,9 @@ export function putRoute<TPath extends string>(
 export function deleteRoute<TPath extends string>(
   path: TPath,
   options: {
-    params?: ZodSchema;
+    params?: ZodTypeAny;
     response?: {
-      schema?: ZodSchema;
+      schema?: ZodTypeAny;
       statusCode?: number;
       description?: string;
     };
