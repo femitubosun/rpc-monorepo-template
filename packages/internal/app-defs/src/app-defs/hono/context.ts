@@ -29,6 +29,16 @@ type HeaderRecord =
   | Record<ResponseHeader, string | string[]>
   | Record<string, string | string[]>;
 /**
+ * Streaming API for `.stream()` responses.
+ */
+export interface StreamingApi {
+  write(data: string | Uint8Array): void;
+  writeln(data: string | Uint8Array): void;
+  sleep(ms: number): Promise<void>;
+  close(): Promise<void>;
+  readonly closed: Promise<void>;
+}
+/**
  * Data type can be a string, ArrayBuffer, Uint8Array (buffer), or ReadableStream.
  */
 export type Data = string | ArrayBuffer | ReadableStream | Uint8Array;
@@ -537,6 +547,24 @@ export declare class Context<
    */
   json: JSONRespond;
   html: HTMLRespond;
+  /**
+   * `.stream()` can return a streaming response.
+   *
+   * @see {@link https://hono.dev/docs/api/context#stream}
+   *
+   * @example
+   * ```ts
+   * app.get('/stream', (c) => {
+   *   return c.stream(async (stream) => {
+   *     stream.write('Hello!')
+   *     await stream.sleep(1000)
+   *     stream.write('World!')
+   *     stream.close()
+   *   })
+   * })
+   * ```
+   */
+  stream: (callback: (stream: StreamingApi) => Promise<void>) => Response;
   /**
    * `.redirect()` can Redirect, default status code is 302.
    *

@@ -1,16 +1,13 @@
+import type { StreamingApi } from '@template/app-defs';
 import { getRedis } from '@template/redis';
 import { makeLogger } from '@template/logging';
 import type { Redis } from 'ioredis';
 
 const logger = makeLogger('SSE');
 
-export interface SSEStream {
-  write(data: string): void;
-}
-
 export interface SSEClient {
   id: string;
-  stream: SSEStream;
+  stream: StreamingApi;
   tags: Set<string>;
   connectedAt: Date;
 }
@@ -81,7 +78,7 @@ export class SSEManager {
   /**
    * Register a new SSE client connection.
    */
-  addClient(id: string, stream: SSEStream, tags?: string[]): void {
+  addClient(id: string, stream: StreamingApi, tags?: string[]): void {
     const client: SSEClient = {
       id,
       stream,
