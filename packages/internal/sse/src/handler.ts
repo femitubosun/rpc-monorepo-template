@@ -29,7 +29,7 @@ export function createSSEHandler(options: SSEHandlerOptions = {}) {
     onDisconnect,
   } = options;
 
-  return async (c: Context<AppBindings>) => {
+  return async (_c: Context<AppBindings>) => {
     const clientId = crypto.randomUUID();
     const encoder = new TextEncoder();
 
