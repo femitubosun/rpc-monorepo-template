@@ -85,7 +85,6 @@ function generatePackageJson(name, type) {
           "@types/node": "^22.15.3",
           "@types/react": "19.1.0",
           "@types/react-dom": "19.1.1",
-          eslint: "^9.30.0",
           typescript: "5.8.2",
         },
       };
@@ -106,7 +105,6 @@ function generatePackageJson(name, type) {
         },
         devDependencies: {
           "@types/node": "^22.15.3",
-          eslint: "^9.30.0",
           tsx: "^4.20.3",
           typescript: "5.8.2",
         },
@@ -120,14 +118,13 @@ function generatePackageJson(name, type) {
           build: "tsc",
           start: "node dist/index.js",
           "check-types": "tsc --noEmit --incremental",
-          lint: "eslint src --max-warnings 0",
+          lint: "oxlint src",
         },
         dependencies: {
           zod: "3.25.74",
         },
         devDependencies: {
           "@types/node": "^22.15.3",
-          eslint: "^9.30.0",
           tsx: "^4.20.3",
           typescript: "5.8.2",
         },

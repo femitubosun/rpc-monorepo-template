@@ -86,7 +86,7 @@ function generatePackageJson(name) {
       test: 'jest',
       'test:watch': 'jest --watch',
       'check-types': 'tsc --noEmit',
-      lint: 'eslint src --max-warnings 0',
+      lint: 'oxlint src',
     },
     dependencies: {
       zod: '3.25.74',
@@ -94,7 +94,6 @@ function generatePackageJson(name) {
     devDependencies: {
       '@types/node': '^22.15.3',
       '@types/jest': '^29.5.0',
-      eslint: '^9.30.0',
       jest: '^29.5.0',
       'ts-jest': '^29.1.0',
       typescript: '5.8.2',

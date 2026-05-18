@@ -15,7 +15,6 @@ to: infrastructure/<%= name %>/package.json
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
-    "eslint": "^9.30.0",
     "typescript": "5.8.2"
   }
 }
