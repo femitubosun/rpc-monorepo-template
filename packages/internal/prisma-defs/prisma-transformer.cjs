@@ -1,21 +1,9 @@
 const { readFile, writeFile, rm } = require("fs/promises");
 const { join } = require("path");
-const { execSync } = require("child_process");
 const glob = require("glob");
 
 // Use __dirname to get the correct package directory
 const currentDir = __dirname;
-
-function formatGeneratedFiles() {
-  try {
-    execSync("biome format --write src", {
-      cwd: currentDir,
-      stdio: "inherit",
-    });
-  } catch {
-    // Biome might not be installed or fail on generated files - non-critical
-  }
-}
 
 const names = [
   "InputJsonValueSchema",
@@ -93,10 +81,9 @@ async function main() {
 
   exportAllTypes();
   generateMainIndex();
-  formatGeneratedFiles();
 
   console.log(
-    "✅ Processed and organized all prisma-defs files",
+    "✅ Processed and organized all prisma-defs files (formatting skipped for generated files)",
   );
 }
 
