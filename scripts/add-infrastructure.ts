@@ -1,15 +1,15 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
-import { existsSync } from 'fs';
-import { mkdir, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 const infrastructureName = process.argv[2];
 
 if (!infrastructureName) {
   console.error('❌ Please provide an infrastructure name');
   console.log(
-    'Usage: node scripts/add-infrastucture.js.js <infrastructure-name> [type]'
+    'Usage: bun scripts/add-infrastructure.ts <infrastructure-name>'
   );
   process.exit(1);
 }
@@ -62,11 +62,24 @@ try {
     `4. Use in apps: add "@template/${infrastructureName}": "workspace:*" to dependencies in package.json`
   );
 } catch (error) {
-  console.error('❌ Error creating infrastructure:', error.message);
+  console.error('❌ Error creating infrastructure:', (error as Error).message);
   process.exit(1);
 }
 
-function generatePackageJson(name) {
+interface PackageJson {
+  name: string;
+  version: string;
+  main: string;
+  module: string;
+  types: string;
+  exports: Record<string, unknown>;
+  files: string[];
+  scripts: Record<string, string>;
+  dependencies: Record<string, string>;
+  devDependencies: Record<string, string>;
+}
+
+function generatePackageJson(name: string): PackageJson {
   return {
     name: `@template/${name}`,
     version: '0.0.0',
@@ -101,7 +114,13 @@ function generatePackageJson(name) {
   };
 }
 
-function generateTsConfig() {
+interface TsConfig {
+  compilerOptions: Record<string, unknown>;
+  include: string[];
+  exclude: string[];
+}
+
+function generateTsConfig(): TsConfig {
   return {
     compilerOptions: {
       target: 'ES2022',
@@ -124,13 +143,13 @@ function generateTsConfig() {
   };
 }
 
-function generateStarterFiles() {
+function generateStarterFiles(): Record<string, string> {
   return {
     'index.ts': '',
   };
 }
 
-function generateReadme(name) {
+function generateReadme(name: string): string {
   return `# @template/${name}
 
 

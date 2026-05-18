@@ -1,26 +1,26 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
-import { existsSync } from "fs";
-import { mkdir, writeFile } from "fs/promises";
-import { join } from "path";
+import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 const appName = process.argv[2];
-const appType = process.argv[3] || "node";
+const appType = process.argv[3] || 'node';
 
 if (!appName) {
-  console.error("❌ Please provide an app name");
-  console.log("Usage: node scripts/add-app.js <app-name> [type]");
-  console.log("Types: node, next, hono");
+  console.error('❌ Please provide an app name');
+  console.log('Usage: bun scripts/add-app.ts <app-name> [type]');
+  console.log('Types: node, next, hono');
   process.exit(1);
 }
 
-if (existsSync(join("apps", appName))) {
+if (existsSync(join('apps', appName))) {
   console.error(`❌ App "${appName}" already exists`);
   process.exit(1);
 }
 
-const appDir = join("apps", appName);
-const srcDir = join(appDir, "src");
+const appDir = join('apps', appName);
+const srcDir = join(appDir, 'src');
 
 try {
   await mkdir(appDir, { recursive: true });
@@ -29,14 +29,14 @@ try {
   // Generate package.json based on type
   const packageJson = generatePackageJson(appName, appType);
   await writeFile(
-    join(appDir, "package.json"),
+    join(appDir, 'package.json'),
     JSON.stringify(packageJson, null, 2),
   );
 
   // Generate TypeScript config
   const tsConfig = generateTsConfig(appType);
   await writeFile(
-    join(appDir, "tsconfig.json"),
+    join(appDir, 'tsconfig.json'),
     JSON.stringify(tsConfig, null, 2),
   );
 
@@ -49,64 +49,74 @@ try {
   console.log(`✅ Created app: ${appName}`);
   console.log(`📁 Location: apps/${appName}`);
   console.log(`🚀 Type: ${appType}`);
-  console.log("");
-  console.log("Next steps:");
+  console.log('');
+  console.log('Next steps:');
   console.log(`1. cd apps/${appName}`);
-  console.log("2. pnpm install");
-  console.log("3. pnpm dev");
+  console.log('2. pnpm install');
+  console.log('3. pnpm dev');
 } catch (error) {
-  console.error("❌ Error creating app:", error.message);
+  console.error('❌ Error creating app:', (error as Error).message);
   process.exit(1);
 }
 
-function generatePackageJson(name, type) {
-  const base = {
+interface PackageJson {
+  name: string;
+  private?: boolean;
+  version: string;
+  type?: string;
+  scripts?: Record<string, string>;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+}
+
+function generatePackageJson(name: string, type: string): PackageJson {
+  const base: PackageJson = {
     name: `@template/${name}`,
     private: true,
-    version: "0.0.0",
-    type: "module",
+    version: '0.0.0',
+    type: 'module',
   };
 
   switch (type) {
-    case "next":
+    case 'next':
       return {
         ...base,
         scripts: {
-          dev: "next dev --turbopack",
-          build: "next build",
-          start: "next start",
-          "check-types": "tsc --noEmit --incremental",
-          lint: "next lint --max-warnings 0",
+          dev: 'next dev --turbopack',
+          build: 'next build',
+          start: 'next start',
+          'check-types': 'tsc --noEmit --incremental',
+          lint: 'next lint --max-warnings 0',
         },
         dependencies: {
-          zod: "3.25.74",
+          zod: '3.25.74',
         },
         devDependencies: {
-          "@types/node": "^22.15.3",
-          "@types/react": "19.1.0",
-          "@types/react-dom": "19.1.1",
-          typescript: "5.8.2",
+          '@types/node': '^22.15.3',
+          '@types/react': '19.1.0',
+          '@types/react-dom': '19.1.1',
+          typescript: '5.8.2',
         },
       };
 
-    case "hono":
+    case 'hono':
       return {
         ...base,
         scripts: {
-          dev: "tsx watch src/index.ts",
-          build: "tsc",
-          start: "node dist/index.js",
-          "check-types": "tsc --noEmit --incremental",
+          dev: 'tsx watch src/index.ts',
+          build: 'tsc',
+          start: 'node dist/index.js',
+          'check-types': 'tsc --noEmit --incremental',
         },
         dependencies: {
-          hono: "^4.8.3",
-          "@hono/node-server": "^1.13.7",
-          zod: "3.25.74",
+          hono: '^4.8.3',
+          '@hono/node-server': '^1.13.7',
+          zod: '3.25.74',
         },
         devDependencies: {
-          "@types/node": "^22.15.3",
-          tsx: "^4.20.3",
-          typescript: "5.8.2",
+          '@types/node': '^22.15.3',
+          tsx: '^4.20.3',
+          typescript: '5.8.2',
         },
       };
 
@@ -114,63 +124,69 @@ function generatePackageJson(name, type) {
       return {
         ...base,
         scripts: {
-          dev: "tsx watch src/index.ts",
-          build: "tsc",
-          start: "node dist/index.js",
-          "check-types": "tsc --noEmit --incremental",
-          lint: "oxlint src",
+          dev: 'tsx watch src/index.ts',
+          build: 'tsc',
+          start: 'node dist/index.js',
+          'check-types': 'tsc --noEmit --incremental',
+          lint: 'oxlint src',
         },
         dependencies: {
-          zod: "3.25.74",
+          zod: '3.25.74',
         },
         devDependencies: {
-          "@types/node": "^22.15.3",
-          tsx: "^4.20.3",
-          typescript: "5.8.2",
+          '@types/node': '^22.15.3',
+          tsx: '^4.20.3',
+          typescript: '5.8.2',
         },
       };
   }
 }
 
-function generateTsConfig(type) {
-  const base = {
+interface TsConfig {
+  compilerOptions: Record<string, unknown>;
+  include?: string[];
+  exclude?: string[];
+}
+
+function generateTsConfig(type: string): TsConfig {
+  const base: TsConfig = {
     compilerOptions: {
-      target: "ES2022",
-      module: "ESNext",
-      moduleResolution: "bundler",
+      target: 'ES2022',
+      module: 'ESNext',
+      moduleResolution: 'bundler',
       strict: true,
       skipLibCheck: true,
       forceConsistentCasingInFileNames: true,
       resolveJsonModule: true,
-      types: ["node"],
+      types: ['node'],
     },
-    include: ["src/**/*"],
-    exclude: ["node_modules", "dist"],
+    include: ['src/**/*'],
+    exclude: ['node_modules', 'dist'],
   };
 
   switch (type) {
-    case "next":
+    case 'next':
       return {
         ...base,
         compilerOptions: {
           ...base.compilerOptions,
-          lib: ["dom", "dom.iterable", "ES6"],
+          lib: ['dom', 'dom.iterable', 'ES6'],
           allowJs: true,
           noEmit: true,
           esModuleInterop: true,
-          moduleResolution: "bundler",
-          jsx: "preserve",
+          moduleResolution: 'bundler',
+          jsx: 'preserve',
           incremental: true,
-          plugins: [{ name: "next" }],
-          types: ["node"],
+          plugins: [{ name: 'next' }],
+          types: ['node'],
         },
         include: [
-          "next-env.d.ts",
-          "**/*.ts",
-          "**/*.tsx",
-          ".next/types/**/*.ts",
+          'next-env.d.ts',
+          '**/*.ts',
+          '**/*.tsx',
+          '.next/types/**/*.ts',
         ],
-        exclude: ["node_modules"],
+        exclude: ['node_modules'],
       };
 
     default:
@@ -179,18 +195,18 @@ function generateTsConfig(type) {
         compilerOptions: {
           ...base.compilerOptions,
           declaration: true,
-          outDir: "./dist",
-          rootDir: "./src",
+          outDir: './dist',
+          rootDir: './src',
         },
       };
   }
 }
 
-function generateStarterFiles(type) {
+function generateStarterFiles(type: string): Record<string, string> {
   switch (type) {
-    case "next":
+    case 'next':
       return {
-        "page.tsx": `export default function HomePage() {
+        'page.tsx': `export default function HomePage() {
   return (
     <div>
       <h1>Welcome to your Next.js App</h1>
@@ -198,7 +214,7 @@ function generateStarterFiles(type) {
     </div>
   )
 }`,
-        "layout.tsx": `import type { Metadata } from 'next'
+        'layout.tsx': `import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'My App',
@@ -218,9 +234,9 @@ export default function RootLayout({
 }`,
       };
 
-    case "hono":
+    case 'hono':
       return {
-        "index.ts": `import { Hono } from 'hono'
+        'index.ts': `import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
 
 const app = new Hono()
@@ -247,7 +263,7 @@ serve({
 
     default: // node
       return {
-        "index.ts": `console.log('Hello from your new Node.js app!')
+        'index.ts': `console.log('Hello from your new Node.js app!')
 
 export function main() {
   console.log('Application started')
