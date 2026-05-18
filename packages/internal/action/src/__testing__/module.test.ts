@@ -38,7 +38,7 @@ describe('New Module Test', () => {
       .input(z.object({ price: z.number().positive() }))
       .output(z.object({ formatted: z.string() })),
     eighth: A('test.eighth')
-      .input(z.object({ tags: z.record(z.string()) }))
+      .input(z.object({ tags: z.record(z.string(), z.string()) }))
       .output(z.object({ count: z.number() })),
     ninth: A('test.ninth')
       .input(z.object({ date: z.string().datetime() }))

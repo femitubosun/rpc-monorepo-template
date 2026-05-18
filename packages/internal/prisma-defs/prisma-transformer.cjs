@@ -47,6 +47,10 @@ async function handleFile(filePath) {
   // replace all jsonSchema references with z.any()
   text = text.replace(/jsonSchema/g, "z.any()");
 
+  // zod v4: z.record() requires 2 args (keyType, valueType)
+  // Replace z.record(z.any()) with z.record(z.string(), z.any())
+  text = text.replace(/z\.record\(z\.any\(\)\)/g, "z.record(z.string(), z.any())");
+
   // Replace { Model }ModelSchema with { Model }Schema(remove "Model" suffix)
   text = text.replace(/(\w+)ModelSchema/g, "$1Schema");
 
