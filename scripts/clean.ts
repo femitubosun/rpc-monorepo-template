@@ -1,18 +1,12 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
+import { execSync } from 'node:child_process';
 
-import { execSync } from 'child_process';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-function runCommand(command, description) {
+function runCommand(command: string, description: string): void {
   console.log(`🧹 ${description}...`);
   try {
     execSync(command, { stdio: 'inherit', cwd: process.cwd() });
     console.log(`✅ ${description} completed`);
-  } catch (error) {
+  } catch {
     console.warn(`⚠️  ${description} failed (this might be expected)`);
   }
 }

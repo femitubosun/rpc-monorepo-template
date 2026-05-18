@@ -269,8 +269,8 @@ import { generateSessionId } from '@logic';
 - **developer-profile**: Developer profile management module
 
 ### Scripts (`scripts/`)
-- **clean.js**: Comprehensive cleanup script
-- **add-*.js**: Code generation utilities for apps, packages, and infrastructure
+- **clean.ts**: Comprehensive cleanup script
+- **add-*.ts**: Code generation utilities for apps, packages, and infrastructure
 
 ## Development Workflow
 
