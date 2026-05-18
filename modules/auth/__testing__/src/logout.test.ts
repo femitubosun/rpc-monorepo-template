@@ -18,6 +18,7 @@ describe('Auth.logout', async () => {
   });
 
   afterEach(async () => {
+    await db.$executeRaw`DELETE FROM "DeveloperProfile"`;
     await db.user.deleteMany({});
     vi.clearAllMocks();
   });

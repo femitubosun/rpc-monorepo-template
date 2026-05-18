@@ -44,6 +44,7 @@ describe('Auth.signin Test', () => {
 
   afterEach(async () => {
     await db.otp.deleteMany({});
+    await db.$executeRaw`DELETE FROM "DeveloperProfile"`;
     await db.user.deleteMany({});
   });
 

@@ -7,10 +7,10 @@ import module from '../_module';
 import { generateOtp, getOtpExpiration } from '../logic';
 
 module.registerHandlers({
-  signup: async ({ input, context }) => {
+  signup: async ({ input, context, makeError }) => {
     const { email } = input;
 
-    await db.user.findUniqueOrThrow({
+    const existingUser = await db.user.findUnique({
       where: {
         email,
       },
@@ -18,6 +18,14 @@ module.registerHandlers({
         id: true,
       },
     });
+
+    if (existingUser) {
+      throw makeError({
+        type: 'CONFLICT',
+        message: 'User already exists',
+        data: { email },
+      });
+    }
 
     const otp = generateOtp();
 

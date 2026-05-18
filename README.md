@@ -40,12 +40,11 @@ template/
 ## Key Technologies
 
 - **Nx 21.2.2** - Build system and monorepo management
-- **Node 22.17.1** - Node version
+- **Bun** - JavaScript runtime and package manager
 - **TypeScript 5.8.2** - All packages use ES modules
 - **Prisma 6.11.1** - PostgreSQL ORM with generated client
 - **Hono 4.8.4** - Web framework for API server
 - **Zod 3.25.74** - Schema validation (especially for environment config)
-- **pnpm** - Package manager with workspace support
 
 ## Setup
 
@@ -76,31 +75,31 @@ template/
 
 6. **Start development**:
    ```bash
-   bun entry:dev      # Main API server
+   bun api:dev      # Main API server
    ```
 
 ## Available Scripts
 
 ### Core Development
-- `pnpm build` - Build all packages
-- `pnpm dev` - Run all packages in development mode
-- `pnpm entry:dev` - Run main API server specifically
-- `pnpm clean` - Clean all build artifacts and node_modules
-- `pnpm lint` - Lint all packages with Biome
-- `pnpm format` - Format all files with Biome
-- `pnpm check-types` - TypeScript check all packages
+- `bun run build` - Build all packages
+- `bun dev` - Run all packages in development mode
+- `bun api:dev` - Run main API server specifically
+- `bun clear` - Clean all build artifacts and node_modules
+- `bun lint` - Lint all packages with Biome
+- `bun format` - Format all files with Biome
+- `bun check-types` - TypeScript check all packages
 
 ### Database Operations
-- `pnpm db:generate` - Generate Prisma client and types
-- `pnpm db:migrate` - Run database migrations
-- `pnpm db` - Run Prisma CLI commands directly
-- `pnpm ensure-prisma` - Generate Prisma client and transform types (CI)
+- `bun db:generate` - Generate Prisma client and types
+- `bun db:migrate` - Run database migrations
+- `bun db` - Run Prisma CLI commands directly
+- `bun ensure-prisma` - Generate Prisma client and transform types (CI)
 
 ### Code Generation
-- `pnpm create:app <name> [type]` - Create new application
-- `pnpm create:package <name> [location]` - Create new package
-- `pnpm create:module <name>` - Create new module
-- `pnpm create:infrastructure <name>` - Create infrastructure package
+- `bun create:app <name> [type]` - Create new application
+- `bun create:package <name> [location]` - Create new package
+- `bun create:module <name>` - Create new module
+- `bun create:infrastructure <name>` - Create infrastructure package
 
 ## Environment Configuration
 
@@ -276,10 +275,10 @@ import { generateSessionId } from '@logic';
 ## Development Workflow
 
 1. **Make changes** to your code
-2. **Run type checking**: `pnpm check-types`
-3. **Run linting**: `pnpm lint`
-4. **Format code**: `pnpm format`
-5. **Build**: `pnpm build`
+2. **Run type checking**: `bun check-types`
+3. **Run linting**: `bun lint`
+4. **Format code**: `bun format`
+5. **Build**: `bun run build`
 6. **Test**: Individual packages have their own test commands
 
 ## Nx Commands
@@ -299,8 +298,7 @@ nx <target> <project-name>
 
 ## Requirements
 
-- **Node.js**: 22.11.0 (specified in package.json engines)
-- **pnpm**: Latest version recommended
+- **Bun**: Latest version (1.x or higher)
 - **PostgreSQL**: For database operations
 
 ## Version Control

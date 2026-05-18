@@ -18,8 +18,9 @@ describe('Auth.useCode Test', async () => {
   }, 5000);
 
   afterEach(async () => {
-    await db.user.deleteMany({});
     await db.otp.deleteMany({});
+    await db.$executeRaw`DELETE FROM "DeveloperProfile"`;
+    await db.user.deleteMany({});
   });
 
   it('should return token for a user', async () => {
