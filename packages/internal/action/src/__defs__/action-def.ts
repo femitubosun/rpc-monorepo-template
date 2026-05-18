@@ -2,8 +2,8 @@ import type z from 'zod';
 import type { QSettings } from './settings';
 
 export class ActionDef<
-  Input extends z.ZodTypeAny,
-  Output extends z.ZodTypeAny,
+  Input extends z.ZodType,
+  Output extends z.ZodType,
 > {
   public readonly name: string;
   public _input?: Input;

@@ -24,7 +24,7 @@
     "@template/testing": "workspace:*",
     "@template/mail": "workspace:*",
     "vitest": "^3.2.4",
-    "zod": "3.25.74"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

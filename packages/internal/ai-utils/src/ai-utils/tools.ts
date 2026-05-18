@@ -1,7 +1,7 @@
 import { type StructuredTool, tool } from '@langchain/core/tools';
 import type z from 'zod';
 
-export class AxonAgentToolBuilder<T extends z.ZodSchema> {
+export class AxonAgentToolBuilder<T extends z.ZodType> {
   _input: T;
   _name?: string;
   _desc?: string;
@@ -36,14 +36,14 @@ export class AxonAgentToolBuilder<T extends z.ZodSchema> {
     const schema = this._input;
     const fn = this._fn;
 
-    return tool(fn, {
+    return tool(fn as any, {
       name,
       description: desc,
-      schema,
+      schema: schema as any,
     });
   }
 }
 
-export function createToolWithInputSchema<T extends z.ZodSchema>(schema: T) {
+export function createToolWithInputSchema<T extends z.ZodType>(schema: T) {
   return new AxonAgentToolBuilder<T>(schema);
 }

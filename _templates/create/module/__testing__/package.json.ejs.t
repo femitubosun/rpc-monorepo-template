@@ -21,6 +21,6 @@ to: modules/<%=name%>/__testing__/package.json
     "typescript": "5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
-    "zod": "3.25.74"
+    "zod": "4.4.3"
   }
 }

@@ -16,7 +16,7 @@ class Scraper {
     this.client = new LLMScraper(this.#model);
   }
 
-  async scrape<T extends z.ZodAny>(
+  async scrape<T extends z.ZodTypeAny>(
     input: ScrapeInput<T>
   ): Promise<z.infer<T>[]> {
     try {

@@ -12,7 +12,7 @@ import type { Queue } from './queue';
 const logger = makeLogger('AppRuntime');
 
 class Runtime {
-  public _appActions: Map<string, ModuleAction<ActionDef<z.ZodAny, z.ZodAny>>> =
+  public _appActions: Map<string, ModuleAction<ActionDef<z.ZodType, z.ZodType>>> =
     new Map();
   public _appCrons: Array<string> = [];
   public _queue?: Queue;

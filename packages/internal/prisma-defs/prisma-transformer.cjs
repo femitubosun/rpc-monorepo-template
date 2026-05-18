@@ -5,11 +5,6 @@ const glob = require("glob");
 // Use __dirname to get the correct package directory
 const currentDir = __dirname;
 
-// Individual file formatting removed - we'll format all files at once at the end
-function formatWithBiome(filePath) {
-  // No-op - formatting handled in bulk at the end
-}
-
 const names = [
   "InputJsonValueSchema",
   "JsonNullValueFilterSchema",
@@ -52,12 +47,15 @@ async function handleFile(filePath) {
   // replace all jsonSchema references with z.any()
   text = text.replace(/jsonSchema/g, "z.any()");
 
+  // zod v4: z.record() requires 2 args (keyType, valueType)
+  // Replace z.record(z.any()) with z.record(z.string(), z.any())
+  text = text.replace(/z\.record\(z\.any\(\)\)/g, "z.record(z.string(), z.any())");
+
   // Replace { Model }ModelSchema with { Model }Schema(remove "Model" suffix)
   text = text.replace(/(\w+)ModelSchema/g, "$1Schema");
 
   // Replace file contents with new lines
   await writeFile(filePath, text);
-  formatWithBiome(filePath);
 }
 
 async function exportAllTypes() {
@@ -74,7 +72,6 @@ async function generateMainIndex() {
 
   const indexPath = join(currentDir, "src/index.ts");
   await writeFile(indexPath, exports.join("\n") + "\n");
-  formatWithBiome(indexPath);
 }
 
 async function main() {

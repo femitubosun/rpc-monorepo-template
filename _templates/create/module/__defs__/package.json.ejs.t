@@ -10,7 +10,7 @@ to: modules/<%=name%>/__defs__/package.json
     "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
-    "zod": "3.25.74",
+    "zod": "4.4.3",
     "@template/prisma-defs": "workspace:*",
     "@template/logging": "workspace:*",
     "@template/env": "workspace:*"

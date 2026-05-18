@@ -17,7 +17,7 @@
     "build": "bun run generate && bun build src/index.ts --outdir ./dist --target node",
     "test": "bun test",
     "check-types": "tsc --noEmit --incremental",
-    "generate": "prisma generate",
+    "generate": "prisma generate && cd ../../packages/internal/prisma-defs && bun run transform",
     "migrate": "prisma generate && prisma migrate dev",
     "deploy": "prisma generate && prisma migrate deploy",
     "studio": "prisma studio",
@@ -30,8 +30,8 @@
     "dotenv": "^16.0.0",
     "pg": "^8.13.1",
     "prisma": "^7.2.0",
-    "prisma-zod-generator": "^2.1.2",
-    "zod-to-json-schema": "^3.24.6"
+    "prisma-zod-generator": "^2.1.4",
+    "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",

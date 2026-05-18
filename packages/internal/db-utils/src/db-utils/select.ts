@@ -1,7 +1,7 @@
 import { z } from 'zod';
 /* eslint-disable */
 
-export type DeepZodToPrismaSelectMapper<T extends z.ZodTypeAny> =
+export type DeepZodToPrismaSelectMapper<T> =
   T extends z.ZodObject<infer Shape>
     ? {
         select: {
@@ -12,7 +12,7 @@ export type DeepZodToPrismaSelectMapper<T extends z.ZodTypeAny> =
       ? DeepZodToPrismaSelectMapper<Item>
       : true;
 
-export type ZodToPrismaSelectMapper<T extends z.ZodTypeAny> =
+export type ZodToPrismaSelectMapper<T> =
   T extends z.ZodObject<infer Shape>
     ? {
         [K in keyof Shape]: DeepZodToPrismaSelectMapper<Shape[K]>;
@@ -25,10 +25,10 @@ function extractInnerType(type: z.ZodTypeAny): z.ZodTypeAny {
   if (
     type instanceof z.ZodOptional ||
     type instanceof z.ZodNullable ||
-    type._def.typeName === 'ZodOptional' ||
-    type._def.typeName === 'ZodNullable'
+    type._def.type === 'optional' ||
+    type._def.type === 'nullable'
   ) {
-    return extractInnerType(type._def.innerType);
+    return extractInnerType((type._def as any).innerType);
   }
   return type;
 }
@@ -36,19 +36,20 @@ function extractInnerType(type: z.ZodTypeAny): z.ZodTypeAny {
 export function zodToPrismaSelect<T extends z.ZodType<any, any>>(
   schema: T
 ): ZodToPrismaSelectMapper<T> {
-  const fields = schema._def.shape();
+  const fields = (schema._def as any).shape;
   const result = {};
   for (const key in fields) {
     const field = extractInnerType(fields[key]);
+    const fieldDef = field._def as any;
     if (
-      field._def.typeName === 'ZodArray' &&
-      field._def.type._def.typeName === 'ZodObject'
+      fieldDef.type === 'array' &&
+      fieldDef.element._def.type === 'object'
     ) {
       // @ts-expect-error
       result[key] = {
-        select: zodToPrismaSelect(field._def.type),
+        select: zodToPrismaSelect(fieldDef.element),
       };
-    } else if (field._def.typeName === 'ZodObject') {
+    } else if (fieldDef.type === 'object') {
       // @ts-expect-error
       result[key] = {
         select: zodToPrismaSelect(field),

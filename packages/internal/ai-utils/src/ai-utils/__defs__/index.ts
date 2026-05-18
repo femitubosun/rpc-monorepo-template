@@ -13,7 +13,7 @@ export type AxonAgentInstructionSegments = {
   goal?: string[] | string;
   internalNotes?: string[] | string;
   includeGlobalContext?: boolean;
-  outputStructure?: z.ZodSchema;
+  outputStructure?: z.ZodType;
 };
 
 export type InstructionSegment = keyof AxonAgentInstructionSegments;
