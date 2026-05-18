@@ -1,5 +1,4 @@
 import type { Context } from 'hono';
-import type { StreamingApi } from 'hono/utils/stream';
 import { sseManager } from './manager';
 import type { AppBindings } from '@template/router';
 
@@ -11,7 +10,7 @@ export interface SSEHandlerOptions {
 }
 
 /**
- * Create an SSE handler for Hono.
+ * Create an SSE handler for Hono using standard Web Streams API.
  *
  * Usage:
  * ```ts
@@ -28,28 +27,42 @@ export function createSSEHandler(options: SSEHandlerOptions = {}) {
 
   return async (c: Context<AppBindings>) => {
     const clientId = crypto.randomUUID();
+    const encoder = new TextEncoder();
 
-    return c.stream(async (stream: StreamingApi) => {
-      sseManager.addClient(clientId, stream, tags);
-      onConnect?.(clientId);
+    let heartbeat: ReturnType<typeof setInterval>;
 
-      // Heartbeat to keep connection alive
-      const heartbeat = setInterval(() => {
-        try {
-          stream.write(':heartbeat\n\n');
-        } catch {
-          clearInterval(heartbeat);
-        }
-      }, heartbeatInterval);
+    const stream = new ReadableStream({
+      start(controller) {
+        const sseStream = {
+          write(data: string) {
+            controller.enqueue(encoder.encode(data));
+          },
+        };
 
-      // Wait until client disconnects
-      try {
-        await stream.closed;
-      } finally {
+        sseManager.addClient(clientId, sseStream, tags);
+        onConnect?.(clientId);
+
+        heartbeat = setInterval(() => {
+          try {
+            sseStream.write(':heartbeat\n\n');
+          } catch {
+            clearInterval(heartbeat);
+          }
+        }, heartbeatInterval);
+      },
+      cancel() {
         clearInterval(heartbeat);
         sseManager.removeClient(clientId);
         onDisconnect?.(clientId);
-      }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      },
     });
   };
 }
